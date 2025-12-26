@@ -11,8 +11,7 @@ class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
 
   Future<UserModel?> getCurrentUser() async {
     final returnedData = await select(userTable).getSingleOrNull();
-    if (returnedData != null) return UserModel.fromDrift(returnedData);
-    return null;
+    return returnedData != null ? UserModel.fromDrift(returnedData) : null;
   }
 
   Future<void> createUser(UserTableCompanion user) {
