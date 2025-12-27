@@ -5,7 +5,6 @@ import 'package:onthi_gplx_pro/presentation/splash/bloc/splash_bloc.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
-
   @override
   State<SplashPage> createState() => _SplashPageState();
 }
@@ -13,29 +12,22 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
-
   SplashState? _pendingState;
   bool _isBlocReady = false; // flag
   bool _isAnimationStopped = false;
-
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(vsync: this);
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SplashBloc>().add(SplashStarted());
     });
   }
 
   Future<void> _handleNavigation(SplashState state) async {
-    if (_animationController.isAnimating) {
-      await _animationController.forward();
-    }
+    _animationController.stop();
     await Future.delayed(Duration(seconds: 2));
-
     if (!mounted) return;
-
     if (state is SplashToHome) {
       Navigator.pushReplacementNamed(context, '/home');
     } else if (state is SplashToOnboarding) {
@@ -51,7 +43,6 @@ class _SplashPageState extends State<SplashPage>
   Future<void> _playAnimation() async {
     while (mounted) {
       await _animationController.forward(from: 0);
-
       if (_isBlocReady) {
         setState(() {
           _isAnimationStopped = true;
@@ -59,9 +50,7 @@ class _SplashPageState extends State<SplashPage>
         break;
       }
     }
-
     if (!mounted || _pendingState == null) return;
-
     await _handleNavigation(_pendingState!);
   }
 
@@ -94,7 +83,6 @@ class _SplashPageState extends State<SplashPage>
                   controller: _animationController,
                   onLoaded: (composition) {
                     _animationController.duration = composition.duration;
-
                     _playAnimation();
                   },
                 ),
