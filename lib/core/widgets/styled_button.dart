@@ -30,6 +30,8 @@ class StyledButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(12),
       ),
+      shadowColor: backgroundColor ?? AppColors.primaryColor,
+      elevation: 4,
 
       textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
     );
