@@ -15,7 +15,7 @@ class _SplashPageState extends State<SplashPage>
   late final AnimationController _animationController;
 
   SplashState? _pendingState;
-  bool _isBlocReady = false; // flag to know when bloc state is ready
+  bool _isBlocReady = false; // flag
   bool _isAnimationStopped = false;
 
   @override
@@ -41,6 +41,7 @@ class _SplashPageState extends State<SplashPage>
     } else if (state is SplashToOnboarding) {
       Navigator.pushReplacementNamed(context, '/onboarding');
     } else if (state is SplashError) {
+      // could navigate to notfound_page and display the state.message
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(state.message)));
