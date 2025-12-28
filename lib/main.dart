@@ -4,7 +4,7 @@ import 'package:onthi_gplx_pro/core/router/app_router.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_theme.dart';
 import 'package:onthi_gplx_pro/dependencies_container.dart';
-import 'package:onthi_gplx_pro/presentation/splash/bloc/splash_bloc.dart';
+import 'package:onthi_gplx_pro/features/splash/presentation/bloc/splash_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
