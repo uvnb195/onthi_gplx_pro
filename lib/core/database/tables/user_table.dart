@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/entities/license/license_type.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license_type.dart';
 
 class UserTable extends Table {
   IntColumn get id => integer().autoIncrement()();
@@ -9,6 +9,7 @@ class UserTable extends Table {
   TextColumn get avatarPath => text().nullable()();
   Column<int> get age => integer().nullable()();
   TextColumn get phoneNumber => text().nullable()();
+  IntColumn get gender => integer()();
 
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();

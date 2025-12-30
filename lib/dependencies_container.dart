@@ -7,6 +7,7 @@ import 'package:onthi_gplx_pro/features/user_management/data/repositories/user_r
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/user_repository.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/usecases/get_current_user.dart';
 import 'package:onthi_gplx_pro/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -28,4 +29,5 @@ void initialDependencies() {
   );
   // B L O C
   sl.registerFactory<SplashBloc>(() => SplashBloc(sl()));
+  sl.registerFactory<UserBloc>(() => UserBloc());
 }

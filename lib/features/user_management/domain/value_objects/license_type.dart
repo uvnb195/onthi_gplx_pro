@@ -73,7 +73,7 @@ extension LicenseTypeExt on LicenseType {
       case 'de':
         return LicenseType.de;
       default:
-        throw ValidationException('Vui lòng chọn đúng loại bằng lái');
+        throw ValidationException('Vui lòng chọn đúng hạng Giấy phép lái xe');
     }
   }
 }

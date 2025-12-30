@@ -24,7 +24,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
 
     result.fold(
       ifLeft: (failure) {
-        if (failure is UserNotFoundFailure) {
+        if (failure is CacheFailure) {
           emit(SplashToOnboarding());
         } else {
           emit(SplashError(failure.message));

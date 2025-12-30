@@ -39,7 +39,7 @@ class $UserTableTable extends UserTable
     false,
     additionalChecks: GeneratedColumn.checkTextLength(
       minTextLength: 2,
-      maxTextLength: 32,
+      maxTextLength: 50,
     ),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
@@ -75,6 +75,15 @@ class $UserTableTable extends UserTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _genderMeta = const VerificationMeta('gender');
+  @override
+  late final GeneratedColumn<int> gender = GeneratedColumn<int>(
+    'gender',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _createdAtMeta = const VerificationMeta(
     'createdAt',
   );
@@ -107,6 +116,7 @@ class $UserTableTable extends UserTable
     avatarPath,
     age,
     phoneNumber,
+    gender,
     createdAt,
     updatedAt,
   ];
@@ -153,6 +163,14 @@ class $UserTableTable extends UserTable
           _phoneNumberMeta,
         ),
       );
+    }
+    if (data.containsKey('gender')) {
+      context.handle(
+        _genderMeta,
+        gender.isAcceptableOrUnknown(data['gender']!, _genderMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_genderMeta);
     }
     if (data.containsKey('created_at')) {
       context.handle(
@@ -201,6 +219,10 @@ class $UserTableTable extends UserTable
         DriftSqlType.string,
         data['${effectivePrefix}phone_number'],
       ),
+      gender: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}gender'],
+      )!,
       createdAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}created_at'],
@@ -228,6 +250,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
   final String? avatarPath;
   final int? age;
   final String? phoneNumber;
+  final int gender;
   final DateTime createdAt;
   final DateTime updatedAt;
   const UserTableData({
@@ -237,6 +260,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
     this.avatarPath,
     this.age,
     this.phoneNumber,
+    required this.gender,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -259,6 +283,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
     if (!nullToAbsent || phoneNumber != null) {
       map['phone_number'] = Variable<String>(phoneNumber);
     }
+    map['gender'] = Variable<int>(gender);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
@@ -276,6 +301,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
       phoneNumber: phoneNumber == null && nullToAbsent
           ? const Value.absent()
           : Value(phoneNumber),
+      gender: Value(gender),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
     );
@@ -295,6 +321,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
       avatarPath: serializer.fromJson<String?>(json['avatarPath']),
       age: serializer.fromJson<int?>(json['age']),
       phoneNumber: serializer.fromJson<String?>(json['phoneNumber']),
+      gender: serializer.fromJson<int>(json['gender']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
@@ -311,6 +338,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
       'avatarPath': serializer.toJson<String?>(avatarPath),
       'age': serializer.toJson<int?>(age),
       'phoneNumber': serializer.toJson<String?>(phoneNumber),
+      'gender': serializer.toJson<int>(gender),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
@@ -323,6 +351,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
     Value<String?> avatarPath = const Value.absent(),
     Value<int?> age = const Value.absent(),
     Value<String?> phoneNumber = const Value.absent(),
+    int? gender,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) => UserTableData(
@@ -332,6 +361,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
     avatarPath: avatarPath.present ? avatarPath.value : this.avatarPath,
     age: age.present ? age.value : this.age,
     phoneNumber: phoneNumber.present ? phoneNumber.value : this.phoneNumber,
+    gender: gender ?? this.gender,
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
   );
@@ -347,6 +377,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
       phoneNumber: data.phoneNumber.present
           ? data.phoneNumber.value
           : this.phoneNumber,
+      gender: data.gender.present ? data.gender.value : this.gender,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
@@ -361,6 +392,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
           ..write('avatarPath: $avatarPath, ')
           ..write('age: $age, ')
           ..write('phoneNumber: $phoneNumber, ')
+          ..write('gender: $gender, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -375,6 +407,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
     avatarPath,
     age,
     phoneNumber,
+    gender,
     createdAt,
     updatedAt,
   );
@@ -388,6 +421,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
           other.avatarPath == this.avatarPath &&
           other.age == this.age &&
           other.phoneNumber == this.phoneNumber &&
+          other.gender == this.gender &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt);
 }
@@ -399,6 +433,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
   final Value<String?> avatarPath;
   final Value<int?> age;
   final Value<String?> phoneNumber;
+  final Value<int> gender;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   const UserTableCompanion({
@@ -408,6 +443,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
     this.avatarPath = const Value.absent(),
     this.age = const Value.absent(),
     this.phoneNumber = const Value.absent(),
+    this.gender = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
@@ -418,10 +454,12 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
     this.avatarPath = const Value.absent(),
     this.age = const Value.absent(),
     this.phoneNumber = const Value.absent(),
+    required int gender,
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : licenseId = Value(licenseId),
-       name = Value(name);
+       name = Value(name),
+       gender = Value(gender);
   static Insertable<UserTableData> custom({
     Expression<int>? id,
     Expression<String>? licenseId,
@@ -429,6 +467,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
     Expression<String>? avatarPath,
     Expression<int>? age,
     Expression<String>? phoneNumber,
+    Expression<int>? gender,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
   }) {
@@ -439,6 +478,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
       if (avatarPath != null) 'avatar_path': avatarPath,
       if (age != null) 'age': age,
       if (phoneNumber != null) 'phone_number': phoneNumber,
+      if (gender != null) 'gender': gender,
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
@@ -451,6 +491,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
     Value<String?>? avatarPath,
     Value<int?>? age,
     Value<String?>? phoneNumber,
+    Value<int>? gender,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
   }) {
@@ -461,6 +502,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
       avatarPath: avatarPath ?? this.avatarPath,
       age: age ?? this.age,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+      gender: gender ?? this.gender,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -489,6 +531,9 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
     if (phoneNumber.present) {
       map['phone_number'] = Variable<String>(phoneNumber.value);
     }
+    if (gender.present) {
+      map['gender'] = Variable<int>(gender.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -507,6 +552,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
           ..write('avatarPath: $avatarPath, ')
           ..write('age: $age, ')
           ..write('phoneNumber: $phoneNumber, ')
+          ..write('gender: $gender, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
@@ -534,6 +580,7 @@ typedef $$UserTableTableCreateCompanionBuilder =
       Value<String?> avatarPath,
       Value<int?> age,
       Value<String?> phoneNumber,
+      required int gender,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -545,6 +592,7 @@ typedef $$UserTableTableUpdateCompanionBuilder =
       Value<String?> avatarPath,
       Value<int?> age,
       Value<String?> phoneNumber,
+      Value<int> gender,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
     });
@@ -586,6 +634,11 @@ class $$UserTableTableFilterComposer
 
   ColumnFilters<String> get phoneNumber => $composableBuilder(
     column: $table.phoneNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get gender => $composableBuilder(
+    column: $table.gender,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -639,6 +692,11 @@ class $$UserTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get gender => $composableBuilder(
+    column: $table.gender,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
     column: $table.createdAt,
     builder: (column) => ColumnOrderings(column),
@@ -680,6 +738,9 @@ class $$UserTableTableAnnotationComposer
     column: $table.phoneNumber,
     builder: (column) => column,
   );
+
+  GeneratedColumn<int> get gender =>
+      $composableBuilder(column: $table.gender, builder: (column) => column);
 
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
@@ -725,6 +786,7 @@ class $$UserTableTableTableManager
                 Value<String?> avatarPath = const Value.absent(),
                 Value<int?> age = const Value.absent(),
                 Value<String?> phoneNumber = const Value.absent(),
+                Value<int> gender = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => UserTableCompanion(
@@ -734,6 +796,7 @@ class $$UserTableTableTableManager
                 avatarPath: avatarPath,
                 age: age,
                 phoneNumber: phoneNumber,
+                gender: gender,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),
@@ -745,6 +808,7 @@ class $$UserTableTableTableManager
                 Value<String?> avatarPath = const Value.absent(),
                 Value<int?> age = const Value.absent(),
                 Value<String?> phoneNumber = const Value.absent(),
+                required int gender,
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => UserTableCompanion.insert(
@@ -754,6 +818,7 @@ class $$UserTableTableTableManager
                 avatarPath: avatarPath,
                 age: age,
                 phoneNumber: phoneNumber,
+                gender: gender,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
               ),

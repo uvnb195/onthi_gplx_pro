@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:onthi_gplx_pro/core/database/daos/user_dao.dart';
 import 'package:drift/native.dart';
-import 'package:drift/drift.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/entities/license/license_type.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license_type.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:onthi_gplx_pro/core/database/tables/user_table.dart';
 import 'package:path/path.dart' as p;
@@ -32,7 +31,7 @@ class AppDatabase extends _$AppDatabase {
   }
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -40,9 +39,11 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (m) async {
         await m.createAll();
       },
-      // onUpgrade: (m, from, to) {
-      //   // migration
-      // },
+      onUpgrade: (m, from, to) async {
+        if (from < 2) {
+          await m.addColumn(userTable, userTable.gender as GeneratedColumn);
+        }
+      },
     );
   }
 }
