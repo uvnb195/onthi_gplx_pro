@@ -7,10 +7,10 @@ import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/pho
 
 class UserEntity {
   final int id;
-  final Name name;
+  final Name name; //
   final License license;
   final Gender gender;
-  final AvatarPath? avatarPath;
+  final AvatarPath? avatarPath; //
   final Age? age;
   final PhoneNumber? phoneNumber;
   final DateTime? createdAt;

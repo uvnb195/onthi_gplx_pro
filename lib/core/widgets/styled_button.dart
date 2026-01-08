@@ -46,6 +46,7 @@ class StyledButton extends StatelessWidget {
       style: buttonStyle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (prefixIcon != null) prefixIcon!,
           if (title != null)

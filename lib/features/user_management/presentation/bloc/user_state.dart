@@ -3,13 +3,14 @@ part of 'user_bloc.dart';
 enum SubmissionStatus { initial, submitting, success, failure }
 
 class UserFormSubmissionState extends Equatable {
+  final bool isLoading;
   final String name;
   final String? nameError;
   final String age;
   final String? ageError;
   final String avatarPath;
   final String? avatarPathError;
-  final String gender;
+  final GenderType gender;
   final String? genderError;
   final String license;
   final String? licenseError;
@@ -20,13 +21,14 @@ class UserFormSubmissionState extends Equatable {
   final String? submitError;
 
   const UserFormSubmissionState({
+    this.isLoading = false,
     this.name = '',
     this.nameError,
     this.age = '',
     this.ageError,
     this.avatarPath = '',
     this.avatarPathError,
-    this.gender = '',
+    this.gender = GenderType.MALE,
     this.genderError,
     this.license = '',
     this.licenseError,
@@ -37,13 +39,14 @@ class UserFormSubmissionState extends Equatable {
   });
 
   UserFormSubmissionState copyWith({
+    final bool? isLoading,
     final String? name,
     final String? nameError,
     final String? age,
     final String? ageError,
     final String? avatarPath,
     final String? avatarPathError,
-    final String? gender,
+    final GenderType? gender,
     final String? genderError,
     final String? license,
     final String? licenseError,
@@ -53,6 +56,7 @@ class UserFormSubmissionState extends Equatable {
     final String? submitError,
   }) {
     return UserFormSubmissionState(
+      isLoading: isLoading ?? this.isLoading,
       name: name ?? this.name,
       nameError: nameError,
       age: age ?? this.age,
@@ -70,14 +74,32 @@ class UserFormSubmissionState extends Equatable {
     );
   }
 
+  bool get isStep1Valid => nameError == null && name.isNotEmpty;
+
+  bool get isStep2Valid =>
+      phoneError == null &&
+      ageError == null &&
+      genderError == null &&
+      age.isNotEmpty;
+
+  bool get isStep3Valid => licenseError == null && license.isNotEmpty;
+
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
+    isLoading,
     name,
+    nameError,
     age,
+    ageError,
     avatarPath,
+    avatarPathError,
     gender,
+    genderError,
     license,
+    licenseError,
     phone,
+    phoneError,
     status,
+    submitError,
   ];
 }

@@ -7,7 +7,7 @@ class Age {
   const Age._(this.age);
 
   factory Age.create(int? input) {
-    if (input == null) return Age._(null);
+    if (input == null) throw ValidationException('Vui lòng nhập tuổi');
 
     if (input < 16 || input >= 100) {
       throw ValidationException('Vui lòng nhập đúng tuổi của bạn');

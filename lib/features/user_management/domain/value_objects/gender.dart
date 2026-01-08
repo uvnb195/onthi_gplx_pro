@@ -2,26 +2,22 @@ import 'package:dart_either/dart_either.dart';
 import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 
+enum GenderType { MALE, FEMALE }
+
 class Gender {
-  final int gender; //ONLY 0:MALE AND 1:FEMALE
+  final GenderType gender;
   const Gender._(this.gender);
 
-  factory Gender.create(int gender) {
-    if (gender != 0 || gender != 1) {
-      throw ValidationException('Vui lòng chọn đúng giới tính');
-    }
-
+  factory Gender.create(GenderType gender) {
     return Gender._(gender);
   }
 
-  static Either<ValidationFailure, Gender> validate(String input) {
+  static Either<ValidationFailure, Gender> validate(GenderType? input) {
     try {
-      final genderInt = int.tryParse(input);
-      if (genderInt == null) {
-        return Left(ValidationFailure("Giới tính không hợp lệ"));
+      if (input == null) {
+        return Left(ValidationFailure('Vui lòng chọn giới tính'));
       }
-
-      return Right(Gender.create(genderInt));
+      return Right(Gender.create(input));
     } on ValidationException catch (e) {
       return Left(ValidationFailure(e.message));
     }

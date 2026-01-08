@@ -13,7 +13,7 @@ class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   SplashState? _pendingState;
-  bool _isBlocReady = false; // flag
+  bool _isBlocReady = false;
   bool _isAnimationStopped = false;
   @override
   void initState() {
@@ -26,14 +26,12 @@ class _SplashPageState extends State<SplashPage>
 
   Future<void> _handleNavigation(SplashState state) async {
     _animationController.stop();
-    await Future.delayed(Duration(seconds: 2));
     if (!mounted) return;
     if (state is SplashToHome) {
       Navigator.pushReplacementNamed(context, '/home');
     } else if (state is SplashToOnboarding) {
       Navigator.pushReplacementNamed(context, '/onboarding');
     } else if (state is SplashError) {
-      // could navigate to notfound_page and display the state.message
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(state.message)));
@@ -68,7 +66,6 @@ class _SplashPageState extends State<SplashPage>
           listener: (context, state) {
             _pendingState = state;
             _isBlocReady = true;
-            print('splash bloc state:$state');
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

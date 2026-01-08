@@ -7,14 +7,14 @@ sealed class UserEvent extends Equatable {
   List<Object> get props => [];
 }
 
+final class Loading extends UserEvent {
+  final bool state;
+  const Loading(this.state);
+}
+
 final class NameChanged extends UserEvent {
   final String name;
   const NameChanged(this.name);
-}
-
-final class AgeChanged extends UserEvent {
-  final String age;
-  const AgeChanged(this.age);
 }
 
 final class AvatarChanged extends UserEvent {
@@ -22,8 +22,13 @@ final class AvatarChanged extends UserEvent {
   const AvatarChanged(this.avatarPath);
 }
 
+final class AgeChanged extends UserEvent {
+  final String age;
+  const AgeChanged(this.age);
+}
+
 final class GenderChanged extends UserEvent {
-  final int gender;
+  final GenderType? gender;
   const GenderChanged(this.gender);
 }
 
