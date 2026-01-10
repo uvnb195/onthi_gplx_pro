@@ -4,7 +4,7 @@ import 'package:onthi_gplx_pro/core/router/app_router.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_theme.dart';
 import 'package:onthi_gplx_pro/dependencies_container.dart';
-import 'package:onthi_gplx_pro/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:onthi_gplx_pro/features/global_blocs/auth_bloc/auth_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<SplashBloc>(),
+      create: (context) => sl<AuthBloc>()..add(AuthStarted()),
       child: MaterialApp(
         onGenerateRoute: AppRouter.generate,
         initialRoute: RouteNames.splash,

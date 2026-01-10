@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:onthi_gplx_pro/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:onthi_gplx_pro/core/router/route_names.dart';
+import 'package:onthi_gplx_pro/features/global_blocs/auth_bloc/auth_bloc.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -12,48 +13,38 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
-  SplashState? _pendingState;
-  bool _isBlocReady = false;
-  bool _isAnimationStopped = false;
-  bool _isAnimationFinishedOnce = false;
+
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SplashBloc>().add(SplashStarted());
-    });
   }
 
-  void _handleNavigation(SplashState state) {
+  Future<void> _handleNavigation(AuthState state) async {
     _animationController.stop();
-    if (state is SplashLoading || state is SplashInitial) return;
-    if (!mounted) return;
-    if (state is SplashToHome) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else if (state is SplashToOnboarding) {
-      Navigator.pushReplacementNamed(context, '/onboarding');
-    } else if (state is SplashError) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(state.message)));
+    switch (state) {
+      case AuthInitial():
+      case Unauthenticated():
+        await Future.delayed(const Duration(seconds: 2));
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, RouteNames.onboarding);
+        }
+        return;
+      case AuthenticateFail():
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(state.message)));
+        return;
+      case AuthChanged():
+        return;
+      case Authenticated():
+        Navigator.pushReplacementNamed(context, RouteNames.home);
+        return;
     }
   }
 
   Future<void> _playAnimation() async {
-    await _animationController.forward();
-
-    if (mounted) {
-      setState(() {
-        _isAnimationFinishedOnce = true;
-        _isAnimationStopped = true;
-      });
-      if (_isBlocReady && _pendingState != null) {
-        _handleNavigation(_pendingState!);
-      } else {
-        _animationController.repeat();
-      }
-    }
+    await _animationController.repeat();
   }
 
   @override
@@ -66,14 +57,9 @@ class _SplashPageState extends State<SplashPage>
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocListener<SplashBloc, SplashState>(
+        child: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state is! SplashLoading) {
-              _pendingState = state;
-              _isBlocReady = true;
-            }
-
-            if (_isAnimationFinishedOnce) {
+            if (state is! AuthInitial) {
               _handleNavigation(state);
             }
           },
@@ -110,7 +96,7 @@ class _SplashPageState extends State<SplashPage>
                   );
                   return slide;
                 },
-                child: _isAnimationStopped
+                child: true
                     ? Text(
                         "Ôn thi GPLX Pro",
                         key: const ValueKey('ready'),

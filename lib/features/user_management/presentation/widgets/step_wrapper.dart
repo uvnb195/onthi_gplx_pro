@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/indicator.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/index.dart';
-
-import '../bloc/user/index.dart';
 
 class StepWrapper extends StatefulWidget {
   const StepWrapper({super.key});
@@ -18,11 +17,22 @@ class StepWrapper extends StatefulWidget {
 class _StepWrapperState extends State<StepWrapper> {
   final stepCount = 3;
   int currentIndex = 0;
+  double buttonOpacity = 0;
   List<StatefulWidget> get _stepList => [
     WelcomeStep(isVisible: currentIndex >= 0),
     InformationStep(isVisible: currentIndex >= 1),
     FinishStep(isVisible: currentIndex >= 2),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => setState(() {
+        buttonOpacity = 1;
+      }),
+    );
+  }
 
   void _onSubmit() {}
 
@@ -126,8 +136,8 @@ class _StepWrapperState extends State<StepWrapper> {
                             ),
                             Expanded(
                               child: AnimatedOpacity(
-                                opacity: state.isLoading ? 0 : 1,
-                                duration: Duration(milliseconds: 500),
+                                opacity: buttonOpacity,
+                                duration: Duration(milliseconds: 1000),
                                 curve: Curves.easeOut,
                                 child: StyledButton(
                                   title: currentIndex == stepCount - 1
