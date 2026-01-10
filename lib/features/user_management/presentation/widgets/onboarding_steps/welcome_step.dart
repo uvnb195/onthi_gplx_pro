@@ -11,7 +11,7 @@ import 'package:onthi_gplx_pro/core/widgets/styled_button.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_scale_entrance.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_slide_entrance.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_text_field.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 
 class WelcomeStep extends StatefulWidget {
   final bool isVisible;

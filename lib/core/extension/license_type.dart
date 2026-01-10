@@ -1,8 +1,4 @@
-import 'package:dart_either/dart_either.dart';
-import 'package:onthi_gplx_pro/core/error/exceptions.dart';
-import 'package:onthi_gplx_pro/core/error/failures.dart';
-
-enum LicenseType { a1, a, b1, b, c1, c, d1, d2, d, be, c1e, ce, d1e, d2e, de }
+import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license.dart';
 
 extension LicenseTypeExt on LicenseType {
   String get code {
@@ -40,7 +36,7 @@ extension LicenseTypeExt on LicenseType {
     }
   }
 
-  static LicenseType fromString(String input) {
+  static LicenseType? fromString(String input) {
     switch (input.toLowerCase()) {
       case 'a1':
         return LicenseType.a1;
@@ -73,27 +69,7 @@ extension LicenseTypeExt on LicenseType {
       case 'de':
         return LicenseType.de;
       default:
-        throw ValidationException('Vui lòng chọn đúng hạng Giấy phép lái xe');
-    }
-  }
-}
-
-class License {
-  final LicenseType license;
-
-  const License._(this.license);
-
-  factory License.create(String input) {
-    if (input.isEmpty) throw ValidationException('Vui lòng chọn Hạng GPLX');
-
-    return License._(LicenseTypeExt.fromString(input));
-  }
-
-  static Either<Failure, License> validate(String input) {
-    try {
-      return Right(License.create(input));
-    } on ValidationException catch (e) {
-      return Left(ValidationFailure(e.message));
+        return null;
     }
   }
 }

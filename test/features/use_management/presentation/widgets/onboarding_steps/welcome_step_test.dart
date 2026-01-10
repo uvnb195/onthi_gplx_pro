@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/welcome_step.dart';
 
 class MockUserBloc extends Mock implements UserBloc {}

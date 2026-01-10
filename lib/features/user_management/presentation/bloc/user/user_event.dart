@@ -33,7 +33,7 @@ final class GenderChanged extends UserEvent {
 }
 
 final class LicenseChanged extends UserEvent {
-  final String license;
+  final LicenseEntity license;
   const LicenseChanged(this.license);
 }
 

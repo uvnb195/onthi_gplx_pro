@@ -6,7 +6,7 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_dropdown.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_text_field.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/gender.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 
 class InformationStep extends StatefulWidget {
   final bool isVisible;

@@ -1,13 +1,13 @@
 import 'package:get_it/get_it.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
-import 'package:onthi_gplx_pro/core/database/daos/user_dao.dart';
-import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local_user_data_source.dart';
-import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local_user_data_source_impl.dart';
-import 'package:onthi_gplx_pro/features/user_management/data/repositories/user_repository_impl.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/repositories/user_repository.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/usecases/get_current_user.dart';
 import 'package:onthi_gplx_pro/features/splash/presentation/bloc/splash_bloc.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/license_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
+
+import 'features/user_management/data/repositories/index.dart';
+import 'features/user_management/domain/usecases/index.dart';
 
 final sl = GetIt.instance;
 
@@ -15,19 +15,32 @@ void initialDependencies() {
   // D A T A B A S E
   sl.registerLazySingleton<AppDatabase>(() => AppDatabase());
 
-  // U S E C A S E S
-  sl.registerLazySingleton<GetCurrentUserUseCase>(
-    () => GetCurrentUserUseCase(sl()),
-  );
-
-  // R E P O S I T O R I E S
-  sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(sl()));
-
   // D A T A - S O U R C E S
   sl.registerLazySingleton<LocalUserDataSource>(
     () => LocalUserDataSourceImpl(sl()),
   );
+  sl.registerLazySingleton<LocalLicenseDataSource>(
+    () => LocalLicenseDataSourceImpl(sl()),
+  );
+
+  // U S E C A S E S
+  sl.registerLazySingleton<WatchCurrentUserUseCase>(
+    () => WatchCurrentUserUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetLicenseByIdUseCase>(
+    () => GetLicenseByIdUseCase(sl()),
+  );
+  sl.registerLazySingleton<GetLicensesUseCase>(() => GetLicensesUseCase(sl()));
+
+  // R E P O S I T O R I E S
+  sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(sl()));
+  sl.registerLazySingleton<LicenseRepository>(
+    () => LicenseRepositoryImpl(sl()),
+  );
+
   // B L O C
   sl.registerFactory<SplashBloc>(() => SplashBloc(sl()));
-  sl.registerFactory<UserBloc>(() => UserBloc());
+  sl.registerFactory<LicenseBloc>(() => LicenseBloc(sl()));
+  sl.registerFactory<UserBloc>(() => UserBloc(licenseBloc: sl<LicenseBloc>()));
 }

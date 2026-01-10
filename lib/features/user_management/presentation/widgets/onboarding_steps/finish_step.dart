@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/radio_item.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/license_bloc.dart';
 
 class FinishStep extends StatefulWidget {
   final bool isVisible;
@@ -57,20 +59,34 @@ class _FinishStepState extends State<FinishStep> {
     return Column(
       children: [
         _buildHeader(context),
-        Expanded(
-          child: Container(
-            decoration: const BoxDecoration(),
-            child: ListView.separated(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(
-                parent: BouncingScrollPhysics(),
+        BlocBuilder<LicenseBloc, LicenseState>(
+          builder: (context, state) {
+            return switch (state) {
+              LicenseInitial() || LicenseLoading() => Expanded(
+                child: Center(child: CircularProgressIndicator()),
               ),
-              itemCount: 10,
-              itemBuilder: (context, index) => RadioItem(),
-              separatorBuilder: (BuildContext context, int index) =>
-                  SizedBox(height: 16),
-            ),
-          ),
+              LicenseLoadFail() => Expanded(
+                child: Center(
+                  child: Text("Đã xảy ra lỗi, vui lòng thử lại sau..."),
+                ),
+              ),
+              LicenseLoaded() => Expanded(
+                child: Container(
+                  decoration: const BoxDecoration(),
+                  child: ListView.separated(
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(),
+                    ),
+                    itemCount: 10,
+                    itemBuilder: (context, index) => RadioItem(),
+                    separatorBuilder: (BuildContext context, int index) =>
+                        SizedBox(height: 16),
+                  ),
+                ),
+              ),
+            };
+          },
         ),
       ],
     );

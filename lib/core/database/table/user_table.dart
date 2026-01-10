@@ -1,12 +1,12 @@
 import 'package:drift/drift.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license_type.dart';
+import 'package:onthi_gplx_pro/core/database/table/license_table.dart';
 
 class UserTable extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get licenseId => textEnum<LicenseType>()();
+  IntColumn get licenseId => integer().references(LicenseTable, #id)();
   TextColumn get name => text().withLength(min: 2, max: 50)();
-  Column<int> get age => integer().nullable()();
-  IntColumn get gender => integer()();
+  Column<int> get age => integer()();
+  IntColumn get gender => integer().withDefault(const Constant(0))();
 
   // optional fields
   TextColumn get avatarPath => text().nullable()();

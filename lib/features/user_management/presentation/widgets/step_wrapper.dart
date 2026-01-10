@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
-import 'package:onthi_gplx_pro/core/widgets/styled_animated_sized.dart';
-import 'package:onthi_gplx_pro/core/widgets/styled_button.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user_bloc.dart';
+import 'package:onthi_gplx_pro/core/widgets/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/indicator.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/finish_step.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/information_step.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/welcome_step.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/index.dart';
+
+import '../bloc/user/index.dart';
 
 class StepWrapper extends StatefulWidget {
   const StepWrapper({super.key});
@@ -19,12 +18,31 @@ class StepWrapper extends StatefulWidget {
 class _StepWrapperState extends State<StepWrapper> {
   final stepCount = 3;
   int currentIndex = 0;
+  List<StatefulWidget> get _stepList => [
+    WelcomeStep(isVisible: currentIndex >= 0),
+    InformationStep(isVisible: currentIndex >= 1),
+    FinishStep(isVisible: currentIndex >= 2),
+  ];
 
   void _onSubmit() {}
 
   @override
   Widget build(BuildContext context) {
     final widgetSize = MediaQuery.of(context).size;
+
+    void onNext() {
+      final int lastIndex = stepCount - 1;
+      if (currentIndex == lastIndex) {
+        _onSubmit();
+      } else {
+        if (currentIndex + 1 == lastIndex) {
+          context.read<LicenseBloc>().add(LoadLicenses());
+        }
+        setState(() {
+          currentIndex++;
+        });
+      }
+    }
 
     return Scaffold(
       body: Stack(
@@ -62,11 +80,7 @@ class _StepWrapperState extends State<StepWrapper> {
                   Expanded(
                     child: IndexedStack(
                       index: currentIndex,
-                      children: [
-                        WelcomeStep(isVisible: currentIndex >= 0),
-                        InformationStep(isVisible: currentIndex >= 1),
-                        FinishStep(isVisible: currentIndex >= 2),
-                      ],
+                      children: _stepList,
                     ),
                   ),
 
@@ -123,17 +137,7 @@ class _StepWrapperState extends State<StepWrapper> {
                                     Icons.arrow_forward_ios_rounded,
                                   ),
                                   backgroundColor: AppColors.primaryColor,
-                                  onPressed: canContinue()
-                                      ? () {
-                                          if (currentIndex == stepCount - 1)
-                                            _onSubmit();
-                                          else {
-                                            setState(() {
-                                              currentIndex++;
-                                            });
-                                          }
-                                        }
-                                      : null,
+                                  onPressed: canContinue() ? onNext : null,
                                 ),
                               ),
                             ),

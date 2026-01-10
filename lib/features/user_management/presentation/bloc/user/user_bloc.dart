@@ -1,20 +1,53 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/age.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/gender.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/name.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/phone_number.dart';
+import 'package:onthi_gplx_pro/core/extension/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/index.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
-  UserBloc()
-    : super(const UserFormSubmissionState(nameError: '', ageError: '')) {
+  final LicenseBloc licenseBloc;
+  late StreamSubscription licenseBlocWatcher;
+
+  @override
+  Future<void> close() {
+    licenseBlocWatcher.cancel();
+    return super.close();
+  }
+
+  UserBloc({required this.licenseBloc})
+    : super(
+        const UserFormSubmissionState(
+          nameError: '',
+          ageError: '',
+          licenseError: '',
+        ),
+      ) {
+    //check initial instantly
+    if (licenseBloc.state is LicenseLoaded) {
+      final selected = (licenseBloc.state as LicenseLoaded).selectedLicense;
+      if (selected != null) {
+        add(LicenseChanged(selected));
+      }
+    }
+
+    licenseBlocWatcher = licenseBloc.stream.listen((licenseState) {
+      if (licenseState is LicenseLoaded &&
+          licenseState.selectedLicense != null) {
+        add(LicenseChanged(licenseState.selectedLicense!));
+      }
+    });
+
     on<NameChanged>(_onNameChanged);
     on<AgeChanged>(_onAgeChanged);
     on<GenderChanged>(_onGenderChanged);
     on<PhoneChanged>(_onPhoneChanged);
+    on<LicenseChanged>(_onLicenseChanged);
 
     on<Loading>(_onLoading);
   }
@@ -78,6 +111,35 @@ class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
       },
       ifRight: (value) {
         emit(state.copyWith(phone: event.phone, phoneError: null));
+      },
+    );
+  }
+
+  void _onLicenseChanged(
+    LicenseChanged event,
+    Emitter<UserFormSubmissionState> emit,
+  ) {
+    final licenseType = LicenseTypeExt.fromString(event.license.code);
+    final result = License.validate(licenseType);
+
+    result.fold(
+      ifLeft: (failure) {
+        emit(
+          state.copyWith(
+            license: licenseType,
+            licenseId: event.license.id,
+            licenseError: failure.message,
+          ),
+        );
+      },
+      ifRight: (value) {
+        emit(
+          state.copyWith(
+            license: licenseType,
+            licenseId: event.license.id,
+            licenseError: null,
+          ),
+        );
       },
     );
   }

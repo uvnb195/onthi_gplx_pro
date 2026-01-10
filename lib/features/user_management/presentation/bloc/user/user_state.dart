@@ -12,7 +12,8 @@ class UserFormSubmissionState extends Equatable {
   final String? avatarPathError;
   final GenderType gender;
   final String? genderError;
-  final String license;
+  final int? licenseId;
+  final LicenseType? license;
   final String? licenseError;
   final String phone;
   final String? phoneError;
@@ -30,7 +31,8 @@ class UserFormSubmissionState extends Equatable {
     this.avatarPathError,
     this.gender = GenderType.MALE,
     this.genderError,
-    this.license = '',
+    this.licenseId,
+    this.license,
     this.licenseError,
     this.phone = '',
     this.phoneError,
@@ -48,7 +50,8 @@ class UserFormSubmissionState extends Equatable {
     final String? avatarPathError,
     final GenderType? gender,
     final String? genderError,
-    final String? license,
+    final int? licenseId,
+    final LicenseType? license,
     final String? licenseError,
     final String? phone,
     final String? phoneError,
@@ -65,6 +68,7 @@ class UserFormSubmissionState extends Equatable {
       avatarPathError: avatarPathError,
       gender: gender ?? this.gender,
       genderError: genderError,
+      licenseId: licenseId ?? this.licenseId,
       license: license ?? this.license,
       licenseError: licenseError,
       phone: phone ?? this.phone,
@@ -82,7 +86,7 @@ class UserFormSubmissionState extends Equatable {
       genderError == null &&
       age.isNotEmpty;
 
-  bool get isStep3Valid => licenseError == null && license.isNotEmpty;
+  bool get isStep3Valid => licenseError == null;
 
   @override
   List<Object?> get props => [
@@ -95,6 +99,7 @@ class UserFormSubmissionState extends Equatable {
     avatarPathError,
     gender,
     genderError,
+    licenseId,
     license,
     licenseError,
     phone,

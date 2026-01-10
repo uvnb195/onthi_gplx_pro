@@ -15,6 +15,7 @@ class _SplashPageState extends State<SplashPage>
   SplashState? _pendingState;
   bool _isBlocReady = false;
   bool _isAnimationStopped = false;
+  bool _isAnimationFinishedOnce = false;
   @override
   void initState() {
     super.initState();
@@ -24,8 +25,9 @@ class _SplashPageState extends State<SplashPage>
     });
   }
 
-  Future<void> _handleNavigation(SplashState state) async {
+  void _handleNavigation(SplashState state) {
     _animationController.stop();
+    if (state is SplashLoading || state is SplashInitial) return;
     if (!mounted) return;
     if (state is SplashToHome) {
       Navigator.pushReplacementNamed(context, '/home');
@@ -39,17 +41,19 @@ class _SplashPageState extends State<SplashPage>
   }
 
   Future<void> _playAnimation() async {
-    while (mounted) {
-      await _animationController.forward(from: 0);
-      if (_isBlocReady) {
-        setState(() {
-          _isAnimationStopped = true;
-        });
-        break;
+    await _animationController.forward();
+
+    if (mounted) {
+      setState(() {
+        _isAnimationFinishedOnce = true;
+        _isAnimationStopped = true;
+      });
+      if (_isBlocReady && _pendingState != null) {
+        _handleNavigation(_pendingState!);
+      } else {
+        _animationController.repeat();
       }
     }
-    if (!mounted || _pendingState == null) return;
-    await _handleNavigation(_pendingState!);
   }
 
   @override
@@ -64,8 +68,14 @@ class _SplashPageState extends State<SplashPage>
       body: SafeArea(
         child: BlocListener<SplashBloc, SplashState>(
           listener: (context, state) {
-            _pendingState = state;
-            _isBlocReady = true;
+            if (state is! SplashLoading) {
+              _pendingState = state;
+              _isBlocReady = true;
+            }
+
+            if (_isAnimationFinishedOnce) {
+              _handleNavigation(state);
+            }
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
