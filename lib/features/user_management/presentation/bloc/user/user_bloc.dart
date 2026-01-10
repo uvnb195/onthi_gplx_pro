@@ -1,26 +1,14 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:onthi_gplx_pro/core/extension/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/index.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
-  final LicenseBloc licenseBloc;
-  late StreamSubscription licenseBlocWatcher;
-
-  @override
-  Future<void> close() {
-    licenseBlocWatcher.cancel();
-    return super.close();
-  }
-
-  UserBloc({required this.licenseBloc})
+  UserBloc()
     : super(
         const UserFormSubmissionState(
           nameError: '',
@@ -28,21 +16,6 @@ class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
           licenseError: '',
         ),
       ) {
-    //check initial instantly
-    if (licenseBloc.state is LicenseLoaded) {
-      final selected = (licenseBloc.state as LicenseLoaded).selectedLicense;
-      if (selected != null) {
-        add(LicenseChanged(selected));
-      }
-    }
-
-    licenseBlocWatcher = licenseBloc.stream.listen((licenseState) {
-      if (licenseState is LicenseLoaded &&
-          licenseState.selectedLicense != null) {
-        add(LicenseChanged(licenseState.selectedLicense!));
-      }
-    });
-
     on<NameChanged>(_onNameChanged);
     on<AgeChanged>(_onAgeChanged);
     on<GenderChanged>(_onGenderChanged);

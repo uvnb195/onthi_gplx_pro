@@ -9,4 +9,10 @@ sealed class LicenseEvent extends Equatable {
 
 final class LoadLicenses extends LicenseEvent {}
 
-final class SelectLicense extends LicenseEvent {}
+final class SelectLicense extends LicenseEvent {
+  final LicenseEntity selected;
+  const SelectLicense(this.selected);
+
+  @override
+  List<Object> get props => [selected];
+}

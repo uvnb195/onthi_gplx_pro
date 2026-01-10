@@ -2,12 +2,11 @@ import 'package:get_it/get_it.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/features/global_blocs/auth_bloc/auth_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/data/repositories/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/usecases/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/license_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
-
-import 'features/user_management/data/repositories/index.dart';
-import 'features/user_management/domain/usecases/index.dart';
 
 final sl = GetIt.instance;
 
@@ -42,5 +41,5 @@ void initialDependencies() {
   // B L O C
   sl.registerFactory<AuthBloc>(() => AuthBloc(sl()));
   sl.registerFactory<LicenseBloc>(() => LicenseBloc(sl()));
-  sl.registerFactory<UserBloc>(() => UserBloc(licenseBloc: sl<LicenseBloc>()));
+  sl.registerFactory<UserBloc>(() => UserBloc());
 }

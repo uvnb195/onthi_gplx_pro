@@ -11,12 +11,13 @@ class LicenseBloc extends Bloc<LicenseEvent, LicenseState> {
   final GetLicensesUseCase _getLicensesUseCase;
   LicenseBloc(this._getLicensesUseCase) : super(LicenseInitial()) {
     on<LoadLicenses>(_onLoadLicenses);
+    on<SelectLicense>(_onSelectLicense);
   }
 
   void _onLoadLicenses(LoadLicenses event, Emitter<LicenseState> emit) async {
     emit(LicenseLoading());
 
-    await Future.delayed(const Duration(seconds: 10));
+    await Future.delayed(const Duration(seconds: 2));
 
     final result = await _getLicensesUseCase(NoParams());
 
@@ -24,5 +25,11 @@ class LicenseBloc extends Bloc<LicenseEvent, LicenseState> {
       ifLeft: (failure) => emit(LicenseLoadFail(failure.message)),
       ifRight: (success) => emit(LicenseLoaded(licenses: success)),
     );
+  }
+
+  void _onSelectLicense(SelectLicense event, Emitter<LicenseState> emit) {
+    if (state is LicenseLoaded) {
+      emit((state as LicenseLoaded).copyWith(selectedLicense: event.selected));
+    }
   }
 }

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/license_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/indicator.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/index.dart';
 
@@ -18,6 +18,7 @@ class _StepWrapperState extends State<StepWrapper> {
   final stepCount = 3;
   int currentIndex = 0;
   double buttonOpacity = 0;
+  bool isLicensesLoaded = false;
   List<StatefulWidget> get _stepList => [
     WelcomeStep(isVisible: currentIndex >= 0),
     InformationStep(isVisible: currentIndex >= 1),
@@ -27,14 +28,22 @@ class _StepWrapperState extends State<StepWrapper> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => setState(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(seconds: 2));
+      setState(() {
         buttonOpacity = 1;
-      }),
-    );
+      });
+    });
   }
 
   void _onSubmit() {}
+
+  IconData getNextButtonIcon() {
+    if (currentIndex == stepCount - 1) {
+      return Icons.done_all_rounded;
+    }
+    return Icons.arrow_forward_ios_rounded;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +54,9 @@ class _StepWrapperState extends State<StepWrapper> {
       if (currentIndex == lastIndex) {
         _onSubmit();
       } else {
-        if (currentIndex + 1 == lastIndex) {
+        if (currentIndex + 1 == lastIndex && !isLicensesLoaded) {
           context.read<LicenseBloc>().add(LoadLicenses());
+          isLicensesLoaded = true;
         }
         setState(() {
           currentIndex++;
@@ -137,14 +147,17 @@ class _StepWrapperState extends State<StepWrapper> {
                             Expanded(
                               child: AnimatedOpacity(
                                 opacity: buttonOpacity,
-                                duration: Duration(milliseconds: 1000),
+                                duration: Duration(milliseconds: 500),
                                 curve: Curves.easeOut,
                                 child: StyledButton(
                                   title: currentIndex == stepCount - 1
                                       ? "Hoàn tất"
                                       : "Tiếp tục",
                                   suffixIcon: Icon(
-                                    Icons.arrow_forward_ios_rounded,
+                                    getNextButtonIcon(),
+                                    size: currentIndex < stepCount - 1
+                                        ? null
+                                        : 24,
                                   ),
                                   backgroundColor: AppColors.primaryColor,
                                   onPressed: canContinue() ? onNext : null,

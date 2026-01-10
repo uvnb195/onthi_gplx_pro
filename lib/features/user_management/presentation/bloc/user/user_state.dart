@@ -86,7 +86,7 @@ class UserFormSubmissionState extends Equatable {
       genderError == null &&
       age.isNotEmpty;
 
-  bool get isStep3Valid => licenseError == null;
+  bool get isStep3Valid => licenseError == null && license != null;
 
   @override
   List<Object?> get props => [

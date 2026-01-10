@@ -24,6 +24,8 @@ class _SplashPageState extends State<SplashPage>
     _animationController.stop();
     switch (state) {
       case AuthInitial():
+        // do nothing
+        return;
       case Unauthenticated():
         await Future.delayed(const Duration(seconds: 2));
         if (mounted) {

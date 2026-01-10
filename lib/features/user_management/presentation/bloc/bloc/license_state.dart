@@ -16,6 +16,16 @@ final class LicenseLoaded extends LicenseState {
   final LicenseEntity? selectedLicense;
   const LicenseLoaded({required this.licenses, this.selectedLicense});
 
+  LicenseLoaded copyWith({
+    final List<LicenseEntity>? licenses,
+    final LicenseEntity? selectedLicense,
+  }) {
+    return LicenseLoaded(
+      licenses: licenses ?? this.licenses,
+      selectedLicense: selectedLicense ?? this.selectedLicense,
+    );
+  }
+
   @override
   List<Object?> get props => [licenses, selectedLicense];
 }

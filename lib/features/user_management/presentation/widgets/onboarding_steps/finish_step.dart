@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/radio_item.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/license_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 
 class FinishStep extends StatefulWidget {
   final bool isVisible;
@@ -14,22 +15,16 @@ class FinishStep extends StatefulWidget {
 
 class _FinishStepState extends State<FinishStep> {
   late final ScrollController _scrollController;
+  final ValueNotifier<double> _headerHeightNotifier = ValueNotifier(0);
   late final double _maxHeight;
   final double _minHeight = 120;
-  double _headerHeight = 0;
 
   void _onScroll() {
     double offset = _scrollController.offset;
-    double newHeight = _maxHeight - offset;
-    setState(() {
-      if (newHeight < _minHeight) {
-        _headerHeight = _minHeight;
-      } else if (newHeight > _maxHeight) {
-        _headerHeight = _maxHeight;
-      } else {
-        _headerHeight = newHeight;
-      }
-    });
+    _headerHeightNotifier.value = (_maxHeight - offset).clamp(
+      _minHeight,
+      _maxHeight,
+    );
   }
 
   @override
@@ -43,9 +38,7 @@ class _FinishStepState extends State<FinishStep> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _maxHeight = MediaQuery.sizeOf(context).height / 4;
-    if (_headerHeight == 0) {
-      _headerHeight = _maxHeight;
-    }
+    _headerHeightNotifier.value = _maxHeight;
   }
 
   @override
@@ -73,15 +66,34 @@ class _FinishStepState extends State<FinishStep> {
               LicenseLoaded() => Expanded(
                 child: Container(
                   decoration: const BoxDecoration(),
-                  child: ListView.separated(
+                  child: ListView.builder(
+                    itemExtent: 100 + 16,
+                    cacheExtent: 80,
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics(),
                     ),
-                    itemCount: 10,
-                    itemBuilder: (context, index) => RadioItem(),
-                    separatorBuilder: (BuildContext context, int index) =>
-                        SizedBox(height: 16),
+                    itemCount: state.licenses.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 16.0),
+                      child: RadioItem(
+                        themeColor: AppColors.primaryColor,
+                        selected:
+                            state.selectedLicense?.id ==
+                            state.licenses[index].id,
+                        title:
+                            "Hạng ${state.licenses[index].code.toUpperCase()}",
+                        description: state.licenses[index].description,
+                        onTap: () {
+                          context.read<LicenseBloc>().add(
+                            SelectLicense(state.licenses[index]),
+                          );
+                          context.read<UserBloc>().add(
+                            LicenseChanged(state.licenses[index]),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -92,30 +104,34 @@ class _FinishStepState extends State<FinishStep> {
     );
   }
 
-  Widget _buildContent() {
-    return Column(children: List.generate(10, (index) => RadioItem()).toList());
-  }
-
   Widget _buildHeader(BuildContext context) {
-    return SizedBox(
-      height: _headerHeight,
-      width: double.maxFinite,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            "Mục tiêu của bạn 🎯",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+    return ValueListenableBuilder(
+      valueListenable: _headerHeightNotifier,
+      builder: (BuildContext context, value, Widget? child) {
+        return SizedBox(
+          height: _headerHeightNotifier.value,
+          width: double.maxFinite,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "Mục tiêu của bạn 🎯",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Bạn muốn thi hạng bằng lái nào?",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textSecondaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+            ],
           ),
-          SizedBox(height: 8),
-          Text(
-            "Bạn muốn thi hạng bằng lái nào?",
-            style: TextStyle(fontSize: 14, color: AppColors.textSecondaryColor),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 20),
-        ],
-      ),
+        );
+      },
     );
   }
 }
