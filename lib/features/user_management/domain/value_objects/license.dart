@@ -5,9 +5,9 @@ import 'package:onthi_gplx_pro/core/error/failures.dart';
 enum LicenseType { a1, a, b1, b, c1, c, d1, d2, d, be, c1e, ce, d1e, d2e, de }
 
 class License {
-  final LicenseType license;
+  final LicenseType value;
 
-  const License._(this.license);
+  const License._(this.value);
 
   factory License.create(LicenseType input) {
     return License._(input);

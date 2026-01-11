@@ -1,6 +1,11 @@
 import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/gender.dart';
 
 extension GenderTypeExt on GenderType {
+  int get intValue => switch (this) {
+    GenderType.MALE => 0,
+    GenderType.FEMALE => 1,
+  };
+
   String get displayName {
     switch (this) {
       case GenderType.MALE:

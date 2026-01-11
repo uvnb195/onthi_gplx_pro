@@ -4,7 +4,7 @@ import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 abstract class LocalUserDataSource {
   Stream<UserWithLicense?> currentUserStream();
   Future<void> clearUser();
-  Future<void> insertUser();
+  Future<int> createUser(UserTableCompanion user);
 }
 
 class LocalUserDataSourceImpl implements LocalUserDataSource {
@@ -14,8 +14,7 @@ class LocalUserDataSourceImpl implements LocalUserDataSource {
 
   @override
   Future<void> clearUser() {
-    // TODO: implement clearUser
-    throw UnimplementedError();
+    return _db.userDao.deleteAllUsers();
   }
 
   @override
@@ -24,8 +23,7 @@ class LocalUserDataSourceImpl implements LocalUserDataSource {
   }
 
   @override
-  Future<void> insertUser() {
-    // TODO: implement insertUser
-    throw UnimplementedError();
+  Future<int> createUser(UserTableCompanion user) {
+    return _db.userDao.createUser(user);
   }
 }

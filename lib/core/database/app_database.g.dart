@@ -428,7 +428,8 @@ class $UserTableTable extends UserTable
     aliasedName,
     false,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
   );
   static const VerificationMeta _avatarPathMeta = const VerificationMeta(
     'avatarPath',
@@ -532,8 +533,6 @@ class $UserTableTable extends UserTable
         _genderMeta,
         gender.isAcceptableOrUnknown(data['gender']!, _genderMeta),
       );
-    } else if (isInserting) {
-      context.missing(_genderMeta);
     }
     if (data.containsKey('avatar_path')) {
       context.handle(
@@ -815,15 +814,14 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
     required int licenseId,
     required String name,
     required int age,
-    required int gender,
+    this.gender = const Value.absent(),
     this.avatarPath = const Value.absent(),
     this.phoneNumber = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : licenseId = Value(licenseId),
        name = Value(name),
-       age = Value(age),
-       gender = Value(gender);
+       age = Value(age);
   static Insertable<UserTableData> custom({
     Expression<int>? id,
     Expression<int>? licenseId,
@@ -1241,7 +1239,7 @@ typedef $$UserTableTableCreateCompanionBuilder =
       required int licenseId,
       required String name,
       required int age,
-      required int gender,
+      Value<int> gender,
       Value<String?> avatarPath,
       Value<String?> phoneNumber,
       Value<DateTime> createdAt,
@@ -1545,7 +1543,7 @@ class $$UserTableTableTableManager
                 required int licenseId,
                 required String name,
                 required int age,
-                required int gender,
+                Value<int> gender = const Value.absent(),
                 Value<String?> avatarPath = const Value.absent(),
                 Value<String?> phoneNumber = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),

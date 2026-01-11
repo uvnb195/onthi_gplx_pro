@@ -42,8 +42,6 @@ final class PhoneChanged extends UserEvent {
   const PhoneChanged(this.phone);
 }
 
-final class UserChanged extends UserEvent {
-  final int? id; // null for create, id for update
+final class CreateUser extends UserEvent {}
 
-  const UserChanged(this.id);
-}
+final class DeleteUser extends UserEvent {}

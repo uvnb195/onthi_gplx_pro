@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/radio_item.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/license_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/license_bloc/license_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 
 class FinishStep extends StatefulWidget {

@@ -8,3 +8,5 @@ sealed class AuthEvent extends Equatable {
 }
 
 final class AuthStarted extends AuthEvent {}
+
+final class AuthLoggedOut extends AuthEvent {} // which mean delete current user

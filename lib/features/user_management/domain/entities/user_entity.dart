@@ -4,10 +4,10 @@ import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/ind
 class UserEntity {
   final int id;
   final Name name;
-  final LicenseEntity? license;
+  final LicenseEntity license;
   final Gender gender;
+  final Age age;
   final AvatarPath? avatarPath;
-  final Age? age;
   final PhoneNumber? phoneNumber;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -17,7 +17,7 @@ class UserEntity {
     required this.license,
     required this.name,
     required this.gender,
-    this.age,
+    required this.age,
     this.avatarPath,
     this.phoneNumber,
     this.createdAt,

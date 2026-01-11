@@ -2,13 +2,18 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:onthi_gplx_pro/core/extension/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/usecases/create_user.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/usecases/delete_user.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/index.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
-  UserBloc()
+  final CreateUserUseCase createUserUseCase;
+  final DeleteUserUseCase deleteUserUseCase;
+
+  UserBloc({required this.createUserUseCase, required this.deleteUserUseCase})
     : super(
         const UserFormSubmissionState(
           nameError: '',
@@ -21,8 +26,18 @@ class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
     on<GenderChanged>(_onGenderChanged);
     on<PhoneChanged>(_onPhoneChanged);
     on<LicenseChanged>(_onLicenseChanged);
+    on<AvatarChanged>(_onAvatarChanged);
+
+    on<CreateUser>(_onCreateUser);
 
     on<Loading>(_onLoading);
+  }
+
+  void _onAvatarChanged(
+    AvatarChanged event,
+    Emitter<UserFormSubmissionState> emit,
+  ) {
+    emit(state.copyWith(avatarPath: event.avatarPath));
   }
 
   void _onNameChanged(
@@ -92,27 +107,55 @@ class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
     LicenseChanged event,
     Emitter<UserFormSubmissionState> emit,
   ) {
-    final licenseType = LicenseTypeExt.fromString(event.license.code);
-    final result = License.validate(licenseType);
+    final result = License.validate(
+      LicenseTypeExt.fromString(event.license.code),
+    );
 
     result.fold(
       ifLeft: (failure) {
         emit(
-          state.copyWith(
-            license: licenseType,
-            licenseId: event.license.id,
-            licenseError: failure.message,
-          ),
+          state.copyWith(license: event.license, licenseError: failure.message),
         );
       },
       ifRight: (value) {
+        emit(state.copyWith(license: event.license, licenseError: null));
+      },
+    );
+  }
+
+  void _onCreateUser(
+    CreateUser event,
+    Emitter<UserFormSubmissionState> emit,
+  ) async {
+    emit(
+      state.copyWith(isLoading: true, status: .submitting, submitError: null),
+    );
+
+    if (!state.isStep1Valid || !state.isStep2Valid || !state.isStep3Valid) {
+      emit(
+        state.copyWith(
+          status: .failure,
+          isLoading: false,
+          submitError: 'Vui lòng điền đầy đủ thông tin hợp lệ',
+        ),
+      );
+      return;
+    }
+
+    final userId = await createUserUseCase(state.toUserEntity());
+
+    userId.fold(
+      ifLeft: (failure) {
         emit(
           state.copyWith(
-            license: licenseType,
-            licenseId: event.license.id,
-            licenseError: null,
+            status: .failure,
+            isLoading: false,
+            submitError: failure.message,
           ),
         );
+      },
+      ifRight: (id) {
+        emit(state.copyWith(userId: id, status: .success, isLoading: false));
       },
     );
   }

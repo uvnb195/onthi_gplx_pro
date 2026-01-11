@@ -5,8 +5,8 @@ import 'package:onthi_gplx_pro/core/error/failures.dart';
 enum GenderType { MALE, FEMALE }
 
 class Gender {
-  final GenderType gender;
-  const Gender._(this.gender);
+  final GenderType value;
+  const Gender._(this.value);
 
   factory Gender.create(GenderType gender) {
     return Gender._(gender);

@@ -3,8 +3,8 @@ import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 
 class Age {
-  final int? age;
-  const Age._(this.age);
+  final int? value;
+  const Age._(this.value);
 
   factory Age.create(int? input) {
     if (input == null) throw ValidationException('Vui lòng nhập tuổi');

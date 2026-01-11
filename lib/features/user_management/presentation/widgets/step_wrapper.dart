@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/bloc/license_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/license_bloc/license_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/indicator.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/onboarding_steps/index.dart';
@@ -36,7 +36,9 @@ class _StepWrapperState extends State<StepWrapper> {
     });
   }
 
-  void _onSubmit() {}
+  void _onSubmit() {
+    context.read<UserBloc>().add(CreateUser());
+  }
 
   IconData getNextButtonIcon() {
     if (currentIndex == stepCount - 1) {
@@ -107,6 +109,19 @@ class _StepWrapperState extends State<StepWrapper> {
                   // B U T T O N - S E C T I O N
                   BlocBuilder<UserBloc, UserFormSubmissionState>(
                     builder: (context, state) {
+                      if (state.submitError != null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                state.submitError!,
+                                style: TextStyle(color: AppColors.primaryColor),
+                              ),
+                              backgroundColor: AppColors.neutralColor,
+                            ),
+                          );
+                        });
+                      }
                       bool canContinue() {
                         switch (currentIndex) {
                           case 0:

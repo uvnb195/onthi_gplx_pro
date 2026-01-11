@@ -4,7 +4,7 @@ import 'package:onthi_gplx_pro/core/router/app_router.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_theme.dart';
 import 'package:onthi_gplx_pro/dependencies_container.dart';
-import 'package:onthi_gplx_pro/features/global_blocs/auth_bloc/auth_bloc.dart';
+import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,13 +38,19 @@ class MyApp extends StatelessWidget {
 
             listener: (context, state) {
               if (state is Authenticated) {
+                if (prevState is Unauthenticated) {
+                  AppRouter.navigatorKey.currentState?.pushReplacementNamed(
+                    RouteNames.achievement,
+                  );
+                  return;
+                }
                 AppRouter.navigatorKey.currentState?.pushReplacementNamed(
                   RouteNames.home,
                 );
               } else if (state is Unauthenticated) {
                 if (prevState is AuthInitial) {
                   Future.delayed(
-                    const Duration(milliseconds: 3000),
+                    const Duration(milliseconds: 10000),
                     () => AppRouter.navigatorKey.currentState
                         ?.pushReplacementNamed(RouteNames.onboarding),
                   );

@@ -21,20 +21,25 @@ class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
       if (row == null) return null;
       return UserWithLicense(
         user: row.readTable(userTable),
-        license: row.readTableOrNull(licenseTable),
+        license: row.readTable(licenseTable),
       );
     });
   }
 
   Future<int> createUser(UserTableCompanion user) {
+    // only 1 user is allowed in the app (offline mode), so we fix the id to 1
     final userWithFixedId = user.copyWith(id: const Value(1));
     return into(userTable).insert(userWithFixedId, mode: .insertOrReplace);
+  }
+
+  Future<int> deleteAllUsers() {
+    return delete(userTable).go();
   }
 }
 
 class UserWithLicense {
   final UserTableData user;
-  final LicenseTableData? license;
+  final LicenseTableData license;
 
-  const UserWithLicense({required this.user, this.license});
+  const UserWithLicense({required this.user, required this.license});
 }

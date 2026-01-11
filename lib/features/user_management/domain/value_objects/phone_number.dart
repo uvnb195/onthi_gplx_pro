@@ -3,9 +3,9 @@ import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 
 class PhoneNumber {
-  final String? phoneNumber;
+  final String? value;
 
-  const PhoneNumber._(this.phoneNumber);
+  const PhoneNumber._(this.value);
 
   factory PhoneNumber.create(String? phone) {
     final message = 'Số điện thoại không hợp lệ';

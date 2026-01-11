@@ -3,9 +3,9 @@ import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 
 class AvatarPath {
-  final String? path;
+  final String? value;
 
-  const AvatarPath._(this.path);
+  const AvatarPath._(this.value);
 
   factory AvatarPath.create(String? filePath) {
     if (filePath == null || filePath.isEmpty) return AvatarPath._(null);
