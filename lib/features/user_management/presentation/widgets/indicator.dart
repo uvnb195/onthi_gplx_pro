@@ -21,9 +21,9 @@ class Indicator extends StatelessWidget {
           return AnimatedContainer(
             duration: Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            margin: EdgeInsets.symmetric(horizontal: 4),
-            width: isActivated ? 30 : 10,
-            height: 10,
+            margin: EdgeInsets.symmetric(horizontal: 2),
+            width: isActivated ? 20 : 10,
+            height: isActivated ? 8 : 10,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(999),
               color: isActivated

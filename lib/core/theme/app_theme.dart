@@ -9,6 +9,9 @@ ThemeData themeData = ThemeData(
   primarySwatch: AppColors.primarySwatch,
   brightness: Brightness.dark,
   appBarTheme: const AppBarTheme(
+    backgroundColor: AppColors.backgroundColor,
+    surfaceTintColor: AppColors.backgroundColor,
+    scrolledUnderElevation: 0,
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light, // Android

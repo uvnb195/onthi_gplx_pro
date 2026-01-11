@@ -1,32 +1,45 @@
+import 'package:drift/drift.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/entities/user/user_entity.dart';
+import 'package:onthi_gplx_pro/core/database/dao/user/user_dao.dart';
+import 'package:onthi_gplx_pro/core/extension/gender_type.dart';
+import 'package:onthi_gplx_pro/features/user_management/data/models/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/index.dart';
 
 class UserModel extends UserEntity {
   UserModel({
     required super.id,
-    required super.license,
     required super.name,
-    super.age,
+    required super.license,
+    required super.gender,
+    required super.age,
     super.avatarPath,
     super.phoneNumber,
-    super.createdAt,
-    super.updatedAt,
   });
 
-  factory UserModel.fromDrift(UserTableData user) {
+  factory UserModel.fromDrift(UserWithLicense data) {
+    final user = data.user;
+    final license = data.license;
     return UserModel(
       id: user.id,
-      license: user.licenseId,
-      name: user.name,
-      age: user.age,
-      avatarPath: user.avatarPath,
-      phoneNumber: user.phoneNumber,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      license: LicenseModel.fromDrift(license),
+      name: Name.create(user.name),
+      age: Age.create(user.age),
+      gender: Gender.create(GenderTypeExt.fromInt(user.gender)!),
+      avatarPath: AvatarPath.create(user.avatarPath),
+      phoneNumber: PhoneNumber.create(user.phoneNumber),
     );
   }
 
-  UserEntity toEntity() {
-    return UserEntity(id: id, license: license, name: name);
+  UserTableCompanion toDrift() {
+    return UserTableCompanion(
+      id: Value(id),
+      name: Value(name.value),
+      licenseId: Value(license.id),
+      age: Value(age.value!),
+      gender: Value(gender.value.intValue),
+      avatarPath: Value(avatarPath?.value),
+      phoneNumber: Value(phoneNumber?.value),
+    );
   }
 }

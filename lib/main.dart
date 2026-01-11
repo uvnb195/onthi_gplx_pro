@@ -4,7 +4,7 @@ import 'package:onthi_gplx_pro/core/router/app_router.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_theme.dart';
 import 'package:onthi_gplx_pro/dependencies_container.dart';
-import 'package:onthi_gplx_pro/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +18,56 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => sl<SplashBloc>(),
+      create: (context) => sl<AuthBloc>()..add(AuthStarted()),
       child: MaterialApp(
+        navigatorKey: AppRouter.navigatorKey,
         onGenerateRoute: AppRouter.generate,
-        initialRoute: RouteNames.onboarding,
+        initialRoute: RouteNames.splash,
         theme: themeData,
         debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          AuthState? prevState;
+
+          return BlocListener<AuthBloc, AuthState>(
+            listenWhen: (previous, current) {
+              prevState = previous;
+              return previous is AuthInitial && current is! AuthInitial ||
+                  previous is Authenticated && current is Unauthenticated ||
+                  previous is Unauthenticated && current is Authenticated;
+            },
+
+            listener: (context, state) {
+              if (state is Authenticated) {
+                if (prevState is Unauthenticated) {
+                  AppRouter.navigatorKey.currentState?.pushReplacementNamed(
+                    RouteNames.achievement,
+                  );
+                  return;
+                }
+                AppRouter.navigatorKey.currentState?.pushReplacementNamed(
+                  RouteNames.home,
+                );
+              } else if (state is Unauthenticated) {
+                if (prevState is AuthInitial) {
+                  Future.delayed(
+                    const Duration(milliseconds: 10000),
+                    () => AppRouter.navigatorKey.currentState
+                        ?.pushReplacementNamed(RouteNames.onboarding),
+                  );
+                } else {
+                  AppRouter.navigatorKey.currentState?.pushReplacementNamed(
+                    RouteNames.onboarding,
+                  );
+                }
+              } else if (state is AuthenticateFail) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
+              }
+            },
+            child: child,
+          );
+        },
       ),
     );
   }

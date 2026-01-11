@@ -3,29 +3,35 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 
 class StyledButton extends StatelessWidget {
   final String? title;
+  final TextStyle? style;
   final Widget? prefixIcon; //left Icon
   final Widget? suffixIcon; //right icon
   final Color? backgroundColor;
   final Color? foregroundColor;
   final VoidCallback? onPressed;
+  final double? width;
+  final double? height;
   const StyledButton({
     super.key,
     this.title,
+    this.style,
     this.onPressed,
     this.prefixIcon,
     this.suffixIcon,
     this.backgroundColor,
     this.foregroundColor,
+    this.height,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    final style = ElevatedButton.styleFrom(
+    final buttonStyle = ElevatedButton.styleFrom(
       // C O L O R
       backgroundColor: backgroundColor ?? AppColors.primaryColor,
       foregroundColor: foregroundColor ?? AppColors.textColor,
 
-      minimumSize: Size(80, 48),
+      minimumSize: Size(width ?? 80, height ?? 48),
 
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(12),
@@ -33,13 +39,14 @@ class StyledButton extends StatelessWidget {
       shadowColor: backgroundColor ?? AppColors.primaryColor,
       elevation: 4,
 
-      textStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+      textStyle: style ?? TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
     );
     return ElevatedButton(
       onPressed: onPressed,
-      style: style,
+      style: buttonStyle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (prefixIcon != null) prefixIcon!,
           if (title != null)
