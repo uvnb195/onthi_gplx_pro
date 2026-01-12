@@ -39,7 +39,7 @@ class _StyledScaleEntranceState extends State<StyledScaleEntrance>
     scale = Tween<double>(
       begin: widget.from,
       end: 1,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     Future.delayed(widget.delayed, () {
       if (mounted) _controller.forward();

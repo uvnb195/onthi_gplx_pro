@@ -7,7 +7,6 @@ import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local/
 import 'package:onthi_gplx_pro/features/user_management/data/models/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/index.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final LocalUserDataSource _localUserDataSource;
@@ -35,19 +34,9 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Stream<UserEntity?> watchCurrentUser() {
-    return _localUserDataSource.currentUserStream().map(
-      (data) => data == null
-          ? null
-          : UserEntity(
-              id: data.user.id,
-              license: LicenseModel.fromDrift(data.license),
-              name: Name.create(data.user.name),
-              gender: Gender.create(GenderTypeExt.fromInt(data.user.gender)!),
-              age: Age.create(data.user.age),
-              avatarPath: AvatarPath.create(data.user.avatarPath),
-              phoneNumber: PhoneNumber.create(data.user.phoneNumber),
-            ),
-    );
+    return _localUserDataSource.currentUserStream().map((data) {
+      return data == null ? null : UserModel.fromDrift(data);
+    });
   }
 
   @override

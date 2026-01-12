@@ -21,7 +21,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _watchCurrentUserUseCase(),
         onData: (user) {
           if (user == null) return Unauthenticated();
-          return Authenticated();
+
+          return Authenticated(user);
         },
         onError: (err, _) => AuthenticateFail(err.toString()),
       );

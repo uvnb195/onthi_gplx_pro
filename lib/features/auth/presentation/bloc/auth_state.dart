@@ -11,7 +11,10 @@ final class AuthInitial extends AuthState {}
 
 final class AuthChanged extends AuthState {}
 
-final class Authenticated extends AuthState {}
+final class Authenticated extends AuthState {
+  final UserEntity user;
+  const Authenticated(this.user);
+}
 
 final class Unauthenticated extends AuthState {}
 

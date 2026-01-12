@@ -56,7 +56,11 @@ class _FinishStepState extends State<FinishStep> {
           builder: (context, state) {
             return switch (state) {
               LicenseInitial() || LicenseLoading() => Expanded(
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryColor,
+                  ),
+                ),
               ),
               LicenseLoadFail() => Expanded(
                 child: Center(
