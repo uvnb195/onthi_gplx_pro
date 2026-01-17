@@ -52,10 +52,15 @@ class TodoSection extends StatelessWidget {
                   ),
                 ],
               ),
+              Divider(),
               SizedBox(height: 16),
               // I T E M S
               _TodoItem(isDone: true),
+              SizedBox(height: 6),
+
               _TodoItem(),
+              SizedBox(height: 6),
+
               _TodoItem(),
             ],
           ),
@@ -78,7 +83,7 @@ class _TodoItem extends StatelessWidget {
           Icon(
             isDone ? BootstrapIcons.check_circle : BootstrapIcons.circle,
             color: isDone
-                ? AppColors.primaryColor
+                ? AppColors.accentColor
                 : AppColors.textColor.withAlpha(50),
             size: 20,
           ),

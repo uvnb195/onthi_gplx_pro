@@ -18,4 +18,11 @@ ThemeData themeData = ThemeData(
       statusBarBrightness: Brightness.dark, // iOS
     ),
   ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: AppColors.backgroundColor,
+    type: BottomNavigationBarType.fixed,
+    showUnselectedLabels: false,
+    selectedItemColor: AppColors.primaryColor,
+    elevation: 0,
+  ),
 );
