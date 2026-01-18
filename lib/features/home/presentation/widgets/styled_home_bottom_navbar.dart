@@ -99,6 +99,7 @@ class StyledBottomNavbar extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 4),
                             ],
                           ),
                         ),

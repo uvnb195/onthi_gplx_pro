@@ -5,6 +5,7 @@ class StyledScaleEntrance extends StatefulWidget {
   final bool disableAnimation;
   final double from;
   final Widget child;
+  final Curve curve;
   final VoidCallback? onEnd;
 
   const StyledScaleEntrance({
@@ -12,6 +13,7 @@ class StyledScaleEntrance extends StatefulWidget {
     this.duration = const Duration(milliseconds: 300),
     this.delayed = const Duration(seconds: 0),
     this.disableAnimation = false,
+    this.curve = Curves.easeOutBack,
     this.from = 0,
     required this.child,
     this.onEnd,
@@ -39,7 +41,7 @@ class _StyledScaleEntranceState extends State<StyledScaleEntrance>
     scale = Tween<double>(
       begin: widget.from,
       end: 1,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
 
     Future.delayed(widget.delayed, () {
       if (mounted) _controller.forward();

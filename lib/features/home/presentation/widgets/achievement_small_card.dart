@@ -8,12 +8,7 @@ class AchievementSmallCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.only(
-      topRight: .circular(16),
-      bottomLeft: .circular(16),
-      bottomRight: .circular(16),
-      topLeft: .circular(16),
-    );
+    final borderRadius = BorderRadius.circular(8);
 
     return Material(
       borderRadius: borderRadius,

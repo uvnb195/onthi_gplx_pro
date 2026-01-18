@@ -97,7 +97,7 @@ class LearningCategoryCard extends StatelessWidget {
                                   color: isDisabled
                                       ? AppColors.textDisableColor
                                       : themeColor,
-                                  size: 32,
+                                  size: 24,
                                 ),
                               ),
                             ),
@@ -113,7 +113,7 @@ class LearningCategoryCard extends StatelessWidget {
                           title,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 24,
+                            fontSize: 20,
                             color: isDisabled
                                 ? AppColors.textDisableColor
                                 : null,
@@ -140,7 +140,7 @@ class LearningCategoryCard extends StatelessWidget {
                             style: TextStyle(
                               color: isDisabled
                                   ? AppColors.textDisableColor
-                                  : null,
+                                  : AppColors.textSecondaryColor,
                             ),
                           ),
                       ],

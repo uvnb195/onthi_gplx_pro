@@ -1,6 +1,8 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/achievement_small_card.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/home_appbar_delegate.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/learning_category_card.dart';
@@ -18,7 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
   final double expandedHeight = 120;
-  final double collapsedHeight = kToolbarHeight + 8;
+  final double collapsedHeight = kToolbarHeight + 16;
 
   @override
   void dispose() {
@@ -70,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
-                  child: TodoSection(),
+                  child: StyledScaleEntrance(child: TodoSection()),
                 ),
               ),
               SliverToBoxAdapter(
@@ -85,19 +87,22 @@ class _HomePageState extends State<HomePage> {
                     ),
                     child: Row(
                       mainAxisSize: .min,
-                      children: [
-                        AchievementSmallCard(),
-                        SizedBox(width: 8),
-                        AchievementSmallCard(level: 2),
-                        SizedBox(width: 8),
-                        AchievementSmallCard(level: 3),
-                        SizedBox(width: 8),
-                        AchievementSmallCard(level: 4),
-                        SizedBox(width: 8),
-                        AchievementSmallCard(level: 3),
-                        SizedBox(width: 8),
-                        AchievementSmallCard(level: 4),
-                      ],
+                      children: List.generate(
+                        6,
+                        (index) => AnimationConfiguration.staggeredList(
+                          position: index,
+                          child: FadeInAnimation(
+                            child: SlideAnimation(
+                              horizontalOffset: 100,
+                              delay: const Duration(milliseconds: 100),
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 12.0),
+                                child: AchievementSmallCard(level: index),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -121,17 +126,31 @@ class _HomePageState extends State<HomePage> {
                             : 1,
                         mainAxisSpacing: 12,
                         crossAxisSpacing: 12,
-                        mainAxisExtent: 160,
+                        childAspectRatio: 2.4,
                       ),
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => LearningCategoryCard(
-                          title: 'Biển báo giao thông',
-                          subTitle: 'Tiếp tục học',
-                          iconData: BootstrapIcons.journal_bookmark,
-                          percentage: 0.8,
-                        ),
-                        childCount: 5,
-                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        if (index > 2) {
+                          return StyledScaleEntrance(
+                            child: LearningCategoryCard(
+                              title: 'Biển báo giao thông',
+                              subTitle: 'Tiếp tục học',
+                              iconData: BootstrapIcons.journal_bookmark,
+                              percentage: 0.8,
+
+                              isDisabled: true,
+                            ),
+                          );
+                        } else {
+                          return StyledScaleEntrance(
+                            child: LearningCategoryCard(
+                              title: 'Biển báo giao thông',
+                              subTitle: 'Tiếp tục học',
+                              iconData: BootstrapIcons.journal_bookmark,
+                              percentage: 0.8,
+                            ),
+                          );
+                        }
+                      }, childCount: 5),
                     );
                   },
                 ),
