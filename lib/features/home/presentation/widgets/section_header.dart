@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 
 class SectionHeader extends StatelessWidget {
+  final Widget? icon;
   final String title;
   final String? subTitle;
   final VoidCallback? onSubtitlePress;
   final EdgeInsets padding;
   const SectionHeader({
     super.key,
+    this.icon,
     required this.title,
     this.subTitle,
     this.onSubtitlePress,
@@ -19,8 +21,10 @@ class SectionHeader extends StatelessWidget {
     return Padding(
       padding: padding,
       child: Row(
-        mainAxisAlignment: .spaceBetween,
+        mainAxisAlignment: .start,
         children: [
+          if (icon != null)
+            Padding(padding: const .symmetric(horizontal: 8), child: icon),
           Text(
             title,
             style: TextStyle(
@@ -29,6 +33,7 @@ class SectionHeader extends StatelessWidget {
               letterSpacing: 1.2,
             ),
           ),
+          Spacer(),
           if (subTitle != null)
             InkWell(
               onTap: onSubtitlePress,

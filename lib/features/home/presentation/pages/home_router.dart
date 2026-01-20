@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/pages/home_page.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/styled_home_bottom_navbar.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/learning_page.dart';
+import 'package:onthi_gplx_pro/features/progress/presentation/pages/progress_page.dart';
 
 class HomeRouter extends StatefulWidget {
   const HomeRouter({super.key});
@@ -20,6 +21,8 @@ class _HomeRouterState extends State<HomeRouter> {
           return HomePage();
         case 1:
           return LearningPage();
+        case 2:
+          return ProgressPage();
         default:
           return Placeholder();
       }

@@ -2,10 +2,10 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/widgets/horizontal_medium_card.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/achievement_small_card.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/home_appbar_delegate.dart';
-import 'package:onthi_gplx_pro/features/home/presentation/widgets/learning_category_card.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/section_header.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/section_wrapper.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/todo_section.dart';
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                       delegate: SliverChildBuilderDelegate((context, index) {
                         if (index > 2) {
                           return StyledScaleEntrance(
-                            child: LearningCategoryCard(
+                            child: HorizontalLargeCard(
                               title: 'Biển báo giao thông',
                               subTitle: 'Tiếp tục học',
                               iconData: BootstrapIcons.journal_bookmark,
@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         } else {
                           return StyledScaleEntrance(
-                            child: LearningCategoryCard(
+                            child: HorizontalLargeCard(
                               title: 'Biển báo giao thông',
                               subTitle: 'Tiếp tục học',
                               iconData: BootstrapIcons.journal_bookmark,

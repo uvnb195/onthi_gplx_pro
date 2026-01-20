@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_scale_entrance.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/widgets/menu_item.dart';
+import 'package:onthi_gplx_pro/core/widgets/widgets/menu_item.dart';
 
 class CollapseMenu extends StatefulWidget {
   final IconData iconData;
@@ -181,14 +181,26 @@ class _CollapseMenuState extends State<CollapseMenu> {
                           width: 40,
                           height: 40,
                           child: Center(
-                            child: AnimatedRotation(
-                              turns: collapsed ? 0.5 : 0,
+                            child: AnimatedSwitcher(
                               duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                              child: Icon(
-                                BootstrapIcons.chevron_down,
-                                size: 18,
-                              ),
+                              transitionBuilder:
+                                  (Widget child, Animation<double> animation) {
+                                    return ScaleTransition(
+                                      scale: animation,
+                                      child: child,
+                                    );
+                                  },
+                              child: collapsed
+                                  ? Icon(
+                                      BootstrapIcons.chevron_down,
+                                      size: 18,
+                                      key: ValueKey('icon1'),
+                                    )
+                                  : Icon(
+                                      BootstrapIcons.x_lg,
+                                      size: 18,
+                                      key: ValueKey('icon2'),
+                                    ),
                             ),
                           ),
                         ),

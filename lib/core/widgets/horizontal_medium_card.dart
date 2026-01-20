@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/circular_progress_with_percent.dart';
 
-class LearningCategoryCard extends StatelessWidget {
+class HorizontalLargeCard extends StatelessWidget {
   final IconData iconData;
   final String title;
   final String? subTitle;
@@ -11,7 +11,7 @@ class LearningCategoryCard extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isDisabled;
   final String? disabledText;
-  const LearningCategoryCard({
+  const HorizontalLargeCard({
     super.key,
     required this.iconData,
     required this.title,

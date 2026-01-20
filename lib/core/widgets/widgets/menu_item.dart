@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 
 class MenuItem extends StatelessWidget {
-  final IconData iconData;
+  final IconData? iconData;
   final String title;
   final String? subTitle;
+  final Widget? subTitleWidget;
   final String? rightText;
   final TextStyle rightTextStyle;
   final Color themeColor;
@@ -17,9 +18,10 @@ class MenuItem extends StatelessWidget {
     super.key,
     required this.title,
     this.subTitle,
+    this.subTitleWidget,
     this.rightText,
     this.rightTextStyle = const TextStyle(),
-    required this.iconData,
+    this.iconData,
     this.themeColor = AppColors.primaryColor,
     this.backgroundColor,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
@@ -60,19 +62,21 @@ class MenuItem extends StatelessWidget {
           child: Row(
             children: [
               // I C O N
-              Container(
-                decoration: BoxDecoration(
-                  color: themeColor.withAlpha(50),
-                  borderRadius: .circular(8),
+              if (iconData != null) ...[
+                Container(
+                  decoration: BoxDecoration(
+                    color: themeColor.withAlpha(50),
+                    borderRadius: .circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(iconData, color: themeColor, size: 24),
+                  ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Icon(iconData, color: themeColor, size: 24),
-                ),
-              ),
+                SizedBox(width: 8),
+              ],
 
               // M I D D L E - T E X T
-              SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: .start,
@@ -84,8 +88,11 @@ class MenuItem extends StatelessWidget {
                       maxLines: 1,
                       overflow: .ellipsis,
                     ),
-                    if (subTitle != null) ...[
-                      SizedBox(height: 2),
+
+                    SizedBox(height: 2),
+                    if (subTitleWidget != null)
+                      subTitleWidget!
+                    else if (subTitle != null)
                       Text(
                         subTitle!,
                         maxLines: 2,
@@ -95,7 +102,6 @@ class MenuItem extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
-                    ],
                   ],
                 ),
               ),

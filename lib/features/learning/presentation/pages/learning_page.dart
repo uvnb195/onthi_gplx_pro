@@ -2,13 +2,12 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
+import 'package:onthi_gplx_pro/core/widgets/horizontal_medium_card.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/core/widgets/page_header.dart';
-import 'package:onthi_gplx_pro/core/widgets/styled_icon_button.dart';
-import 'package:onthi_gplx_pro/features/home/presentation/widgets/learning_category_card.dart';
+import 'package:onthi_gplx_pro/core/widgets/widgets/collapse_menu.dart';
+import 'package:onthi_gplx_pro/core/widgets/widgets/menu_item.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/section_header.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/widgets/collapse_menu.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/widgets/menu_item.dart';
 
 class LearningPage extends StatelessWidget {
   const LearningPage({super.key});
@@ -26,16 +25,7 @@ class LearningPage extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               titleSpacing: 0,
-              title: PageHeader(
-                content: Text('Học tập'),
-                actions: [
-                  StyledIconButton(
-                    iconData: BootstrapIcons.gear,
-                    onTap: () {},
-                    isBadgeLabelVisible: false,
-                  ),
-                ],
-              ),
+              title: PageHeader(content: Text('Học tập')),
             ),
             SliverPadding(
               padding: const EdgeInsets.symmetric(
@@ -44,7 +34,7 @@ class LearningPage extends StatelessWidget {
               sliver: SliverToBoxAdapter(
                 child: StyledScaleEntrance(
                   duration: const Duration(milliseconds: 300),
-                  child: LearningCategoryCard(
+                  child: HorizontalLargeCard(
                     themeColor: AppColors.accentVariantColor,
                     iconData: BootstrapIcons.clipboard_check,
                     title: 'Thi thử',

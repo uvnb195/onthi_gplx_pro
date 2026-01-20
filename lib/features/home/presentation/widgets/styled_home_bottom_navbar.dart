@@ -16,7 +16,7 @@ class StyledBottomNavbar extends StatelessWidget {
     final List<Map<String, dynamic>> navItems = [
       {'label': 'Trang chủ', 'icon': BootstrapIcons.house},
       {'label': 'Học tập', 'icon': BootstrapIcons.book},
-      {'label': 'Trang chủ', 'icon': BootstrapIcons.bar_chart_line},
+      {'label': 'Tiến độ', 'icon': BootstrapIcons.bar_chart_line},
       {'label': 'Hồ sơ', 'icon': BootstrapIcons.person},
     ];
     return Container(
