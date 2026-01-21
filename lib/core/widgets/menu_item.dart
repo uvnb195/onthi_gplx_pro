@@ -5,6 +5,7 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 class MenuItem extends StatelessWidget {
   final IconData? iconData;
   final String title;
+  final bool? titleUseThemeColor;
   final String? subTitle;
   final Widget? subTitleWidget;
   final String? rightText;
@@ -17,6 +18,7 @@ class MenuItem extends StatelessWidget {
   const MenuItem({
     super.key,
     required this.title,
+    this.titleUseThemeColor,
     this.subTitle,
     this.subTitleWidget,
     this.rightText,
@@ -84,7 +86,13 @@ class MenuItem extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontSize: 16, fontWeight: .w600),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: .w600,
+                        color: titleUseThemeColor == true
+                            ? Color.lerp(themeColor, Colors.white70, 0.3)
+                            : null,
+                      ),
                       maxLines: 1,
                       overflow: .ellipsis,
                     ),

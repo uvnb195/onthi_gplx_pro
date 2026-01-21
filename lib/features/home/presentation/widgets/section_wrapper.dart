@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:onthi_gplx_pro/features/home/presentation/widgets/section_header.dart';
+import 'package:onthi_gplx_pro/core/widgets/section_header.dart';
 
 class SectionWrapper extends StatelessWidget {
   final String? title;

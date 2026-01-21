@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
-import 'package:onthi_gplx_pro/features/home/presentation/widgets/section_header.dart';
+import 'package:onthi_gplx_pro/core/widgets/section_header.dart';
 
 class StyledTimeline extends StatelessWidget {
   const StyledTimeline({super.key});
@@ -47,10 +47,12 @@ class StyledTimeline extends StatelessWidget {
                   clipBehavior: .antiAlias,
                   decoration: BoxDecoration(
                     border: .all(
-                      color: AppColors.primarySwatch.withAlpha(
-                        index == timelineItems.length - 1 ? 150 : 255,
-                      ),
-                      width: index >= timelineItems.length - 2 ? 2 : 0,
+                      width: index >= timelineItems.length - 2 ? 3 : 0,
+                      color: index == timelineItems.length - 1
+                          ? AppColors.primaryColor.withAlpha(100)
+                          : index == timelineItems.length - 2
+                          ? AppColors.secondaryColor
+                          : AppColors.primaryColor,
                     ),
                     color: index == timelineItems.length - 1
                         ? AppColors.textDisableColor

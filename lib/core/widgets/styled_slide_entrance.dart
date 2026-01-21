@@ -69,8 +69,8 @@ class _StyledSlideEntranceState extends State<StyledSlideEntrance>
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override

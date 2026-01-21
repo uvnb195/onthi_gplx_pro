@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
-import 'package:onthi_gplx_pro/core/widgets/styled_icon_button.dart';
-import 'package:onthi_gplx_pro/features/home/presentation/widgets/avatar_wrapper.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/streak_animation.dart';
 
 class HomeAppBarDelegate extends SliverPersistentHeaderDelegate {

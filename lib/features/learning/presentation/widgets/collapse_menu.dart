@@ -2,8 +2,8 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
+import 'package:onthi_gplx_pro/core/widgets/menu_item.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_scale_entrance.dart';
-import 'package:onthi_gplx_pro/core/widgets/widgets/menu_item.dart';
 
 class CollapseMenu extends StatefulWidget {
   final IconData iconData;

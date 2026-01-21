@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/pages/home_page.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/styled_home_bottom_navbar.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/learning_page.dart';
+import 'package:onthi_gplx_pro/features/profile/presentation/pages/profile_page.dart';
 import 'package:onthi_gplx_pro/features/progress/presentation/pages/progress_page.dart';
 
 class HomeRouter extends StatefulWidget {
@@ -23,13 +24,15 @@ class _HomeRouterState extends State<HomeRouter> {
           return LearningPage();
         case 2:
           return ProgressPage();
+        case 3:
+          return ProfilePage();
         default:
           return Placeholder();
       }
     }
 
     return Scaffold(
-      body: SafeArea(child: buildBody()),
+      body: buildBody(),
       bottomNavigationBar: StyledBottomNavbar(
         currentIndex: currentIndex,
         onTap: (value) => setState(() {

@@ -13,7 +13,7 @@ ThemeData themeData = ThemeData(
     surfaceTintColor: AppColors.backgroundColor,
     scrolledUnderElevation: 0,
     systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: AppColors.backgroundColor,
+      statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light, // Android
       statusBarBrightness: Brightness.dark, // iOS
     ),
