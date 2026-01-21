@@ -4,7 +4,13 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 class PageHeader extends StatelessWidget {
   final Widget content;
   final List<Widget>? actions;
-  const PageHeader({super.key, required this.content, this.actions});
+  final bool showBottomBorder;
+  const PageHeader({
+    super.key,
+    required this.content,
+    this.actions,
+    this.showBottomBorder = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +18,10 @@ class PageHeader extends StatelessWidget {
       decoration: BoxDecoration(
         border: .fromLTRB(
           bottom: BorderSide(
-            width: 1,
-            color: AppColors.textDisableColor.withAlpha(100),
+            width: showBottomBorder ? 1 : 0,
+            color: showBottomBorder
+                ? AppColors.textDisableColor.withAlpha(100)
+                : Colors.transparent,
           ),
         ),
       ),

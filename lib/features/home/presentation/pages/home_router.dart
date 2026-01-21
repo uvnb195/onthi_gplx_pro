@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/pages/home_page.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/styled_home_bottom_navbar.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/pages/learning_page.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/pages/learning_dashboard_page.dart';
 import 'package:onthi_gplx_pro/features/profile/presentation/pages/profile_page.dart';
 import 'package:onthi_gplx_pro/features/progress/presentation/pages/progress_page.dart';
 
@@ -21,7 +21,7 @@ class _HomeRouterState extends State<HomeRouter> {
         case 0:
           return HomePage();
         case 1:
-          return LearningPage();
+          return LearningDashBoardPage();
         case 2:
           return ProgressPage();
         case 3:

@@ -11,6 +11,7 @@ class StyledButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final double? width;
   final double? height;
+  final EdgeInsets padding;
   const StyledButton({
     super.key,
     this.title,
@@ -22,6 +23,7 @@ class StyledButton extends StatelessWidget {
     this.foregroundColor,
     this.height,
     this.width,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8),
   });
 
   @override
@@ -30,14 +32,12 @@ class StyledButton extends StatelessWidget {
       // C O L O R
       backgroundColor: backgroundColor ?? AppColors.primaryColor,
       foregroundColor: foregroundColor ?? AppColors.textColor,
-
       minimumSize: Size(width ?? 80, height ?? 48),
-
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadiusGeometry.circular(12),
       ),
       shadowColor: backgroundColor ?? AppColors.primaryColor,
-      elevation: 4,
+      elevation: 2,
 
       textStyle: style ?? TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
     );
@@ -49,11 +49,7 @@ class StyledButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (prefixIcon != null) prefixIcon!,
-          if (title != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(title!),
-            ),
+          if (title != null) Padding(padding: padding, child: Text(title!)),
           if (suffixIcon != null) suffixIcon!,
         ],
       ),

@@ -28,6 +28,17 @@ class ProfilePage extends StatelessWidget {
             padding: const .symmetric(vertical: 40, horizontal: 16),
             sliver: SliverToBoxAdapter(child: _buildContent()),
           ),
+          SliverToBoxAdapter(
+            child: StyledScaleEntrance(
+              delayed: const Duration(milliseconds: 300),
+              child: Center(
+                child: Text(
+                  'Phiên bản: v2.0.1',
+                  style: TextStyle(color: AppColors.textDisableColor),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -177,14 +188,6 @@ class ProfilePage extends StatelessWidget {
               themeColor: AppColors.infoColor,
               onTap: () {},
             ),
-          ),
-        ),
-        SizedBox(height: 24),
-        StyledScaleEntrance(
-          delayed: const Duration(milliseconds: 300),
-          child: Text(
-            'Phiên bản: v2.0.1',
-            style: TextStyle(color: AppColors.textDisableColor),
           ),
         ),
       ],

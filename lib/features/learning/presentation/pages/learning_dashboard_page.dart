@@ -1,12 +1,13 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/collapse_menu.dart';
 
-class LearningPage extends StatelessWidget {
-  const LearningPage({super.key});
+class LearningDashBoardPage extends StatelessWidget {
+  const LearningDashBoardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,13 @@ class LearningPage extends StatelessWidget {
                     themeColor: AppColors.accentVariantColor,
                     iconData: BootstrapIcons.clipboard_check,
                     title: 'Thi thử',
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        RouteNames.learning,
+                        arguments: {'title': 'Đề thi #1', 'isStudy': true},
+                      );
+                    },
                     subTitle:
                         'Thi thử bộ đề ngẫu nhiên từ 600 câu hỏi. Cấu trúc chuẩn bộ GTVT.',
                     percentage: 0.8,
