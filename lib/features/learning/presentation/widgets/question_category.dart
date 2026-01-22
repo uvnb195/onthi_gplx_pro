@@ -3,22 +3,28 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 
 class QuestionCategory extends StatelessWidget {
   final bool expanded;
-  final int currentIndex;
+  final int current;
+  final int total;
+  final double itemPadding;
+  final double itemHeight;
+  final int columnNums;
+  final ValueChanged<int>? onSelectedItem;
   const QuestionCategory({
     super.key,
     this.expanded = true,
-    required this.currentIndex,
+    required this.current,
+    required this.total,
+    this.itemPadding = 6,
+    this.itemHeight = 40,
+    this.columnNums = 6,
+    this.onSelectedItem,
   });
 
   @override
   Widget build(BuildContext context) {
-    final int itemCount = 20;
-    final double itemHeight = 40;
-    final double itemPadding = 6;
-    final int columnNum = 6;
-    final int rowNum = (itemCount / columnNum).ceil();
+    final int rowNums = (total / columnNums).ceil();
     final double totalHeight =
-        (itemHeight * rowNum) + (itemPadding) * (rowNum - 1) + 16;
+        (itemHeight * rowNums) + (itemPadding) * (rowNums - 1) + 16;
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -40,27 +46,27 @@ class QuestionCategory extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     mainAxisExtent: itemHeight,
-                    crossAxisCount: columnNum,
+                    crossAxisCount: columnNums,
                     childAspectRatio: 1,
                     mainAxisSpacing: itemPadding,
                     crossAxisSpacing: itemPadding,
                   ),
-                  itemCount: itemCount,
+                  itemCount: total,
                   itemBuilder: (context, index) => Material(
                     shape: RoundedRectangleBorder(
-                      borderRadius: .circular(currentIndex == index ? 8 : 4),
+                      borderRadius: .circular(current == index ? 8 : 4),
                       side: BorderSide(
                         width: 2,
-                        color: currentIndex == index
+                        color: current == index
                             ? AppColors.primaryColor
                             : Colors.transparent,
                       ),
                     ),
                     color: AppColors.backgroundColor,
                     child: InkWell(
-                      borderRadius: .circular(currentIndex == index ? 8 : 4),
+                      borderRadius: .circular(current == index ? 8 : 4),
                       onTap: () {
-                        print('Tap on ${index + 1}');
+                        onSelectedItem ?? onSelectedItem!(index);
                       },
                       child: Center(child: Text('${index + 1}')),
                     ),

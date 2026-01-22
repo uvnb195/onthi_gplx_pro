@@ -3,16 +3,52 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_radio_item.dart';
 
-class QuestionContent extends StatelessWidget {
-  const QuestionContent({super.key});
+class OptionObject {
+  final int id;
+  final String content;
+  final bool isCorrect;
+
+  const OptionObject({
+    required this.id,
+    required this.content,
+    required this.isCorrect,
+  });
+}
+
+class QuestionArgs {
+  final int id;
+  final String? imagePath;
+  final String description, explanation;
+  final bool isCritical;
+  final List<OptionObject> options;
+
+  const QuestionArgs({
+    required this.id,
+    this.imagePath,
+    required this.description,
+    required this.explanation,
+    required this.options,
+    required this.isCritical,
+  });
+}
+
+class QuestionContent extends StatefulWidget {
+  final int total;
+  final QuestionArgs content;
+  const QuestionContent({
+    super.key,
+    required this.total,
+    required this.content,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    final List<String> options = [
-      'Xe ô tô; máy kéo; xe mô tô hai bánh; xe mô tô ba bánh; xe gắn máy; xe cơ giới dùng cho người khuyết tật và xe máy chuyên dùng; xe đạp, xe đạp máy, xe đạp điện. ',
-      'Xe ô tô; rơ moóc được kéo bởi xe ô tô; sơ mi rơ moóc được kéo bởi ô tô đầu kéo; xe chở người bốn bánh có gắn động cơ; xe chở hàng bốn bánh có gắn động cơ; xe mô tô, xe gắn máy và các loại xe tương tự.',
-    ];
+  State<QuestionContent> createState() => _QuestionContentState();
+}
 
+class _QuestionContentState extends State<QuestionContent> {
+  int? selectedId;
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.neutralColor,
@@ -22,14 +58,14 @@ class QuestionContent extends StatelessWidget {
       width: double.maxFinite,
       padding: const .all(16),
       child: Column(
-        mainAxisSize: .min,
+        mainAxisSize: .max,
+        crossAxisAlignment: .start,
         children: [
           _buildHeader(),
           SizedBox(height: 8),
           _buildQuestion(),
           SizedBox(height: 8),
-          _buildOptions(options),
-          SizedBox(height: 8),
+          _buildOptions(),
           _buildExplanation(),
         ],
       ),
@@ -49,7 +85,7 @@ class QuestionContent extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
             child: RichText(
               text: TextSpan(
-                text: 'Câu 1',
+                text: 'Câu ${widget.content.id}',
                 style: TextStyle(
                   fontSize: 18,
                   color: AppColors.textColor,
@@ -57,7 +93,7 @@ class QuestionContent extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: ' / 40',
+                    text: ' / ${widget.total}',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.textSecondaryColor,
@@ -83,31 +119,49 @@ class QuestionContent extends StatelessWidget {
       children: [
         // Q U E S T I O N - C O N T E N T
         Text(
-          'Trong nhóm các phương tiện giao thông đường bộ dưới đây, nhóm phương tiện nào là xe cơ giới? ',
+          widget.content.description,
           style: TextStyle(fontSize: 18, fontWeight: .bold, letterSpacing: 0.8),
         ),
-        SizedBox(height: 8),
-        Container(
-          clipBehavior: .antiAlias,
-          decoration: BoxDecoration(borderRadius: .circular(8)),
-          height: 200,
-          child: Image.asset('assets/images/dummy.jpg', fit: .contain),
-        ),
+        if (widget.content.imagePath != null) ...[
+          SizedBox(height: 8),
+          Container(
+            clipBehavior: .antiAlias,
+            decoration: BoxDecoration(borderRadius: .circular(8)),
+            height: 200,
+            child: Image.asset('assets/images/dummy.jpg', fit: .contain),
+          ),
+        ],
       ],
     );
   }
 
-  Widget _buildOptions(List<String> options) {
+  Widget _buildOptions() {
+    Color getResultColor(bool isCorrect) {
+      return isCorrect ? AppColors.accentColor : AppColors.primaryColor;
+    }
+
     return Column(
+      crossAxisAlignment: .start,
       children: List.generate(
-        options.length,
+        widget.content.options.length,
         (index) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: StyledRadioItem(
-            isCorrect: false,
+            themeColor:
+                selectedId != null &&
+                    (selectedId == index ||
+                        widget.content.options[index].isCorrect)
+                ? getResultColor(widget.content.options[index].isCorrect)
+                : null,
             index: index,
-            content: options[index],
-            onTap: () {},
+            content: widget.content.options[index].content,
+            onTap: selectedId != null
+                ? null
+                : () {
+                    setState(() {
+                      selectedId = index;
+                    });
+                  },
           ),
         ),
       ),
@@ -115,30 +169,42 @@ class QuestionContent extends StatelessWidget {
   }
 
   Widget _buildExplanation() {
-    return Container(
-      child: RichText(
-        text: TextSpan(
-          text: 'Giải thích:',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: .w600,
-            decoration: .underline,
-          ),
-          children: [
-            TextSpan(
-              text:
-                  '   Trên đường bộ ngoài khu vực đông dân cư, đường đôi hoặc đường một chiều có từ hai làn xe cơ giới trở lên (trừ đường cao tốc), xe ô tô chở người trên 28 chỗ không kể chỗ người lái xe (trừ xe buýt); ô tô tải có trọng tải trên 3,5 tấn (trừ ô tô xi téc) được tham gia giao thông với tốc độ khai thác tối đa cho phép là 80 km/h, đảm bảo an toàn trên đường ngoài khu vực đông dân cư.',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: .w400,
-                wordSpacing: 1.2,
-                height: 1.2,
-                decoration: .none,
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 100),
+      switchInCurve: Curves.easeIn,
+      switchOutCurve: Curves.bounceIn,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: ScaleTransition(scale: animation, child: child),
+        );
+      },
+      child: selectedId != null
+          ? KeyedSubtree(
+              key: const ValueKey('explanation_visible'),
+              child: Container(
+                padding: const .only(top: 8),
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Giải thích:',
+                    style: TextStyle(fontSize: 14, fontWeight: .w400),
+                    children: [
+                      TextSpan(
+                        text: '  ${widget.content.explanation}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: .w500,
+                          wordSpacing: 1.2,
+                          height: 1.2,
+                          decoration: .none,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : const SizedBox.shrink(key: ValueKey('explanation_hidden')),
     );
   }
 }

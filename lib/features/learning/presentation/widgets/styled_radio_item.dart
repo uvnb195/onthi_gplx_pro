@@ -3,24 +3,21 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 
 class StyledRadioItem extends StatelessWidget {
   final bool selected;
-  final bool? isCorrect;
   final int index;
   final String content;
   final VoidCallback? onTap;
+  final Color? themeColor;
   const StyledRadioItem({
     super.key,
     this.selected = true,
-    this.isCorrect,
     required this.index,
     required this.content,
-    this.onTap,
+    required this.onTap,
+    this.themeColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textWrong = AppColors.primaryColor;
-    final textCorrect = AppColors.accentColor;
-
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -28,9 +25,16 @@ class StyledRadioItem extends StatelessWidget {
         borderRadius: .circular(12),
         splashColor: AppColors.infoColor.withAlpha(30),
         child: Ink(
+          width: double.maxFinite,
           padding: .all(12),
           decoration: BoxDecoration(
-            border: .all(color: AppColors.textSecondaryColor.withAlpha(100)),
+            color: themeColor?.withAlpha(30),
+            border: .all(
+              width: themeColor != null ? 2 : 1,
+              color: themeColor != null
+                  ? themeColor!
+                  : AppColors.textSecondaryColor.withAlpha(100),
+            ),
             borderRadius: .circular(12),
           ),
           child: RichText(
