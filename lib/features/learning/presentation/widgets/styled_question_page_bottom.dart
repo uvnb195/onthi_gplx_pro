@@ -5,8 +5,18 @@ import 'package:onthi_gplx_pro/core/widgets/styled_animated_sized.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_button.dart';
 
 class StyledQuestionPageBottom extends StatelessWidget {
-  final bool showPrev;
-  const StyledQuestionPageBottom({super.key, this.showPrev = false});
+  final bool showPrev, showNext;
+  final int totalQuestion, currentIndex;
+  final VoidCallback? onNext, onPrev;
+  const StyledQuestionPageBottom({
+    super.key,
+    this.showPrev = false,
+    this.showNext = false,
+    required this.totalQuestion,
+    required this.currentIndex,
+    this.onNext,
+    this.onPrev,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +33,7 @@ class StyledQuestionPageBottom extends StatelessWidget {
                 backgroundColor: AppColors.infoColor,
                 suffixIcon: Icon(Icons.arrow_back_ios_new_rounded, size: 24),
 
-                onPressed: () {},
+                onPressed: currentIndex == 0 ? null : onPrev,
               ),
             ),
           ),
@@ -33,10 +43,16 @@ class StyledQuestionPageBottom extends StatelessWidget {
               duration: Duration(milliseconds: 500),
               curve: Curves.easeOut,
               child: StyledButton(
-                title: "Câu tiếp theo",
-                suffixIcon: Icon(BootstrapIcons.chevron_right),
-                backgroundColor: AppColors.primaryColor,
-                onPressed: () {},
+                title: currentIndex == totalQuestion - 1
+                    ? "Nộp bài"
+                    : "Câu tiếp theo",
+                suffixIcon: currentIndex == totalQuestion - 1
+                    ? Icon(BootstrapIcons.check_circle_fill)
+                    : Icon(BootstrapIcons.chevron_right),
+                backgroundColor: currentIndex == totalQuestion - 1
+                    ? Color.lerp(AppColors.accentColor, Colors.white10, 0.3)
+                    : AppColors.primaryColor,
+                onPressed: onNext,
               ),
             ),
           ),

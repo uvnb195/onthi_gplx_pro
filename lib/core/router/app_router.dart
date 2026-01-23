@@ -24,8 +24,11 @@ class AppRouter {
       case RouteNames.learning:
         final args = routeSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) =>
-              QuestionsPage(title: args['title'], isStudy: args['isStudy']),
+          builder: (_) => QuestionsPage(
+            title: args['title'],
+            isStudy: args['isStudy'],
+            categoryId: args['categoryId'],
+          ),
         );
 
       case RouteNames.achievement:

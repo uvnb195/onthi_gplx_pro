@@ -1,25 +1,30 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
+import 'package:onthi_gplx_pro/core/widgets/styled_animated_sized.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/question_category.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_question_page_bottom.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_question_page_header.dart';
 
 class QuestionWrapper extends StatefulWidget {
-  final bool isStudy; // study or do practice test
+  final bool showCategoryButton;
+  final double countdownSeconds;
   final String title;
-  final int totalQuestion;
-  final int currentIndex;
+  final int totalQuestion, currentIndex;
+  final int categoryId;
   final Widget child;
-  final ValueChanged<int>? questionChanged;
+  final ValueChanged<int>? onQuestionChanged;
+
   const QuestionWrapper({
     super.key,
-    this.isStudy = true,
+    this.countdownSeconds = 0,
+    this.showCategoryButton = false,
     required this.title,
-    required this.totalQuestion,
+    required this.categoryId,
     required this.child,
+    required this.totalQuestion,
     required this.currentIndex,
-    this.questionChanged,
+    this.onQuestionChanged,
   });
 
   @override
@@ -27,23 +32,25 @@ class QuestionWrapper extends StatefulWidget {
 }
 
 class _QuestionWrapperState extends State<QuestionWrapper> {
-  late final ScrollController _controller;
+  Size questionCategorySize = .zero;
   bool questionsExpanded = false;
 
   @override
   void initState() {
-    _controller = ScrollController();
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.of(context).size;
+    double centeredTop = (screenSize.height - questionCategorySize.height) / 2;
+    double finalTop = questionsExpanded ? centeredTop : -screenSize.height;
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -85,77 +92,91 @@ class _QuestionWrapperState extends State<QuestionWrapper> {
           Navigator.of(context).pop();
         }
       },
-      child: Scaffold(
-        body: SafeArea(
-          child: CustomScrollView(
-            controller: _controller,
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              SliverAppBar(
-                shape: Border(
-                  bottom: BorderSide(
-                    color: AppColors.textSecondaryColor.withAlpha(50),
-                    width: 1,
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              shape: Border(
+                bottom: BorderSide(
+                  color: AppColors.textSecondaryColor.withAlpha(50),
+                  width: 1,
+                ),
+              ),
+              titleSpacing: 0,
+              centerTitle: true,
+              title: StyledQuestionPageHeader(
+                title: widget.title,
+                showDoneButton: widget.currentIndex != widget.totalQuestion - 1,
+                onListButtonClicked: () {
+                  setState(() {
+                    questionsExpanded = !questionsExpanded;
+                  });
+                },
+              ),
+            ),
+            body: SafeArea(child: widget.child),
+            bottomNavigationBar: SafeArea(
+              child: Container(
+                padding: .symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  border: .fromLTRB(
+                    top: BorderSide(
+                      color: AppColors.textSecondaryColor.withAlpha(50),
+                    ),
                   ),
                 ),
-                pinned: true,
-                titleSpacing: 0,
-                centerTitle: true,
-                title: StyledQuestionPageHeader(
-                  title: widget.title,
-                  showDoneButton: false,
-                  onListButtonClicked: () {
-                    setState(() {
-                      questionsExpanded = !questionsExpanded;
-                      if (questionsExpanded == true) {
-                        _controller.animateTo(
-                          0,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.bounceOut,
-                        );
-                      }
-                    });
+                height: kBottomNavigationBarHeight + 20,
+                child: StyledQuestionPageBottom(
+                  showPrev: widget.currentIndex > 0,
+                  totalQuestion: widget.totalQuestion,
+                  currentIndex: widget.currentIndex,
+                  onNext: () {
+                    if (widget.currentIndex < widget.totalQuestion - 1) {
+                      widget.onQuestionChanged?.call(widget.currentIndex + 1);
+                    }
+                  },
+                  onPrev: () {
+                    if (widget.currentIndex > 0) {
+                      widget.onQuestionChanged?.call(widget.currentIndex - 1);
+                    }
                   },
                 ),
               ),
-
-              // Q U E S T I O N - C A T E G O R Y
-              SliverPadding(
-                padding: const .symmetric(horizontal: 16),
-                sliver: SliverToBoxAdapter(
-                  child: QuestionCategory(
-                    total: 40,
-                    current: 16,
-                    expanded: questionsExpanded,
-                    onSelectedItem: (value) {
-                      widget.questionChanged ?? widget.questionChanged!(value);
-                    },
-                  ),
-                ),
-              ),
-
-              // Q U E S T I O N - C O N T E N T
-              SliverPadding(
-                padding: .all(16),
-                sliver: SliverToBoxAdapter(child: widget.child),
-              ),
-            ],
+            ),
           ),
-        ),
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            padding: .symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              border: .fromLTRB(
-                top: BorderSide(
-                  color: AppColors.textSecondaryColor.withAlpha(50),
-                ),
+
+          // Q U E S T I O N - C A T E G O R Y
+          if (questionsExpanded)
+            GestureDetector(
+              onTap: () => setState(() => questionsExpanded = false),
+              child: Container(color: Colors.black87),
+            ),
+          Positioned(
+            top: finalTop,
+            left: 24,
+            right: 24,
+            child: StyledAnimatedSized(
+              isVisible: questionsExpanded,
+              child: QuestionCategory(
+                total: widget.totalQuestion,
+                current: widget.currentIndex,
+                onSelectedItem: (index) {
+                  setState(() {
+                    questionsExpanded = false;
+                  });
+                  widget.onQuestionChanged?.call(index);
+                },
+                onReady: (size) {
+                  if (size != questionCategorySize) {
+                    setState(() {
+                      questionCategorySize = size;
+                    });
+                  }
+                },
               ),
             ),
-            height: kBottomNavigationBarHeight + 20,
-            child: StyledQuestionPageBottom(),
           ),
-        ),
+        ],
       ),
     );
   }

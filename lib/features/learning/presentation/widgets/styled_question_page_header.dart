@@ -29,14 +29,15 @@ class StyledQuestionPageHeader extends StatelessWidget {
         children: [
           Text(title, style: TextStyle(fontSize: 18)),
           SizedBox(width: 8),
-          Expanded(child: _buildCountdownTimer()),
+          Expanded(child: _buildActions()),
         ],
       ),
     );
   }
 
-  Widget _buildCountdownTimer() {
-    return SizedBox(
+  Widget _buildActions() {
+    return Container(
+      padding: .only(right: 8),
       child: Row(
         mainAxisSize: .max,
         children: [

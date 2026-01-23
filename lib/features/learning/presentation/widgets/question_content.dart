@@ -1,6 +1,7 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
+import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_radio_item.dart';
 
 class OptionObject {
@@ -35,10 +36,15 @@ class QuestionArgs {
 class QuestionContent extends StatefulWidget {
   final int total;
   final QuestionArgs content;
+  final double top, bottom;
+  final VoidCallback? onSelectedAnswer;
   const QuestionContent({
     super.key,
     required this.total,
     required this.content,
+    this.onSelectedAnswer,
+    this.top = 16,
+    this.bottom = 16,
   });
 
   @override
@@ -47,26 +53,53 @@ class QuestionContent extends StatefulWidget {
 
 class _QuestionContentState extends State<QuestionContent> {
   int? selectedId;
+  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    _controller = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.neutralColor,
-        borderRadius: .circular(16),
-        border: .all(color: AppColors.primaryColor.withAlpha(50)),
+    return SingleChildScrollView(
+      controller: _controller,
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
       ),
-      width: double.maxFinite,
-      padding: const .all(16),
       child: Column(
-        mainAxisSize: .max,
-        crossAxisAlignment: .start,
         children: [
-          _buildHeader(),
-          SizedBox(height: 8),
-          _buildQuestion(),
-          SizedBox(height: 8),
-          _buildOptions(),
-          _buildExplanation(),
+          SizedBox(height: widget.top),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.neutralColor,
+              borderRadius: .circular(16),
+              border: .all(color: AppColors.primaryColor.withAlpha(50)),
+            ),
+            width: double.maxFinite,
+            padding: const .all(16),
+            child: Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: .start,
+              children: [
+                _buildHeader(),
+                SizedBox(height: 8),
+                _buildQuestion(),
+                SizedBox(height: 24),
+                _buildOptions(),
+                SizedBox(height: 24),
+                _buildExplanation(),
+              ],
+            ),
+          ),
+          SizedBox(height: widget.bottom),
         ],
       ),
     );
@@ -115,23 +148,31 @@ class _QuestionContentState extends State<QuestionContent> {
   }
 
   Widget _buildQuestion() {
-    return Column(
-      children: [
-        // Q U E S T I O N - C O N T E N T
-        Text(
-          widget.content.description,
-          style: TextStyle(fontSize: 18, fontWeight: .bold, letterSpacing: 0.8),
-        ),
-        if (widget.content.imagePath != null) ...[
-          SizedBox(height: 8),
-          Container(
-            clipBehavior: .antiAlias,
-            decoration: BoxDecoration(borderRadius: .circular(8)),
-            height: 200,
-            child: Image.asset('assets/images/dummy.jpg', fit: .contain),
+    return StyledSlideEntrance(
+      from: .TOP,
+      duration: const Duration(milliseconds: 500),
+      child: Column(
+        children: [
+          // Q U E S T I O N - C O N T E N T
+          Text(
+            widget.content.description,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: .bold,
+              letterSpacing: 0.8,
+            ),
           ),
+          if (widget.content.imagePath != null) ...[
+            SizedBox(height: 8),
+            Container(
+              clipBehavior: .antiAlias,
+              decoration: BoxDecoration(borderRadius: .circular(8)),
+              height: 200,
+              child: Image.asset('assets/images/dummy.jpg', fit: .contain),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 
@@ -146,22 +187,34 @@ class _QuestionContentState extends State<QuestionContent> {
         widget.content.options.length,
         (index) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: StyledRadioItem(
-            themeColor:
-                selectedId != null &&
-                    (selectedId == index ||
-                        widget.content.options[index].isCorrect)
-                ? getResultColor(widget.content.options[index].isCorrect)
-                : null,
-            index: index,
-            content: widget.content.options[index].content,
-            onTap: selectedId != null
-                ? null
-                : () {
-                    setState(() {
-                      selectedId = index;
-                    });
-                  },
+          child: StyledScaleEntrance(
+            duration: const Duration(milliseconds: 500),
+            child: StyledRadioItem(
+              themeColor:
+                  selectedId != null &&
+                      (selectedId == index ||
+                          widget.content.options[index].isCorrect)
+                  ? getResultColor(widget.content.options[index].isCorrect)
+                  : null,
+              index: index,
+              content: widget.content.options[index].content,
+              onTap: selectedId != null
+                  ? null
+                  : () {
+                      setState(() {
+                        selectedId = index;
+                      });
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (_controller.hasClients) {
+                          _controller.animateTo(
+                            _controller.position.maxScrollExtent,
+                            duration: const Duration(milliseconds: 400),
+                            curve: Curves.easeOut,
+                          );
+                        }
+                      });
+                    },
+            ),
           ),
         ),
       ),

@@ -35,16 +35,20 @@ class LearningDashBoardPage extends StatelessWidget {
                     themeColor: AppColors.accentVariantColor,
                     iconData: BootstrapIcons.clipboard_check,
                     title: 'Thi thử',
+                    subTitle:
+                        'Thi thử bộ đề ngẫu nhiên từ 600 câu hỏi. Cấu trúc chuẩn bộ GTVT.',
+                    percentage: 0.8,
                     onTap: () {
                       Navigator.pushNamed(
                         context,
                         RouteNames.learning,
-                        arguments: {'title': 'Đề thi #1', 'isStudy': true},
+                        arguments: {
+                          'title': 'Đề thi #1',
+                          'isStudy': true,
+                          'categoryId': 1,
+                        },
                       );
                     },
-                    subTitle:
-                        'Thi thử bộ đề ngẫu nhiên từ 600 câu hỏi. Cấu trúc chuẩn bộ GTVT.',
-                    percentage: 0.8,
                   ),
                 ),
               ),
