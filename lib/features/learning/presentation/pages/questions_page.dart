@@ -6,13 +6,13 @@ import 'package:onthi_gplx_pro/features/learning/presentation/widgets/question_w
 class QuestionsPage extends StatefulWidget {
   final bool isStudy; // study or do practice test
   final String title;
-  final int categoryId;
+  final int? categoryId;
 
   const QuestionsPage({
     super.key,
     this.isStudy = true,
     required this.title,
-    required this.categoryId,
+    this.categoryId,
   });
 
   @override

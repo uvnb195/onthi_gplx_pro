@@ -36,15 +36,12 @@ class QuestionArgs {
 class QuestionContent extends StatefulWidget {
   final int total;
   final QuestionArgs content;
-  final double top, bottom;
   final VoidCallback? onSelectedAnswer;
   const QuestionContent({
     super.key,
     required this.total,
     required this.content,
     this.onSelectedAnswer,
-    this.top = 16,
-    this.bottom = 16,
   });
 
   @override
@@ -69,37 +66,39 @@ class _QuestionContentState extends State<QuestionContent> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: _controller,
-      physics: const AlwaysScrollableScrollPhysics(
-        parent: BouncingScrollPhysics(),
-      ),
-      child: Column(
-        children: [
-          SizedBox(height: widget.top),
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.neutralColor,
-              borderRadius: .circular(16),
-              border: .all(color: AppColors.primaryColor.withAlpha(50)),
-            ),
-            width: double.maxFinite,
-            padding: const .all(16),
-            child: Column(
-              mainAxisSize: .min,
-              crossAxisAlignment: .start,
-              children: [
-                _buildHeader(),
-                SizedBox(height: 8),
-                _buildQuestion(),
-                SizedBox(height: 24),
-                _buildOptions(),
-                SizedBox(height: 24),
-                _buildExplanation(),
-              ],
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    return Container(
+      margin: const .only(top: 16, bottom: 16),
+      child: CustomScrollView(
+        controller: _controller,
+        physics: const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(),
+        ),
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.neutralColor,
+                borderRadius: .circular(16),
+                border: .all(color: AppColors.primaryColor.withAlpha(50)),
+              ),
+              width: double.maxFinite,
+              padding: const .all(16),
+              child: Column(
+                mainAxisSize: .min,
+                crossAxisAlignment: .start,
+                children: [
+                  _buildHeader(),
+                  SizedBox(height: 8),
+                  _buildQuestion(),
+                  SizedBox(height: 24),
+                  _buildOptions(screenWidth),
+                  SizedBox(height: 24),
+                  _buildExplanation(),
+                ],
+              ),
             ),
           ),
-          SizedBox(height: widget.bottom),
         ],
       ),
     );
@@ -152,14 +151,19 @@ class _QuestionContentState extends State<QuestionContent> {
       from: .TOP,
       duration: const Duration(milliseconds: 500),
       child: Column(
+        crossAxisAlignment: .center,
         children: [
           // Q U E S T I O N - C O N T E N T
-          Text(
-            widget.content.description,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: .bold,
-              letterSpacing: 0.8,
+          SizedBox(
+            width: double.maxFinite,
+            child: Text(
+              widget.content.description,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: .bold,
+                letterSpacing: 0.8,
+              ),
+              textAlign: .center,
             ),
           ),
           if (widget.content.imagePath != null) ...[
@@ -168,6 +172,7 @@ class _QuestionContentState extends State<QuestionContent> {
               clipBehavior: .antiAlias,
               decoration: BoxDecoration(borderRadius: .circular(8)),
               height: 200,
+              width: double.maxFinite,
               child: Image.asset('assets/images/dummy.jpg', fit: .contain),
             ),
           ],
@@ -176,48 +181,89 @@ class _QuestionContentState extends State<QuestionContent> {
     );
   }
 
-  Widget _buildOptions() {
+  Widget _buildOptionItem(int index) {
     Color getResultColor(bool isCorrect) {
       return isCorrect ? AppColors.accentColor : AppColors.primaryColor;
     }
 
-    return Column(
-      crossAxisAlignment: .start,
-      children: List.generate(
-        widget.content.options.length,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: StyledScaleEntrance(
-            duration: const Duration(milliseconds: 500),
-            child: StyledRadioItem(
-              themeColor:
-                  selectedId != null &&
-                      (selectedId == index ||
-                          widget.content.options[index].isCorrect)
-                  ? getResultColor(widget.content.options[index].isCorrect)
-                  : null,
-              index: index,
-              content: widget.content.options[index].content,
-              onTap: selectedId != null
-                  ? null
-                  : () {
-                      setState(() {
-                        selectedId = index;
-                      });
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        if (_controller.hasClients) {
-                          _controller.animateTo(
-                            _controller.position.maxScrollExtent,
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeOut,
-                          );
-                        }
-                      });
-                    },
-            ),
-          ),
-        ),
+    return StyledSlideEntrance(
+      duration: const Duration(milliseconds: 500),
+      child: StyledRadioItem(
+        themeColor:
+            selectedId != null &&
+                (selectedId == index || widget.content.options[index].isCorrect)
+            ? getResultColor(widget.content.options[index].isCorrect)
+            : null,
+        index: index,
+        content: widget.content.options[index].content,
+        onTap: selectedId != null
+            ? null
+            : () {
+                setState(() => selectedId = index);
+                _scrollToBottom();
+              },
       ),
+    );
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_controller.hasClients) {
+        _controller.animateTo(
+          _controller.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
+  double _calculateOptionMaxHeight(double itemWidth) {
+    final double padding = 12 * 4;
+    final double leadingWith = 40;
+    double maxHeight = 0;
+
+    for (var option in widget.content.options) {
+      final double textWidth = itemWidth - (padding + leadingWith);
+
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: option.content,
+          style: const TextStyle(fontSize: 14, height: 1.2, letterSpacing: 0.8),
+        ),
+        textDirection: TextDirection.ltr,
+        maxLines: 10,
+      )..layout(maxWidth: textWidth);
+
+      double currentHeight = textPainter.size.height + padding;
+      if (currentHeight > maxHeight) maxHeight = currentHeight;
+    }
+
+    return maxHeight < 55 ? 55 : maxHeight;
+  }
+
+  Widget _buildOptions(double screenWidth) {
+    final bool isLargeScreen = screenWidth > 600;
+    double contentPadding = 32;
+    double crossAxisPadding = 16;
+    double itemWidth = isLargeScreen
+        ? (screenWidth - contentPadding - crossAxisPadding) / 2
+        : (screenWidth - contentPadding);
+    double itemHeight = _calculateOptionMaxHeight(itemWidth);
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: widget.content.options.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: isLargeScreen ? 2 : 1,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        childAspectRatio: itemWidth / itemHeight,
+      ),
+      itemBuilder: (context, index) {
+        return _buildOptionItem(index);
+      },
     );
   }
 

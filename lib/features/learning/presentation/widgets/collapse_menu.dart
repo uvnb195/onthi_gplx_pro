@@ -11,6 +11,7 @@ class CollapseMenu extends StatefulWidget {
   final String? subTitle;
   final double? percentage;
   final Color themeColor;
+  final List<Map<String, dynamic>> items;
   final VoidCallback? onTap;
   const CollapseMenu({
     super.key,
@@ -19,6 +20,7 @@ class CollapseMenu extends StatefulWidget {
     this.subTitle,
     this.percentage,
     this.themeColor = AppColors.primaryColor,
+    required this.items,
     this.onTap,
   });
 
@@ -28,71 +30,6 @@ class CollapseMenu extends StatefulWidget {
 
 class _CollapseMenuState extends State<CollapseMenu> {
   bool collapsed = true;
-  final List<Map<String, dynamic>> items = [
-    {
-      'title': 'Câu hỏi đánh dấu',
-      'subTitle': 'Học ngẫu nhiên những câu hỏi bạn đã lưu',
-      'total': 23,
-      'iconData': BootstrapIcons.bookmarks,
-      'themeColor': Colors.deepOrange,
-    },
-    {
-      'title': 'Câu điểm liệt',
-      'subTitle':
-          'Những tình huống gây mất an toàn giao thông nghiêm trọng (Sai 1 câu là đi 1 sải)',
-      'total': 60,
-      'iconData': BootstrapIcons.shield_lock,
-      'themeColor': Colors.deepOrangeAccent,
-    },
-    {
-      'title': 'Khái Niệm và Quy Tắc',
-      'subTitle':
-          'Định nghĩa cơ bản, quy tắc đi đường, tốc độ và khoảng cách an toàn.',
-      'total': 60,
-      'iconData': BootstrapIcons.journal_text,
-      'themeColor': Colors.orange,
-    },
-    {
-      'title': 'Văn hóa & Đạo đức',
-      'subTitle':
-          'Trách nhiệm của người lái xe, văn hóa ứng xử và kỹ năng sơ cứu.',
-      'total': 60,
-      'iconData': BootstrapIcons.people,
-      'themeColor': Colors.amber,
-    },
-    {
-      'title': 'Kỹ thuật Lái xe',
-      'subTitle':
-          'Cách điều khiển xe trên dốc, đường trơn, đường hầm và xử lý sự cố.',
-      'total': 60,
-      'iconData': BootstrapIcons.speedometer2,
-      'themeColor': Colors.green,
-    },
-    {
-      'title': 'Hệ thống Biển báo',
-      'subTitle':
-          'Biển báo cấm, biển nguy hiểm, biển hiệu lệnh và biển chỉ dẫn.',
-      'total': 60,
-      'iconData': BootstrapIcons.sign_stop,
-      'themeColor': AppColors.infoColor,
-    },
-    {
-      'title': 'Cấu Tạo và Sửa Chữa',
-      'subTitle':
-          'Tìm hiểu về động cơ, phanh, lốp và các bộ phận cơ bản của xe ô tô.',
-      'total': 60,
-      'iconData': BootstrapIcons.tools,
-      'themeColor': Colors.deepPurpleAccent,
-    },
-    {
-      'title': 'Giải thế Sa hình',
-      'subTitle':
-          'Quy tắc nhường đường tại ngã tư và các tình huống giao thông thực tế.',
-      'total': 60,
-      'iconData': BootstrapIcons.stoplights,
-      'themeColor': Colors.purpleAccent,
-    },
-  ];
   @override
   Widget build(BuildContext context) {
     return StyledScaleEntrance(
@@ -216,7 +153,9 @@ class _CollapseMenuState extends State<CollapseMenu> {
                     child: collapsed
                         ? SizedBox.shrink()
                         : Column(
-                            children: List.generate(items.length, (index) {
+                            children: List.generate(widget.items.length, (
+                              index,
+                            ) {
                               return AnimationConfiguration.staggeredList(
                                 position: index,
                                 child: SlideAnimation(
@@ -224,17 +163,18 @@ class _CollapseMenuState extends State<CollapseMenu> {
                                   horizontalOffset: -100,
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                      bottom: (index == items.length - 1)
+                                      bottom: (index == widget.items.length - 1)
                                           ? 0
                                           : 12.0,
                                     ),
                                     child: MenuItem(
-                                      themeColor: items[index]['themeColor'],
+                                      themeColor:
+                                          widget.items[index]['themeColor'],
                                       onTap: () {},
-                                      title: items[index]['title'],
+                                      title: widget.items[index]['title'],
                                       subTitle:
-                                          '${items[index]['total']} câu hỏi',
-                                      iconData: items[index]['iconData'],
+                                          '${widget.items[index]['total']} câu hỏi',
+                                      iconData: widget.items[index]['iconData'],
                                     ),
                                   ),
                                 ),

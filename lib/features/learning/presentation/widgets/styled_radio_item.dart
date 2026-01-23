@@ -37,22 +37,25 @@ class StyledRadioItem extends StatelessWidget {
             ),
             borderRadius: .circular(12),
           ),
-          child: RichText(
-            text: TextSpan(
-              text: '${String.fromCharCode(index + 65)}.  ',
-              style: TextStyle(fontSize: 18, fontWeight: .w500),
-              children: [
-                TextSpan(
-                  text: content,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: .w400,
-                    letterSpacing: 0.8,
-                    wordSpacing: 2,
-                    height: 1.2,
+          child: Align(
+            alignment: .centerLeft,
+            child: RichText(
+              text: TextSpan(
+                text: '${String.fromCharCode(index + 65)}.  ',
+                style: TextStyle(fontSize: 18, fontWeight: .w500),
+                children: [
+                  TextSpan(
+                    text: content,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: .w400,
+                      letterSpacing: 0.8,
+                      wordSpacing: 2,
+                      height: 1.2,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
