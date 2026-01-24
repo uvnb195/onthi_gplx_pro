@@ -1,113 +1,149 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/widgets/question_wrapper.dart';
-import 'package:video_player/video_player.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_question_page_bottom.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_toggle_button.dart';
+import 'package:onthi_gplx_pro/features/progress/presentation/widgets/info_card.dart';
 
-class VideoQuestionsPage extends StatefulWidget {
-  const VideoQuestionsPage({super.key});
-
-  @override
-  State<VideoQuestionsPage> createState() => _VideoQuestionsPageState();
-}
-
-class _VideoQuestionsPageState extends State<VideoQuestionsPage> {
-  final ValueNotifier<int> _currentIndexNotifier = ValueNotifier(0);
-  late final VideoPlayerController _videoPlayerController;
-  late final PageController _pageController;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _videoPlayerController = VideoPlayerController.asset('assets/videos/1.webm')
-      ..initialize().then((_) {
-        if (mounted) setState(() {});
-      })
-      ..setLooping(true)
-      ..play();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController.dispose();
-    _currentIndexNotifier.dispose();
-    _pageController.dispose();
-    super.dispose();
-  }
+class PreTestPage extends StatelessWidget {
+  final String title;
+  final IconData iconData;
+  final Color themeColor;
+  final String? description;
+  final List<Map<String, dynamic>> stats;
+  final int categoryId; // 0 which mean do a test
+  const PreTestPage({
+    super.key,
+    required this.title,
+    required this.iconData,
+    required this.themeColor,
+    this.description,
+    this.stats = const [],
+    this.categoryId = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
-    return ValueListenableBuilder(
-      builder: (context, value, child) => QuestionWrapper(
-        title: 'Thi mô phỏng',
-        showCategoryButton: false,
-        totalQuestion: 20,
-        currentIndex: _currentIndexNotifier.value,
-        child: SizedBox(
-          height: double.maxFinite,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 24),
-                _buildHeader(),
-                SizedBox(height: 40),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SizedBox(
-                    width: double.maxFinite,
-                    child: _buildExplanation(),
-                  ),
-                ),
-                // _buildQuestion(),
-                // SizedBox(height: 16),
-                // StyledButton(
-                //   title: 'Bắt đầu',
-                //   suffixIcon: Icon(BootstrapIcons.play_circle_fill, size: 28),
-                // ),
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyActions: false,
+        shape: Border(
+          bottom: BorderSide(
+            color: AppColors.textSecondaryColor.withAlpha(50),
+            width: 1,
           ),
         ),
       ),
-      valueListenable: _currentIndexNotifier,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
+          child: Column(
+            children: [
+              _buildHeader(),
+              SizedBox(height: 16),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: _buildMode(screenWidth),
+              ),
+              SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: _buildExplanation(),
+              ),
+
+              SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: StyledQuestionPageBottom(
+            nextText: 'Bắt đầu',
+            prevText: '',
+            showDone: false,
+            showPrev: false,
+            onNext: () {},
+            onPrev: () {},
+          ),
+        ),
+      ),
     );
   }
 
   Widget _buildHeader() {
     return Column(
+      mainAxisSize: .min,
       children: [
         SizedBox(height: 24),
-        SizedBox(
-          width: double.maxFinite,
-          child: Text(
-            textAlign: .center,
-            'Đề thi ngẫu nhiên',
+        Container(
+          decoration: BoxDecoration(
+            color: themeColor,
+            borderRadius: .circular(12),
+          ),
+          padding: .all(16),
+          child: Icon(iconData, size: 40),
+        ),
+        SizedBox(height: 16),
+        Text(
+          title,
+          style: TextStyle(fontSize: 28, fontWeight: .w700, letterSpacing: 1.2),
+        ),
+        if (description != null)
+          Text(
+            description!,
             style: TextStyle(
-              fontSize: 24,
-              color: AppColors.textColor,
-              fontWeight: .w500,
+              fontSize: 16,
+              fontWeight: .w400,
+              color: AppColors.textSecondaryColor,
             ),
           ),
-        ),
-        SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: SizedBox(
-            width: double.maxFinite,
-            child: Text(
-              textAlign: .center,
-              '(10 • 23 • 35 • 51 • 55 • 70 • 78 • 90 • 93 • 111)',
-              style: TextStyle(fontSize: 16, color: AppColors.textColor),
+        if (stats.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: List.generate(
+                stats.length,
+                (index) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0,
+                      vertical: 8,
+                    ),
+                    child: InfoCard(
+                      backgroundColor: Color.lerp(
+                        themeColor,
+                        Colors.black,
+                        0.8,
+                      )!,
+                      iconData: stats[index]['iconData'],
+                      title: stats[index]['title'],
+                      description: stats[index]['description'],
+                      descriptionStyle: const TextStyle(
+                        color: AppColors.textSecondaryColor,
+                        fontSize: 12,
+                        fontWeight: .w400,
+                      ),
+                      themeColor: themeColor,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
       ],
+    );
+  }
+
+  Widget _buildMode(double screenWidth) {
+    return StyledToggleButton(
+      themeColor: themeColor,
+      size: screenWidth > 600 ? Size(400, 50) : Size(double.maxFinite, 50),
     );
   }
 

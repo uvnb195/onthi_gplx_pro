@@ -6,7 +6,6 @@ class QuestionCategory extends StatelessWidget {
   final int total;
   final double itemPadding;
   final double itemHeight;
-  final double minHeight;
   final int columnNums;
   final ValueChanged<int>? onSelectedItem;
   final ValueChanged<Size>? onReady;
@@ -17,18 +16,24 @@ class QuestionCategory extends StatelessWidget {
     this.itemPadding = 6,
     this.itemHeight = 40,
     this.columnNums = 6,
-    this.minHeight = 0,
     this.onSelectedItem,
     this.onReady,
   });
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
     final int rowNums = (total / columnNums).ceil();
-    final double finalHeight =
-        (itemHeight * rowNums) + (itemPadding) * (rowNums - 1) + 18 > minHeight
-        ? (itemHeight * rowNums) + (itemPadding) * (rowNums - 1) + 18
-        : minHeight;
+    final bool isTooManyItem =
+        (itemHeight * rowNums) + (itemPadding) * (rowNums - 1) + 18 >
+        screenHeight - kToolbarHeight - kBottomNavigationBarHeight;
+    final double finalHeight = isTooManyItem
+        ? 500
+        : (itemHeight * rowNums) + (itemPadding) * (rowNums - 1) + 18;
+
+    final ScrollPhysics physics = isTooManyItem
+        ? const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics())
+        : const NeverScrollableScrollPhysics();
 
     final GlobalKey widgetKey = GlobalKey();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,7 +59,7 @@ class QuestionCategory extends StatelessWidget {
       height: finalHeight,
       child: GridView.builder(
         padding: .zero,
-        physics: const NeverScrollableScrollPhysics(),
+        physics: physics,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           mainAxisExtent: itemHeight,
           crossAxisCount: columnNums,

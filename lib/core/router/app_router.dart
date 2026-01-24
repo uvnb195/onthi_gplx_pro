@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/features/achievement/presentation/pages/achievement_page.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/pages/home_router.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/pages/pre_test_page.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/questions_page.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/video_questions_page.dart';
 import 'package:onthi_gplx_pro/features/notfound/presentation/pages/notfound_page.dart';
@@ -21,6 +22,19 @@ class AppRouter {
 
       case RouteNames.home:
         return MaterialPageRoute(builder: (_) => HomeRouter());
+
+      case RouteNames.learningInfo:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => PreTestPage(
+            title: args['title'],
+            description: args['description'],
+            stats: args['stats'],
+            categoryId: args['categoryId'],
+            iconData: args['iconData'],
+            themeColor: args['themeColor'],
+          ),
+        );
 
       case RouteNames.learning:
         final args = routeSettings.arguments as Map<String, dynamic>;

@@ -52,11 +52,30 @@ class LearningDashBoardPage extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      RouteNames.learning,
+                      RouteNames.learningInfo,
                       arguments: {
-                        'title': 'Đề thi #1',
-                        'isStudy': true,
+                        'themeColor': AppColors.accentVariantColor,
+                        'title': 'Thi lý thuyết',
+                        'iconData': BootstrapIcons.clipboard_check,
+                        'description': 'Thi lý thuyết chuẩn bộ GTVT',
                         'categoryId': 1,
+                        'stats': [
+                          {
+                            'iconData': BootstrapIcons.file_earmark_text,
+                            'title': '30',
+                            'description': 'Câu hỏi',
+                          },
+                          {
+                            'iconData': BootstrapIcons.clock_history,
+                            'title': '19',
+                            'description': 'phút',
+                          },
+                          {
+                            'iconData': BootstrapIcons.bullseye,
+                            'title': '21',
+                            'description': 'Điểm tối thiểu',
+                          },
+                        ],
                       },
                     );
                   },
@@ -96,11 +115,30 @@ class LearningDashBoardPage extends StatelessWidget {
                   onTap: () {
                     Navigator.pushNamed(
                       context,
-                      RouteNames.videoLearning,
+                      RouteNames.learningInfo,
                       arguments: {
-                        'title': 'Đề thi #1',
-                        'isStudy': true,
+                        'themeColor': AppColors.secondaryColor,
+                        'title': 'Thi mô phỏng',
+                        'iconData': BootstrapIcons.tv,
+                        'description': 'Thi mô phỏng chuẩn bộ GTVT',
                         'categoryId': 1,
+                        'stats': [
+                          {
+                            'iconData': BootstrapIcons.file_earmark_text,
+                            'title': '30',
+                            'description': 'Câu hỏi',
+                          },
+                          {
+                            'iconData': BootstrapIcons.clock_history,
+                            'title': '19',
+                            'description': 'phút',
+                          },
+                          {
+                            'iconData': BootstrapIcons.bullseye,
+                            'title': '21',
+                            'description': 'Điểm tối thiểu',
+                          },
+                        ],
                       },
                     );
                   },
@@ -226,11 +264,31 @@ class LearningDashBoardPage extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  RouteNames.learning,
+                  RouteNames.learningInfo,
                   arguments: {
-                    'title': 'Đề thi #1',
-                    'isStudy': true,
+                    'themeColor': AppColors.accentVariantColor,
+                    'title': 'Thi lý thuyết',
+
+                    'iconData': BootstrapIcons.clipboard_check,
+                    'description': 'Thi lý thuyết chuẩn bộ GTVT',
                     'categoryId': 1,
+                    'stats': [
+                      {
+                        'iconData': BootstrapIcons.file_earmark_text,
+                        'title': '30',
+                        'description': 'Câu hỏi',
+                      },
+                      {
+                        'iconData': BootstrapIcons.clock_history,
+                        'title': '19',
+                        'description': 'phút',
+                      },
+                      {
+                        'iconData': BootstrapIcons.bullseye,
+                        'title': '21',
+                        'description': 'Điểm tối thiểu',
+                      },
+                    ],
                   },
                 );
               },
@@ -249,11 +307,30 @@ class LearningDashBoardPage extends StatelessWidget {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  RouteNames.videoLearning,
+                  RouteNames.learningInfo,
                   arguments: {
-                    'title': 'Đề thi #1',
-                    'isStudy': true,
+                    'themeColor': AppColors.secondaryColor,
+                    'title': 'Thi mô phỏng',
+                    'description': 'Thi mô phỏng chuẩn bộ GTVT',
                     'categoryId': 1,
+                    'iconData': BootstrapIcons.tv,
+                    'stats': [
+                      {
+                        'iconData': BootstrapIcons.file_earmark_text,
+                        'title': '30',
+                        'description': 'Câu hỏi',
+                      },
+                      {
+                        'iconData': BootstrapIcons.clock_history,
+                        'title': '19',
+                        'description': 'phút',
+                      },
+                      {
+                        'iconData': BootstrapIcons.bullseye,
+                        'title': '21',
+                        'description': 'Điểm tối thiểu',
+                      },
+                    ],
                   },
                 );
               },
@@ -312,7 +389,7 @@ class LearningDashBoardPage extends StatelessWidget {
                       themeColor: AppColors.accentColor,
                       iconData: BootstrapIcons.list_check,
                       title: 'Học mô phỏng',
-                      subTitle: '120 câu • 6 chủ đề',
+                      subTitle: '120 tình huống • 6 chủ đề',
                     ),
                   ),
                 ],

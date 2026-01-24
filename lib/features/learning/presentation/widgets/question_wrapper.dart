@@ -59,7 +59,6 @@ class _QuestionWrapperState extends State<QuestionWrapper> {
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: AppColors.neutralColor,
-
             title: Row(
               children: [
                 Icon(BootstrapIcons.exclamation_circle_fill),
@@ -105,8 +104,9 @@ class _QuestionWrapperState extends State<QuestionWrapper> {
               titleSpacing: 0,
               centerTitle: true,
               title: StyledQuestionPageHeader(
+                showCountdown: widget.countdownSeconds > 0,
+                showListButton: widget.showCategoryButton,
                 title: widget.title,
-                showDoneButton: widget.currentIndex != widget.totalQuestion - 1,
                 onListButtonClicked: () {
                   setState(() {
                     questionsExpanded = !questionsExpanded;
@@ -125,11 +125,12 @@ class _QuestionWrapperState extends State<QuestionWrapper> {
                     ),
                   ),
                 ),
-                height: kBottomNavigationBarHeight + 20,
+                height: kBottomNavigationBarHeight,
                 child: StyledQuestionPageBottom(
                   showPrev: widget.currentIndex > 0,
                   totalQuestion: widget.totalQuestion,
                   currentIndex: widget.currentIndex,
+                  showDone: widget.currentIndex == widget.totalQuestion - 1,
                   onNext: () {
                     if (widget.currentIndex < widget.totalQuestion - 1) {
                       widget.onQuestionChanged?.call(widget.currentIndex + 1);
@@ -158,7 +159,8 @@ class _QuestionWrapperState extends State<QuestionWrapper> {
             child: StyledAnimatedSized(
               isVisible: questionsExpanded,
               child: QuestionCategory(
-                total: widget.totalQuestion,
+                total: widget.totalQuestion + 97,
+                columnNums: screenSize.width <= 600 ? 6 : 10,
                 current: widget.currentIndex,
                 onSelectedItem: (index) {
                   setState(() {

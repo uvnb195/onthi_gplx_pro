@@ -67,40 +67,39 @@ class _QuestionContentState extends State<QuestionContent> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
-    return Container(
-      margin: const .only(top: 16, bottom: 16),
-      child: CustomScrollView(
-        controller: _controller,
-        physics: const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(),
-        ),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.neutralColor,
-                borderRadius: .circular(16),
-                border: .all(color: AppColors.primaryColor.withAlpha(50)),
-              ),
-              width: double.maxFinite,
-              padding: const .all(16),
-              child: Column(
-                mainAxisSize: .min,
-                crossAxisAlignment: .start,
-                children: [
-                  _buildHeader(),
-                  SizedBox(height: 8),
-                  _buildQuestion(),
-                  SizedBox(height: 24),
-                  _buildOptions(screenWidth),
-                  SizedBox(height: 24),
-                  _buildExplanation(),
-                ],
-              ),
+    return CustomScrollView(
+      controller: _controller,
+      physics: const AlwaysScrollableScrollPhysics(
+        parent: BouncingScrollPhysics(),
+      ),
+      slivers: [
+        SliverToBoxAdapter(child: SizedBox(height: 16)),
+        SliverToBoxAdapter(
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.neutralColor,
+              borderRadius: .circular(16),
+              border: .all(color: AppColors.primaryColor.withAlpha(50)),
+            ),
+            width: double.maxFinite,
+            padding: const .all(16),
+            child: Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: .start,
+              children: [
+                _buildHeader(),
+                SizedBox(height: 8),
+                _buildQuestion(),
+                SizedBox(height: 24),
+                _buildOptions(screenWidth),
+                SizedBox(height: 24),
+                _buildExplanation(),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: 16)),
+      ],
     );
   }
 
