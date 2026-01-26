@@ -20,8 +20,6 @@ void main() {
         id: 0,
         code: LicenseType.a1,
         description: "Dung tích dưới 175cc",
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
       );
 
       final result = UserModel.fromDrift(
@@ -29,8 +27,8 @@ void main() {
       );
 
       expect(result.id, equals(1));
-      expect(result.license!.id, equals(0));
-      expect(result.license!.code, 'a1');
+      expect(result.license.id, equals(0));
+      expect(result.license.code, 'a1');
     });
   });
 }

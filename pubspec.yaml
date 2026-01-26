@@ -86,7 +86,9 @@ flutter:
     - assets/images/
     - assets/images/achievements/
     - assets/images/thumbnails/
+    - assets/images/questions/
     - assets/videos/
+    - assets/data/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

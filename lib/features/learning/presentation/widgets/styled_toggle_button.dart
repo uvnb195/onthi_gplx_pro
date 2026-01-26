@@ -88,7 +88,7 @@ class _StyledToggleButtonState extends State<StyledToggleButton> {
                     decoration: BoxDecoration(
                       border: .all(color: widget.themeColor.withAlpha(200)),
                       borderRadius: .circular(9999),
-                      color: AppColors.backgroundColor,
+                      color: widget.themeColor,
                     ),
                     width: itemWidth,
                     height: widget.size.height - widget.padding,

@@ -1,18 +1,19 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_question_page_bottom.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_toggle_button.dart';
 import 'package:onthi_gplx_pro/features/progress/presentation/widgets/info_card.dart';
 
-class PreTestPage extends StatelessWidget {
+class PreLearningPage extends StatelessWidget {
   final String title;
   final IconData iconData;
   final Color themeColor;
   final String? description;
   final List<Map<String, dynamic>> stats;
   final int categoryId; // 0 which mean do a test
-  const PreTestPage({
+  const PreLearningPage({
     super.key,
     required this.title,
     required this.iconData,
@@ -68,7 +69,19 @@ class PreTestPage extends StatelessWidget {
             prevText: '',
             showDone: false,
             showPrev: false,
-            onNext: () {},
+            onNext: () {
+              // Navigator.pushNamed(
+              //   context,
+              //   RouteNames.learning,
+              //   arguments: {'title': title, 'isStudy': true, 'categoryId': 1},
+              // );
+
+              Navigator.pushNamed(
+                context,
+                RouteNames.videoLearning,
+                arguments: screenWidth > 600,
+              );
+            },
             onPrev: () {},
           ),
         ),
@@ -103,7 +116,8 @@ class PreTestPage extends StatelessWidget {
               color: AppColors.textSecondaryColor,
             ),
           ),
-        if (stats.isNotEmpty)
+        if (stats.isNotEmpty) ...[
+          SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
@@ -136,6 +150,7 @@ class PreTestPage extends StatelessWidget {
               ),
             ),
           ),
+        ],
       ],
     );
   }

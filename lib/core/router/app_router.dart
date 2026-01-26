@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/features/achievement/presentation/pages/achievement_page.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/pages/home_router.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/pages/pre_test_page.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/pages/pre_learning_page.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/questions_page.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/video_questions_page.dart';
 import 'package:onthi_gplx_pro/features/notfound/presentation/pages/notfound_page.dart';
@@ -26,7 +26,7 @@ class AppRouter {
       case RouteNames.learningInfo:
         final args = routeSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => PreTestPage(
+          builder: (_) => PreLearningPage(
             title: args['title'],
             description: args['description'],
             stats: args['stats'],
@@ -47,8 +47,10 @@ class AppRouter {
         );
 
       case RouteNames.videoLearning:
-        final args = routeSettings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(builder: (_) => VideoQuestionsPage());
+        final isLargeScreen = routeSettings.arguments as bool;
+        return MaterialPageRoute(
+          builder: (_) => VideoQuestionsPage(isLargeScreen: isLargeScreen),
+        );
 
       case RouteNames.achievement:
         return MaterialPageRoute(builder: (_) => AchievementPage());

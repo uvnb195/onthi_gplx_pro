@@ -2,13 +2,11 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
-import 'package:onthi_gplx_pro/core/database/seed_data.dart';
+import 'package:onthi_gplx_pro/core/database/dao/index.dart';
+import 'package:onthi_gplx_pro/core/database/table/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-
-import 'dao/index.dart';
-import 'table/index.dart';
 
 part 'app_database.g.dart';
 
@@ -21,21 +19,21 @@ LazyDatabase _openConnection() {
   });
 }
 
-@DriftDatabase(tables: [UserTable, LicenseTable], daos: [UserDao, LicenseDao])
+@DriftDatabase(
+  tables: [
+    UserTable,
+    LicenseTable,
+    QuestionCategoryTable,
+    QuestionTable,
+    QuestionOptionTable,
+  ],
+  daos: [UserDao, LicenseDao, QuestionCategoryDao, QuestionDao],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
   int get schemaVersion => 3;
-
-  Future<void> loadLicenseSeed() async {
-    final count = await licenseTable.count().getSingle();
-    if (count > 0) return;
-
-    await batch((batch) {
-      batch.insertAll(licenseTable, licenseSeedData, mode: .insertOrReplace);
-    });
-  }
 
   @override
   MigrationStrategy get migration {
@@ -43,7 +41,9 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (m) async {
         await m.createAll();
 
-        await loadLicenseSeed();
+        await licenseDao.createLicensesSeedData();
+        await categoryDao.createCategoriesSeedData();
+        await questionDao.createQuestionsSeedData();
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');

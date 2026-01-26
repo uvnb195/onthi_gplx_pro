@@ -46,38 +46,8 @@ class $LicenseTableTable extends LicenseTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
   @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    defaultValue: currentDateAndTime,
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    code,
-    description,
-    createdAt,
-    updatedAt,
-  ];
+  List<GeneratedColumn> get $columns => [id, code, description];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -104,18 +74,6 @@ class $LicenseTableTable extends LicenseTable
     } else if (isInserting) {
       context.missing(_descriptionMeta);
     }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    }
     return context;
   }
 
@@ -139,14 +97,6 @@ class $LicenseTableTable extends LicenseTable
         DriftSqlType.string,
         data['${effectivePrefix}description'],
       )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
     );
   }
 
@@ -164,14 +114,10 @@ class LicenseTableData extends DataClass
   final int id;
   final LicenseType code;
   final String description;
-  final DateTime createdAt;
-  final DateTime updatedAt;
   const LicenseTableData({
     required this.id,
     required this.code,
     required this.description,
-    required this.createdAt,
-    required this.updatedAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -183,8 +129,6 @@ class LicenseTableData extends DataClass
       );
     }
     map['description'] = Variable<String>(description);
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
 
@@ -193,8 +137,6 @@ class LicenseTableData extends DataClass
       id: Value(id),
       code: Value(code),
       description: Value(description),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
     );
   }
 
@@ -209,8 +151,6 @@ class LicenseTableData extends DataClass
         serializer.fromJson<String>(json['code']),
       ),
       description: serializer.fromJson<String>(json['description']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
   @override
@@ -222,8 +162,6 @@ class LicenseTableData extends DataClass
         $LicenseTableTable.$convertercode.toJson(code),
       ),
       'description': serializer.toJson<String>(description),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
 
@@ -231,14 +169,10 @@ class LicenseTableData extends DataClass
     int? id,
     LicenseType? code,
     String? description,
-    DateTime? createdAt,
-    DateTime? updatedAt,
   }) => LicenseTableData(
     id: id ?? this.id,
     code: code ?? this.code,
     description: description ?? this.description,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
   );
   LicenseTableData copyWithCompanion(LicenseTableCompanion data) {
     return LicenseTableData(
@@ -247,8 +181,6 @@ class LicenseTableData extends DataClass
       description: data.description.present
           ? data.description.value
           : this.description,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
 
@@ -257,60 +189,46 @@ class LicenseTableData extends DataClass
     return (StringBuffer('LicenseTableData(')
           ..write('id: $id, ')
           ..write('code: $code, ')
-          ..write('description: $description, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('description: $description')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, code, description, createdAt, updatedAt);
+  int get hashCode => Object.hash(id, code, description);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is LicenseTableData &&
           other.id == this.id &&
           other.code == this.code &&
-          other.description == this.description &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt);
+          other.description == this.description);
 }
 
 class LicenseTableCompanion extends UpdateCompanion<LicenseTableData> {
   final Value<int> id;
   final Value<LicenseType> code;
   final Value<String> description;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
   const LicenseTableCompanion({
     this.id = const Value.absent(),
     this.code = const Value.absent(),
     this.description = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
   });
   LicenseTableCompanion.insert({
     this.id = const Value.absent(),
     required LicenseType code,
     required String description,
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
   }) : code = Value(code),
        description = Value(description);
   static Insertable<LicenseTableData> custom({
     Expression<int>? id,
     Expression<String>? code,
     Expression<String>? description,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (code != null) 'code': code,
       if (description != null) 'description': description,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
 
@@ -318,15 +236,11 @@ class LicenseTableCompanion extends UpdateCompanion<LicenseTableData> {
     Value<int>? id,
     Value<LicenseType>? code,
     Value<String>? description,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
   }) {
     return LicenseTableCompanion(
       id: id ?? this.id,
       code: code ?? this.code,
       description: description ?? this.description,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -344,12 +258,6 @@ class LicenseTableCompanion extends UpdateCompanion<LicenseTableData> {
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
     return map;
   }
 
@@ -358,9 +266,7 @@ class LicenseTableCompanion extends UpdateCompanion<LicenseTableData> {
     return (StringBuffer('LicenseTableCompanion(')
           ..write('id: $id, ')
           ..write('code: $code, ')
-          ..write('description: $description, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('description: $description')
           ..write(')'))
         .toString();
   }
@@ -920,18 +826,1028 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
   }
 }
 
+class $CategoryTableTable extends QuestionCategoryTable
+    with TableInfo<$CategoryTableTable, CategoryTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CategoryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _labelMeta = const VerificationMeta('label');
+  @override
+  late final GeneratedColumn<String> label = GeneratedColumn<String>(
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, label, description];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'category_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CategoryTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('label')) {
+      context.handle(
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_labelMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CategoryTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CategoryTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+    );
+  }
+
+  @override
+  $CategoryTableTable createAlias(String alias) {
+    return $CategoryTableTable(attachedDatabase, alias);
+  }
+}
+
+class CategoryTableData extends DataClass
+    implements Insertable<CategoryTableData> {
+  final int id;
+  final String label;
+  final String? description;
+  const CategoryTableData({
+    required this.id,
+    required this.label,
+    this.description,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['label'] = Variable<String>(label);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    return map;
+  }
+
+  CategoryTableCompanion toCompanion(bool nullToAbsent) {
+    return CategoryTableCompanion(
+      id: Value(id),
+      label: Value(label),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+    );
+  }
+
+  factory CategoryTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CategoryTableData(
+      id: serializer.fromJson<int>(json['id']),
+      label: serializer.fromJson<String>(json['label']),
+      description: serializer.fromJson<String?>(json['description']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'label': serializer.toJson<String>(label),
+      'description': serializer.toJson<String?>(description),
+    };
+  }
+
+  CategoryTableData copyWith({
+    int? id,
+    String? label,
+    Value<String?> description = const Value.absent(),
+  }) => CategoryTableData(
+    id: id ?? this.id,
+    label: label ?? this.label,
+    description: description.present ? description.value : this.description,
+  );
+  CategoryTableData copyWithCompanion(CategoryTableCompanion data) {
+    return CategoryTableData(
+      id: data.id.present ? data.id.value : this.id,
+      label: data.label.present ? data.label.value : this.label,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryTableData(')
+          ..write('id: $id, ')
+          ..write('label: $label, ')
+          ..write('description: $description')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, label, description);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CategoryTableData &&
+          other.id == this.id &&
+          other.label == this.label &&
+          other.description == this.description);
+}
+
+class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
+  final Value<int> id;
+  final Value<String> label;
+  final Value<String?> description;
+  const CategoryTableCompanion({
+    this.id = const Value.absent(),
+    this.label = const Value.absent(),
+    this.description = const Value.absent(),
+  });
+  CategoryTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String label,
+    this.description = const Value.absent(),
+  }) : label = Value(label);
+  static Insertable<CategoryTableData> custom({
+    Expression<int>? id,
+    Expression<String>? label,
+    Expression<String>? description,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (label != null) 'label': label,
+      if (description != null) 'description': description,
+    });
+  }
+
+  CategoryTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? label,
+    Value<String?>? description,
+  }) {
+    return CategoryTableCompanion(
+      id: id ?? this.id,
+      label: label ?? this.label,
+      description: description ?? this.description,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (label.present) {
+      map['label'] = Variable<String>(label.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryTableCompanion(')
+          ..write('id: $id, ')
+          ..write('label: $label, ')
+          ..write('description: $description')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $QuestionTableTable extends QuestionTable
+    with TableInfo<$QuestionTableTable, QuestionTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuestionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _imageIdMeta = const VerificationMeta(
+    'imageId',
+  );
+  @override
+  late final GeneratedColumn<String> imageId = GeneratedColumn<String>(
+    'image_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _explanationMeta = const VerificationMeta(
+    'explanation',
+  );
+  @override
+  late final GeneratedColumn<String> explanation = GeneratedColumn<String>(
+    'explanation',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isCriticalMeta = const VerificationMeta(
+    'isCritical',
+  );
+  @override
+  late final GeneratedColumn<bool> isCritical = GeneratedColumn<bool>(
+    'is_critical',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_critical" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  static const VerificationMeta _categoryIdMeta = const VerificationMeta(
+    'categoryId',
+  );
+  @override
+  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
+    'category_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES category_table (id)',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    imageId,
+    content,
+    explanation,
+    isCritical,
+    categoryId,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'question_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<QuestionTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('image_id')) {
+      context.handle(
+        _imageIdMeta,
+        imageId.isAcceptableOrUnknown(data['image_id']!, _imageIdMeta),
+      );
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('explanation')) {
+      context.handle(
+        _explanationMeta,
+        explanation.isAcceptableOrUnknown(
+          data['explanation']!,
+          _explanationMeta,
+        ),
+      );
+    }
+    if (data.containsKey('is_critical')) {
+      context.handle(
+        _isCriticalMeta,
+        isCritical.isAcceptableOrUnknown(data['is_critical']!, _isCriticalMeta),
+      );
+    }
+    if (data.containsKey('category_id')) {
+      context.handle(
+        _categoryIdMeta,
+        categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  QuestionTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return QuestionTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      imageId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}image_id'],
+      ),
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      explanation: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}explanation'],
+      ),
+      isCritical: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_critical'],
+      )!,
+      categoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}category_id'],
+      )!,
+    );
+  }
+
+  @override
+  $QuestionTableTable createAlias(String alias) {
+    return $QuestionTableTable(attachedDatabase, alias);
+  }
+}
+
+class QuestionTableData extends DataClass
+    implements Insertable<QuestionTableData> {
+  final int id;
+  final String? imageId;
+  final String content;
+  final String? explanation;
+  final bool isCritical;
+  final int categoryId;
+  const QuestionTableData({
+    required this.id,
+    this.imageId,
+    required this.content,
+    this.explanation,
+    required this.isCritical,
+    required this.categoryId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || imageId != null) {
+      map['image_id'] = Variable<String>(imageId);
+    }
+    map['content'] = Variable<String>(content);
+    if (!nullToAbsent || explanation != null) {
+      map['explanation'] = Variable<String>(explanation);
+    }
+    map['is_critical'] = Variable<bool>(isCritical);
+    map['category_id'] = Variable<int>(categoryId);
+    return map;
+  }
+
+  QuestionTableCompanion toCompanion(bool nullToAbsent) {
+    return QuestionTableCompanion(
+      id: Value(id),
+      imageId: imageId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(imageId),
+      content: Value(content),
+      explanation: explanation == null && nullToAbsent
+          ? const Value.absent()
+          : Value(explanation),
+      isCritical: Value(isCritical),
+      categoryId: Value(categoryId),
+    );
+  }
+
+  factory QuestionTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return QuestionTableData(
+      id: serializer.fromJson<int>(json['id']),
+      imageId: serializer.fromJson<String?>(json['imageId']),
+      content: serializer.fromJson<String>(json['content']),
+      explanation: serializer.fromJson<String?>(json['explanation']),
+      isCritical: serializer.fromJson<bool>(json['isCritical']),
+      categoryId: serializer.fromJson<int>(json['categoryId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'imageId': serializer.toJson<String?>(imageId),
+      'content': serializer.toJson<String>(content),
+      'explanation': serializer.toJson<String?>(explanation),
+      'isCritical': serializer.toJson<bool>(isCritical),
+      'categoryId': serializer.toJson<int>(categoryId),
+    };
+  }
+
+  QuestionTableData copyWith({
+    int? id,
+    Value<String?> imageId = const Value.absent(),
+    String? content,
+    Value<String?> explanation = const Value.absent(),
+    bool? isCritical,
+    int? categoryId,
+  }) => QuestionTableData(
+    id: id ?? this.id,
+    imageId: imageId.present ? imageId.value : this.imageId,
+    content: content ?? this.content,
+    explanation: explanation.present ? explanation.value : this.explanation,
+    isCritical: isCritical ?? this.isCritical,
+    categoryId: categoryId ?? this.categoryId,
+  );
+  QuestionTableData copyWithCompanion(QuestionTableCompanion data) {
+    return QuestionTableData(
+      id: data.id.present ? data.id.value : this.id,
+      imageId: data.imageId.present ? data.imageId.value : this.imageId,
+      content: data.content.present ? data.content.value : this.content,
+      explanation: data.explanation.present
+          ? data.explanation.value
+          : this.explanation,
+      isCritical: data.isCritical.present
+          ? data.isCritical.value
+          : this.isCritical,
+      categoryId: data.categoryId.present
+          ? data.categoryId.value
+          : this.categoryId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestionTableData(')
+          ..write('id: $id, ')
+          ..write('imageId: $imageId, ')
+          ..write('content: $content, ')
+          ..write('explanation: $explanation, ')
+          ..write('isCritical: $isCritical, ')
+          ..write('categoryId: $categoryId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, imageId, content, explanation, isCritical, categoryId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is QuestionTableData &&
+          other.id == this.id &&
+          other.imageId == this.imageId &&
+          other.content == this.content &&
+          other.explanation == this.explanation &&
+          other.isCritical == this.isCritical &&
+          other.categoryId == this.categoryId);
+}
+
+class QuestionTableCompanion extends UpdateCompanion<QuestionTableData> {
+  final Value<int> id;
+  final Value<String?> imageId;
+  final Value<String> content;
+  final Value<String?> explanation;
+  final Value<bool> isCritical;
+  final Value<int> categoryId;
+  const QuestionTableCompanion({
+    this.id = const Value.absent(),
+    this.imageId = const Value.absent(),
+    this.content = const Value.absent(),
+    this.explanation = const Value.absent(),
+    this.isCritical = const Value.absent(),
+    this.categoryId = const Value.absent(),
+  });
+  QuestionTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.imageId = const Value.absent(),
+    required String content,
+    this.explanation = const Value.absent(),
+    this.isCritical = const Value.absent(),
+    required int categoryId,
+  }) : content = Value(content),
+       categoryId = Value(categoryId);
+  static Insertable<QuestionTableData> custom({
+    Expression<int>? id,
+    Expression<String>? imageId,
+    Expression<String>? content,
+    Expression<String>? explanation,
+    Expression<bool>? isCritical,
+    Expression<int>? categoryId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (imageId != null) 'image_id': imageId,
+      if (content != null) 'content': content,
+      if (explanation != null) 'explanation': explanation,
+      if (isCritical != null) 'is_critical': isCritical,
+      if (categoryId != null) 'category_id': categoryId,
+    });
+  }
+
+  QuestionTableCompanion copyWith({
+    Value<int>? id,
+    Value<String?>? imageId,
+    Value<String>? content,
+    Value<String?>? explanation,
+    Value<bool>? isCritical,
+    Value<int>? categoryId,
+  }) {
+    return QuestionTableCompanion(
+      id: id ?? this.id,
+      imageId: imageId ?? this.imageId,
+      content: content ?? this.content,
+      explanation: explanation ?? this.explanation,
+      isCritical: isCritical ?? this.isCritical,
+      categoryId: categoryId ?? this.categoryId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (imageId.present) {
+      map['image_id'] = Variable<String>(imageId.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (explanation.present) {
+      map['explanation'] = Variable<String>(explanation.value);
+    }
+    if (isCritical.present) {
+      map['is_critical'] = Variable<bool>(isCritical.value);
+    }
+    if (categoryId.present) {
+      map['category_id'] = Variable<int>(categoryId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestionTableCompanion(')
+          ..write('id: $id, ')
+          ..write('imageId: $imageId, ')
+          ..write('content: $content, ')
+          ..write('explanation: $explanation, ')
+          ..write('isCritical: $isCritical, ')
+          ..write('categoryId: $categoryId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $QuestionOptionTableTable extends QuestionOptionTable
+    with TableInfo<$QuestionOptionTableTable, QuestionOptionTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuestionOptionTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _questionIdMeta = const VerificationMeta(
+    'questionId',
+  );
+  @override
+  late final GeneratedColumn<int> questionId = GeneratedColumn<int>(
+    'question_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES question_table (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _isCorrectMeta = const VerificationMeta(
+    'isCorrect',
+  );
+  @override
+  late final GeneratedColumn<bool> isCorrect = GeneratedColumn<bool>(
+    'is_correct',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_correct" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, content, questionId, isCorrect];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'question_option_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<QuestionOptionTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('question_id')) {
+      context.handle(
+        _questionIdMeta,
+        questionId.isAcceptableOrUnknown(data['question_id']!, _questionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_questionIdMeta);
+    }
+    if (data.containsKey('is_correct')) {
+      context.handle(
+        _isCorrectMeta,
+        isCorrect.isAcceptableOrUnknown(data['is_correct']!, _isCorrectMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  QuestionOptionTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return QuestionOptionTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      questionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}question_id'],
+      )!,
+      isCorrect: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_correct'],
+      )!,
+    );
+  }
+
+  @override
+  $QuestionOptionTableTable createAlias(String alias) {
+    return $QuestionOptionTableTable(attachedDatabase, alias);
+  }
+}
+
+class QuestionOptionTableData extends DataClass
+    implements Insertable<QuestionOptionTableData> {
+  final int id;
+  final String content;
+  final int questionId;
+  final bool isCorrect;
+  const QuestionOptionTableData({
+    required this.id,
+    required this.content,
+    required this.questionId,
+    required this.isCorrect,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['content'] = Variable<String>(content);
+    map['question_id'] = Variable<int>(questionId);
+    map['is_correct'] = Variable<bool>(isCorrect);
+    return map;
+  }
+
+  QuestionOptionTableCompanion toCompanion(bool nullToAbsent) {
+    return QuestionOptionTableCompanion(
+      id: Value(id),
+      content: Value(content),
+      questionId: Value(questionId),
+      isCorrect: Value(isCorrect),
+    );
+  }
+
+  factory QuestionOptionTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return QuestionOptionTableData(
+      id: serializer.fromJson<int>(json['id']),
+      content: serializer.fromJson<String>(json['content']),
+      questionId: serializer.fromJson<int>(json['questionId']),
+      isCorrect: serializer.fromJson<bool>(json['isCorrect']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'content': serializer.toJson<String>(content),
+      'questionId': serializer.toJson<int>(questionId),
+      'isCorrect': serializer.toJson<bool>(isCorrect),
+    };
+  }
+
+  QuestionOptionTableData copyWith({
+    int? id,
+    String? content,
+    int? questionId,
+    bool? isCorrect,
+  }) => QuestionOptionTableData(
+    id: id ?? this.id,
+    content: content ?? this.content,
+    questionId: questionId ?? this.questionId,
+    isCorrect: isCorrect ?? this.isCorrect,
+  );
+  QuestionOptionTableData copyWithCompanion(QuestionOptionTableCompanion data) {
+    return QuestionOptionTableData(
+      id: data.id.present ? data.id.value : this.id,
+      content: data.content.present ? data.content.value : this.content,
+      questionId: data.questionId.present
+          ? data.questionId.value
+          : this.questionId,
+      isCorrect: data.isCorrect.present ? data.isCorrect.value : this.isCorrect,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestionOptionTableData(')
+          ..write('id: $id, ')
+          ..write('content: $content, ')
+          ..write('questionId: $questionId, ')
+          ..write('isCorrect: $isCorrect')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, content, questionId, isCorrect);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is QuestionOptionTableData &&
+          other.id == this.id &&
+          other.content == this.content &&
+          other.questionId == this.questionId &&
+          other.isCorrect == this.isCorrect);
+}
+
+class QuestionOptionTableCompanion
+    extends UpdateCompanion<QuestionOptionTableData> {
+  final Value<int> id;
+  final Value<String> content;
+  final Value<int> questionId;
+  final Value<bool> isCorrect;
+  const QuestionOptionTableCompanion({
+    this.id = const Value.absent(),
+    this.content = const Value.absent(),
+    this.questionId = const Value.absent(),
+    this.isCorrect = const Value.absent(),
+  });
+  QuestionOptionTableCompanion.insert({
+    this.id = const Value.absent(),
+    required String content,
+    required int questionId,
+    this.isCorrect = const Value.absent(),
+  }) : content = Value(content),
+       questionId = Value(questionId);
+  static Insertable<QuestionOptionTableData> custom({
+    Expression<int>? id,
+    Expression<String>? content,
+    Expression<int>? questionId,
+    Expression<bool>? isCorrect,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (content != null) 'content': content,
+      if (questionId != null) 'question_id': questionId,
+      if (isCorrect != null) 'is_correct': isCorrect,
+    });
+  }
+
+  QuestionOptionTableCompanion copyWith({
+    Value<int>? id,
+    Value<String>? content,
+    Value<int>? questionId,
+    Value<bool>? isCorrect,
+  }) {
+    return QuestionOptionTableCompanion(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      questionId: questionId ?? this.questionId,
+      isCorrect: isCorrect ?? this.isCorrect,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (questionId.present) {
+      map['question_id'] = Variable<int>(questionId.value);
+    }
+    if (isCorrect.present) {
+      map['is_correct'] = Variable<bool>(isCorrect.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestionOptionTableCompanion(')
+          ..write('id: $id, ')
+          ..write('content: $content, ')
+          ..write('questionId: $questionId, ')
+          ..write('isCorrect: $isCorrect')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $LicenseTableTable licenseTable = $LicenseTableTable(this);
   late final $UserTableTable userTable = $UserTableTable(this);
+  late final $CategoryTableTable categoryTable = $CategoryTableTable(this);
+  late final $QuestionTableTable questionTable = $QuestionTableTable(this);
+  late final $QuestionOptionTableTable questionOptionTable =
+      $QuestionOptionTableTable(this);
   late final UserDao userDao = UserDao(this as AppDatabase);
   late final LicenseDao licenseDao = LicenseDao(this as AppDatabase);
+  late final QuestionCategoryDao categoryDao = QuestionCategoryDao(
+    this as AppDatabase,
+  );
+  late final QuestionDao questionDao = QuestionDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [licenseTable, userTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    licenseTable,
+    userTable,
+    categoryTable,
+    questionTable,
+    questionOptionTable,
+  ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'question_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('question_option_table', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$LicenseTableTableCreateCompanionBuilder =
@@ -939,16 +1855,12 @@ typedef $$LicenseTableTableCreateCompanionBuilder =
       Value<int> id,
       required LicenseType code,
       required String description,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
     });
 typedef $$LicenseTableTableUpdateCompanionBuilder =
     LicenseTableCompanion Function({
       Value<int> id,
       Value<LicenseType> code,
       Value<String> description,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
     });
 
 final class $$LicenseTableTableReferences
@@ -997,16 +1909,6 @@ class $$LicenseTableTableFilterComposer
 
   ColumnFilters<String> get description => $composableBuilder(
     column: $table.description,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1059,16 +1961,6 @@ class $$LicenseTableTableOrderingComposer
     column: $table.description,
     builder: (column) => ColumnOrderings(column),
   );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
 }
 
 class $$LicenseTableTableAnnotationComposer
@@ -1090,12 +1982,6 @@ class $$LicenseTableTableAnnotationComposer
     column: $table.description,
     builder: (column) => column,
   );
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
   Expression<T> userTableRefs<T extends Object>(
     Expression<T> Function($$UserTableTableAnnotationComposer a) f,
@@ -1154,28 +2040,20 @@ class $$LicenseTableTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<LicenseType> code = const Value.absent(),
                 Value<String> description = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
               }) => LicenseTableCompanion(
                 id: id,
                 code: code,
                 description: description,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
               ),
           createCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 required LicenseType code,
                 required String description,
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
               }) => LicenseTableCompanion.insert(
                 id: id,
                 code: code,
                 description: description,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
               ),
           withReferenceMapper: (p0) => p0
               .map(
@@ -1626,6 +2504,1040 @@ typedef $$UserTableTableProcessedTableManager =
       UserTableData,
       PrefetchHooks Function({bool licenseId})
     >;
+typedef $$CategoryTableTableCreateCompanionBuilder =
+    CategoryTableCompanion Function({
+      Value<int> id,
+      required String label,
+      Value<String?> description,
+    });
+typedef $$CategoryTableTableUpdateCompanionBuilder =
+    CategoryTableCompanion Function({
+      Value<int> id,
+      Value<String> label,
+      Value<String?> description,
+    });
+
+final class $$CategoryTableTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $CategoryTableTable, CategoryTableData> {
+  $$CategoryTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static MultiTypedResultKey<$QuestionTableTable, List<QuestionTableData>>
+  _questionTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.questionTable,
+    aliasName: $_aliasNameGenerator(
+      db.categoryTable.id,
+      db.questionTable.categoryId,
+    ),
+  );
+
+  $$QuestionTableTableProcessedTableManager get questionTableRefs {
+    final manager = $$QuestionTableTableTableManager(
+      $_db,
+      $_db.questionTable,
+    ).filter((f) => f.categoryId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_questionTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$CategoryTableTableFilterComposer
+    extends Composer<_$AppDatabase, $CategoryTableTable> {
+  $$CategoryTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> questionTableRefs(
+    Expression<bool> Function($$QuestionTableTableFilterComposer f) f,
+  ) {
+    final $$QuestionTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.categoryId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$CategoryTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $CategoryTableTable> {
+  $$CategoryTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CategoryTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CategoryTableTable> {
+  $$CategoryTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  Expression<T> questionTableRefs<T extends Object>(
+    Expression<T> Function($$QuestionTableTableAnnotationComposer a) f,
+  ) {
+    final $$QuestionTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.categoryId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$CategoryTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CategoryTableTable,
+          CategoryTableData,
+          $$CategoryTableTableFilterComposer,
+          $$CategoryTableTableOrderingComposer,
+          $$CategoryTableTableAnnotationComposer,
+          $$CategoryTableTableCreateCompanionBuilder,
+          $$CategoryTableTableUpdateCompanionBuilder,
+          (CategoryTableData, $$CategoryTableTableReferences),
+          CategoryTableData,
+          PrefetchHooks Function({bool questionTableRefs})
+        > {
+  $$CategoryTableTableTableManager(_$AppDatabase db, $CategoryTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CategoryTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CategoryTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CategoryTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> label = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+              }) => CategoryTableCompanion(
+                id: id,
+                label: label,
+                description: description,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String label,
+                Value<String?> description = const Value.absent(),
+              }) => CategoryTableCompanion.insert(
+                id: id,
+                label: label,
+                description: description,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$CategoryTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({questionTableRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (questionTableRefs) db.questionTable,
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (questionTableRefs)
+                    await $_getPrefetchedData<
+                      CategoryTableData,
+                      $CategoryTableTable,
+                      QuestionTableData
+                    >(
+                      currentTable: table,
+                      referencedTable: $$CategoryTableTableReferences
+                          ._questionTableRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$CategoryTableTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).questionTableRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.categoryId == item.id),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$CategoryTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CategoryTableTable,
+      CategoryTableData,
+      $$CategoryTableTableFilterComposer,
+      $$CategoryTableTableOrderingComposer,
+      $$CategoryTableTableAnnotationComposer,
+      $$CategoryTableTableCreateCompanionBuilder,
+      $$CategoryTableTableUpdateCompanionBuilder,
+      (CategoryTableData, $$CategoryTableTableReferences),
+      CategoryTableData,
+      PrefetchHooks Function({bool questionTableRefs})
+    >;
+typedef $$QuestionTableTableCreateCompanionBuilder =
+    QuestionTableCompanion Function({
+      Value<int> id,
+      Value<String?> imageId,
+      required String content,
+      Value<String?> explanation,
+      Value<bool> isCritical,
+      required int categoryId,
+    });
+typedef $$QuestionTableTableUpdateCompanionBuilder =
+    QuestionTableCompanion Function({
+      Value<int> id,
+      Value<String?> imageId,
+      Value<String> content,
+      Value<String?> explanation,
+      Value<bool> isCritical,
+      Value<int> categoryId,
+    });
+
+final class $$QuestionTableTableReferences
+    extends
+        BaseReferences<_$AppDatabase, $QuestionTableTable, QuestionTableData> {
+  $$QuestionTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $CategoryTableTable _categoryIdTable(_$AppDatabase db) =>
+      db.categoryTable.createAlias(
+        $_aliasNameGenerator(db.questionTable.categoryId, db.categoryTable.id),
+      );
+
+  $$CategoryTableTableProcessedTableManager get categoryId {
+    final $_column = $_itemColumn<int>('category_id')!;
+
+    final manager = $$CategoryTableTableTableManager(
+      $_db,
+      $_db.categoryTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_categoryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $QuestionOptionTableTable,
+    List<QuestionOptionTableData>
+  >
+  _questionOptionTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.questionOptionTable,
+        aliasName: $_aliasNameGenerator(
+          db.questionTable.id,
+          db.questionOptionTable.questionId,
+        ),
+      );
+
+  $$QuestionOptionTableTableProcessedTableManager get questionOptionTableRefs {
+    final manager = $$QuestionOptionTableTableTableManager(
+      $_db,
+      $_db.questionOptionTable,
+    ).filter((f) => f.questionId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _questionOptionTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$QuestionTableTableFilterComposer
+    extends Composer<_$AppDatabase, $QuestionTableTable> {
+  $$QuestionTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get imageId => $composableBuilder(
+    column: $table.imageId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get explanation => $composableBuilder(
+    column: $table.explanation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isCritical => $composableBuilder(
+    column: $table.isCritical,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$CategoryTableTableFilterComposer get categoryId {
+    final $$CategoryTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryId,
+      referencedTable: $db.categoryTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CategoryTableTableFilterComposer(
+            $db: $db,
+            $table: $db.categoryTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> questionOptionTableRefs(
+    Expression<bool> Function($$QuestionOptionTableTableFilterComposer f) f,
+  ) {
+    final $$QuestionOptionTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.questionOptionTable,
+      getReferencedColumn: (t) => t.questionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionOptionTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionOptionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$QuestionTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $QuestionTableTable> {
+  $$QuestionTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get imageId => $composableBuilder(
+    column: $table.imageId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get explanation => $composableBuilder(
+    column: $table.explanation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isCritical => $composableBuilder(
+    column: $table.isCritical,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$CategoryTableTableOrderingComposer get categoryId {
+    final $$CategoryTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryId,
+      referencedTable: $db.categoryTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CategoryTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.categoryTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuestionTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $QuestionTableTable> {
+  $$QuestionTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get imageId =>
+      $composableBuilder(column: $table.imageId, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<String> get explanation => $composableBuilder(
+    column: $table.explanation,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isCritical => $composableBuilder(
+    column: $table.isCritical,
+    builder: (column) => column,
+  );
+
+  $$CategoryTableTableAnnotationComposer get categoryId {
+    final $$CategoryTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryId,
+      referencedTable: $db.categoryTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$CategoryTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.categoryTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> questionOptionTableRefs<T extends Object>(
+    Expression<T> Function($$QuestionOptionTableTableAnnotationComposer a) f,
+  ) {
+    final $$QuestionOptionTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.questionOptionTable,
+          getReferencedColumn: (t) => t.questionId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionOptionTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionOptionTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$QuestionTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $QuestionTableTable,
+          QuestionTableData,
+          $$QuestionTableTableFilterComposer,
+          $$QuestionTableTableOrderingComposer,
+          $$QuestionTableTableAnnotationComposer,
+          $$QuestionTableTableCreateCompanionBuilder,
+          $$QuestionTableTableUpdateCompanionBuilder,
+          (QuestionTableData, $$QuestionTableTableReferences),
+          QuestionTableData,
+          PrefetchHooks Function({
+            bool categoryId,
+            bool questionOptionTableRefs,
+          })
+        > {
+  $$QuestionTableTableTableManager(_$AppDatabase db, $QuestionTableTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QuestionTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QuestionTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$QuestionTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String?> imageId = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<String?> explanation = const Value.absent(),
+                Value<bool> isCritical = const Value.absent(),
+                Value<int> categoryId = const Value.absent(),
+              }) => QuestionTableCompanion(
+                id: id,
+                imageId: imageId,
+                content: content,
+                explanation: explanation,
+                isCritical: isCritical,
+                categoryId: categoryId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String?> imageId = const Value.absent(),
+                required String content,
+                Value<String?> explanation = const Value.absent(),
+                Value<bool> isCritical = const Value.absent(),
+                required int categoryId,
+              }) => QuestionTableCompanion.insert(
+                id: id,
+                imageId: imageId,
+                content: content,
+                explanation: explanation,
+                isCritical: isCritical,
+                categoryId: categoryId,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$QuestionTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({categoryId = false, questionOptionTableRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (questionOptionTableRefs) db.questionOptionTable,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (categoryId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.categoryId,
+                                    referencedTable:
+                                        $$QuestionTableTableReferences
+                                            ._categoryIdTable(db),
+                                    referencedColumn:
+                                        $$QuestionTableTableReferences
+                                            ._categoryIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (questionOptionTableRefs)
+                        await $_getPrefetchedData<
+                          QuestionTableData,
+                          $QuestionTableTable,
+                          QuestionOptionTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$QuestionTableTableReferences
+                              ._questionOptionTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$QuestionTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).questionOptionTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.questionId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$QuestionTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $QuestionTableTable,
+      QuestionTableData,
+      $$QuestionTableTableFilterComposer,
+      $$QuestionTableTableOrderingComposer,
+      $$QuestionTableTableAnnotationComposer,
+      $$QuestionTableTableCreateCompanionBuilder,
+      $$QuestionTableTableUpdateCompanionBuilder,
+      (QuestionTableData, $$QuestionTableTableReferences),
+      QuestionTableData,
+      PrefetchHooks Function({bool categoryId, bool questionOptionTableRefs})
+    >;
+typedef $$QuestionOptionTableTableCreateCompanionBuilder =
+    QuestionOptionTableCompanion Function({
+      Value<int> id,
+      required String content,
+      required int questionId,
+      Value<bool> isCorrect,
+    });
+typedef $$QuestionOptionTableTableUpdateCompanionBuilder =
+    QuestionOptionTableCompanion Function({
+      Value<int> id,
+      Value<String> content,
+      Value<int> questionId,
+      Value<bool> isCorrect,
+    });
+
+final class $$QuestionOptionTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $QuestionOptionTableTable,
+          QuestionOptionTableData
+        > {
+  $$QuestionOptionTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $QuestionTableTable _questionIdTable(_$AppDatabase db) =>
+      db.questionTable.createAlias(
+        $_aliasNameGenerator(
+          db.questionOptionTable.questionId,
+          db.questionTable.id,
+        ),
+      );
+
+  $$QuestionTableTableProcessedTableManager get questionId {
+    final $_column = $_itemColumn<int>('question_id')!;
+
+    final manager = $$QuestionTableTableTableManager(
+      $_db,
+      $_db.questionTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_questionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$QuestionOptionTableTableFilterComposer
+    extends Composer<_$AppDatabase, $QuestionOptionTableTable> {
+  $$QuestionOptionTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isCorrect => $composableBuilder(
+    column: $table.isCorrect,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$QuestionTableTableFilterComposer get questionId {
+    final $$QuestionTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.questionId,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuestionOptionTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $QuestionOptionTableTable> {
+  $$QuestionOptionTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isCorrect => $composableBuilder(
+    column: $table.isCorrect,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$QuestionTableTableOrderingComposer get questionId {
+    final $$QuestionTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.questionId,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuestionOptionTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $QuestionOptionTableTable> {
+  $$QuestionOptionTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<bool> get isCorrect =>
+      $composableBuilder(column: $table.isCorrect, builder: (column) => column);
+
+  $$QuestionTableTableAnnotationComposer get questionId {
+    final $$QuestionTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.questionId,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuestionOptionTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $QuestionOptionTableTable,
+          QuestionOptionTableData,
+          $$QuestionOptionTableTableFilterComposer,
+          $$QuestionOptionTableTableOrderingComposer,
+          $$QuestionOptionTableTableAnnotationComposer,
+          $$QuestionOptionTableTableCreateCompanionBuilder,
+          $$QuestionOptionTableTableUpdateCompanionBuilder,
+          (QuestionOptionTableData, $$QuestionOptionTableTableReferences),
+          QuestionOptionTableData,
+          PrefetchHooks Function({bool questionId})
+        > {
+  $$QuestionOptionTableTableTableManager(
+    _$AppDatabase db,
+    $QuestionOptionTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QuestionOptionTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QuestionOptionTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$QuestionOptionTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<int> questionId = const Value.absent(),
+                Value<bool> isCorrect = const Value.absent(),
+              }) => QuestionOptionTableCompanion(
+                id: id,
+                content: content,
+                questionId: questionId,
+                isCorrect: isCorrect,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String content,
+                required int questionId,
+                Value<bool> isCorrect = const Value.absent(),
+              }) => QuestionOptionTableCompanion.insert(
+                id: id,
+                content: content,
+                questionId: questionId,
+                isCorrect: isCorrect,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$QuestionOptionTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({questionId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (questionId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.questionId,
+                                referencedTable:
+                                    $$QuestionOptionTableTableReferences
+                                        ._questionIdTable(db),
+                                referencedColumn:
+                                    $$QuestionOptionTableTableReferences
+                                        ._questionIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$QuestionOptionTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $QuestionOptionTableTable,
+      QuestionOptionTableData,
+      $$QuestionOptionTableTableFilterComposer,
+      $$QuestionOptionTableTableOrderingComposer,
+      $$QuestionOptionTableTableAnnotationComposer,
+      $$QuestionOptionTableTableCreateCompanionBuilder,
+      $$QuestionOptionTableTableUpdateCompanionBuilder,
+      (QuestionOptionTableData, $$QuestionOptionTableTableReferences),
+      QuestionOptionTableData,
+      PrefetchHooks Function({bool questionId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1634,4 +3546,10 @@ class $AppDatabaseManager {
       $$LicenseTableTableTableManager(_db, _db.licenseTable);
   $$UserTableTableTableManager get userTable =>
       $$UserTableTableTableManager(_db, _db.userTable);
+  $$CategoryTableTableTableManager get categoryTable =>
+      $$CategoryTableTableTableManager(_db, _db.categoryTable);
+  $$QuestionTableTableTableManager get questionTable =>
+      $$QuestionTableTableTableManager(_db, _db.questionTable);
+  $$QuestionOptionTableTableTableManager get questionOptionTable =>
+      $$QuestionOptionTableTableTableManager(_db, _db.questionOptionTable);
 }
