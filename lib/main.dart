@@ -15,6 +15,17 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   // development purpose only
+  //   return MaterialApp(
+  //     navigatorKey: AppRouter.navigatorKey,
+  //     home: AchievementPage(),
+  //     theme: themeData,
+  //     debugShowCheckedModeBanner: false,
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

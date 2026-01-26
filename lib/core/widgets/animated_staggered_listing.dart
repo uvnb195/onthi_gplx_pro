@@ -6,15 +6,17 @@ class AnimatedStaggeredListing extends StatelessWidget {
   final Duration itemDuration;
   final double itemPadding;
   final Duration delayed;
+  final AnimatedFrom from;
   final VoidCallback? onEnd;
-
   final List<Widget> children;
+
   const AnimatedStaggeredListing({
     super.key,
     this.interval = const Duration(milliseconds: 1000),
     this.delayed = const Duration(milliseconds: 0),
     this.itemDuration = const Duration(milliseconds: 1000),
     this.itemPadding = 8,
+    this.from = .BOTTOM,
     required this.children,
     this.onEnd,
   });
@@ -29,6 +31,7 @@ class AnimatedStaggeredListing extends StatelessWidget {
             bottom: index == children.length - 1 ? 0 : itemPadding,
           ),
           child: StyledSlideEntrance(
+            from: from,
             delayed: Duration(
               milliseconds:
                   index * interval.inMilliseconds + delayed.inMilliseconds,

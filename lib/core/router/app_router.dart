@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/features/achievement/presentation/pages/achievement_page.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/pages/dashboard_page.dart';
+import 'package:onthi_gplx_pro/features/home/presentation/pages/home_router.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/pages/pre_learning_page.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/pages/questions_page.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/pages/video_questions_page.dart';
 import 'package:onthi_gplx_pro/features/notfound/presentation/pages/notfound_page.dart';
 import 'package:onthi_gplx_pro/features/splash/presentation/pages/splash_page.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/pages/onboarding_page.dart';
@@ -13,10 +16,41 @@ class AppRouter {
     switch (routeSettings.name) {
       case RouteNames.splash:
         return MaterialPageRoute(builder: (_) => SplashPage());
+
       case RouteNames.onboarding:
         return MaterialPageRoute(builder: (_) => OnboardingPage());
+
       case RouteNames.home:
-        return MaterialPageRoute(builder: (_) => DashboardPage());
+        return MaterialPageRoute(builder: (_) => HomeRouter());
+
+      case RouteNames.learningInfo:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => PreLearningPage(
+            title: args['title'],
+            description: args['description'],
+            stats: args['stats'],
+            categoryId: args['categoryId'],
+            iconData: args['iconData'],
+            themeColor: args['themeColor'],
+          ),
+        );
+
+      case RouteNames.learning:
+        final args = routeSettings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => QuestionsPage(
+            title: args['title'],
+            isStudy: args['isStudy'],
+            categoryId: args['categoryId'],
+          ),
+        );
+
+      case RouteNames.videoLearning:
+        final isLargeScreen = routeSettings.arguments as bool;
+        return MaterialPageRoute(
+          builder: (_) => VideoQuestionsPage(isLargeScreen: isLargeScreen),
+        );
 
       case RouteNames.achievement:
         return MaterialPageRoute(builder: (_) => AchievementPage());

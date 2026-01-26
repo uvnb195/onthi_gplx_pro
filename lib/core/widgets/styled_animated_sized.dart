@@ -21,6 +21,12 @@ class _StyledAnimatedSizedState extends State<StyledAnimatedSized> {
   double _scale = 0;
 
   @override
+  void initState() {
+    _scale = widget.isVisible ? 1 : 0;
+    super.initState();
+  }
+
+  @override
   void didUpdateWidget(covariant StyledAnimatedSized oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isVisible) {

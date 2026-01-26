@@ -6,7 +6,6 @@ class LicenseModel extends LicenseEntity {
     required super.id,
     required super.code,
     required super.description,
-    required super.updatedAt,
   });
 
   factory LicenseModel.fromDrift(LicenseTableData license) {
@@ -14,7 +13,6 @@ class LicenseModel extends LicenseEntity {
       id: license.id,
       code: license.code.name,
       description: license.description,
-      updatedAt: license.updatedAt,
     );
   }
 }
