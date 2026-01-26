@@ -826,12 +826,12 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
   }
 }
 
-class $CategoryTableTable extends QuestionCategoryTable
-    with TableInfo<$CategoryTableTable, CategoryTableData> {
+class $QuestionCategoryTableTable extends QuestionCategoryTable
+    with TableInfo<$QuestionCategoryTableTable, QuestionCategoryTableData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CategoryTableTable(this.attachedDatabase, [this._alias]);
+  $QuestionCategoryTableTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -871,10 +871,10 @@ class $CategoryTableTable extends QuestionCategoryTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'category_table';
+  static const String $name = 'question_category_table';
   @override
   VerificationContext validateIntegrity(
-    Insertable<CategoryTableData> instance, {
+    Insertable<QuestionCategoryTableData> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -905,9 +905,12 @@ class $CategoryTableTable extends QuestionCategoryTable
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  CategoryTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  QuestionCategoryTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return CategoryTableData(
+    return QuestionCategoryTableData(
       id: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}id'],
@@ -924,17 +927,17 @@ class $CategoryTableTable extends QuestionCategoryTable
   }
 
   @override
-  $CategoryTableTable createAlias(String alias) {
-    return $CategoryTableTable(attachedDatabase, alias);
+  $QuestionCategoryTableTable createAlias(String alias) {
+    return $QuestionCategoryTableTable(attachedDatabase, alias);
   }
 }
 
-class CategoryTableData extends DataClass
-    implements Insertable<CategoryTableData> {
+class QuestionCategoryTableData extends DataClass
+    implements Insertable<QuestionCategoryTableData> {
   final int id;
   final String label;
   final String? description;
-  const CategoryTableData({
+  const QuestionCategoryTableData({
     required this.id,
     required this.label,
     this.description,
@@ -950,8 +953,8 @@ class CategoryTableData extends DataClass
     return map;
   }
 
-  CategoryTableCompanion toCompanion(bool nullToAbsent) {
-    return CategoryTableCompanion(
+  QuestionCategoryTableCompanion toCompanion(bool nullToAbsent) {
+    return QuestionCategoryTableCompanion(
       id: Value(id),
       label: Value(label),
       description: description == null && nullToAbsent
@@ -960,12 +963,12 @@ class CategoryTableData extends DataClass
     );
   }
 
-  factory CategoryTableData.fromJson(
+  factory QuestionCategoryTableData.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return CategoryTableData(
+    return QuestionCategoryTableData(
       id: serializer.fromJson<int>(json['id']),
       label: serializer.fromJson<String>(json['label']),
       description: serializer.fromJson<String?>(json['description']),
@@ -981,17 +984,19 @@ class CategoryTableData extends DataClass
     };
   }
 
-  CategoryTableData copyWith({
+  QuestionCategoryTableData copyWith({
     int? id,
     String? label,
     Value<String?> description = const Value.absent(),
-  }) => CategoryTableData(
+  }) => QuestionCategoryTableData(
     id: id ?? this.id,
     label: label ?? this.label,
     description: description.present ? description.value : this.description,
   );
-  CategoryTableData copyWithCompanion(CategoryTableCompanion data) {
-    return CategoryTableData(
+  QuestionCategoryTableData copyWithCompanion(
+    QuestionCategoryTableCompanion data,
+  ) {
+    return QuestionCategoryTableData(
       id: data.id.present ? data.id.value : this.id,
       label: data.label.present ? data.label.value : this.label,
       description: data.description.present
@@ -1002,7 +1007,7 @@ class CategoryTableData extends DataClass
 
   @override
   String toString() {
-    return (StringBuffer('CategoryTableData(')
+    return (StringBuffer('QuestionCategoryTableData(')
           ..write('id: $id, ')
           ..write('label: $label, ')
           ..write('description: $description')
@@ -1015,27 +1020,28 @@ class CategoryTableData extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is CategoryTableData &&
+      (other is QuestionCategoryTableData &&
           other.id == this.id &&
           other.label == this.label &&
           other.description == this.description);
 }
 
-class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
+class QuestionCategoryTableCompanion
+    extends UpdateCompanion<QuestionCategoryTableData> {
   final Value<int> id;
   final Value<String> label;
   final Value<String?> description;
-  const CategoryTableCompanion({
+  const QuestionCategoryTableCompanion({
     this.id = const Value.absent(),
     this.label = const Value.absent(),
     this.description = const Value.absent(),
   });
-  CategoryTableCompanion.insert({
+  QuestionCategoryTableCompanion.insert({
     this.id = const Value.absent(),
     required String label,
     this.description = const Value.absent(),
   }) : label = Value(label);
-  static Insertable<CategoryTableData> custom({
+  static Insertable<QuestionCategoryTableData> custom({
     Expression<int>? id,
     Expression<String>? label,
     Expression<String>? description,
@@ -1047,12 +1053,12 @@ class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
     });
   }
 
-  CategoryTableCompanion copyWith({
+  QuestionCategoryTableCompanion copyWith({
     Value<int>? id,
     Value<String>? label,
     Value<String?>? description,
   }) {
-    return CategoryTableCompanion(
+    return QuestionCategoryTableCompanion(
       id: id ?? this.id,
       label: label ?? this.label,
       description: description ?? this.description,
@@ -1076,7 +1082,7 @@ class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
 
   @override
   String toString() {
-    return (StringBuffer('CategoryTableCompanion(')
+    return (StringBuffer('QuestionCategoryTableCompanion(')
           ..write('id: $id, ')
           ..write('label: $label, ')
           ..write('description: $description')
@@ -1163,7 +1169,7 @@ class $QuestionTableTable extends QuestionTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES category_table (id)',
+      'REFERENCES question_category_table (id)',
     ),
   );
   @override
@@ -1817,13 +1823,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $LicenseTableTable licenseTable = $LicenseTableTable(this);
   late final $UserTableTable userTable = $UserTableTable(this);
-  late final $CategoryTableTable categoryTable = $CategoryTableTable(this);
+  late final $QuestionCategoryTableTable questionCategoryTable =
+      $QuestionCategoryTableTable(this);
   late final $QuestionTableTable questionTable = $QuestionTableTable(this);
   late final $QuestionOptionTableTable questionOptionTable =
       $QuestionOptionTableTable(this);
   late final UserDao userDao = UserDao(this as AppDatabase);
   late final LicenseDao licenseDao = LicenseDao(this as AppDatabase);
-  late final QuestionCategoryDao categoryDao = QuestionCategoryDao(
+  late final QuestionCategoryDao questionCategoryDao = QuestionCategoryDao(
     this as AppDatabase,
   );
   late final QuestionDao questionDao = QuestionDao(this as AppDatabase);
@@ -1834,7 +1841,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     licenseTable,
     userTable,
-    categoryTable,
+    questionCategoryTable,
     questionTable,
     questionOptionTable,
   ];
@@ -2504,23 +2511,27 @@ typedef $$UserTableTableProcessedTableManager =
       UserTableData,
       PrefetchHooks Function({bool licenseId})
     >;
-typedef $$CategoryTableTableCreateCompanionBuilder =
-    CategoryTableCompanion Function({
+typedef $$QuestionCategoryTableTableCreateCompanionBuilder =
+    QuestionCategoryTableCompanion Function({
       Value<int> id,
       required String label,
       Value<String?> description,
     });
-typedef $$CategoryTableTableUpdateCompanionBuilder =
-    CategoryTableCompanion Function({
+typedef $$QuestionCategoryTableTableUpdateCompanionBuilder =
+    QuestionCategoryTableCompanion Function({
       Value<int> id,
       Value<String> label,
       Value<String?> description,
     });
 
-final class $$CategoryTableTableReferences
+final class $$QuestionCategoryTableTableReferences
     extends
-        BaseReferences<_$AppDatabase, $CategoryTableTable, CategoryTableData> {
-  $$CategoryTableTableReferences(
+        BaseReferences<
+          _$AppDatabase,
+          $QuestionCategoryTableTable,
+          QuestionCategoryTableData
+        > {
+  $$QuestionCategoryTableTableReferences(
     super.$_db,
     super.$_table,
     super.$_typedResult,
@@ -2530,7 +2541,7 @@ final class $$CategoryTableTableReferences
   _questionTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.questionTable,
     aliasName: $_aliasNameGenerator(
-      db.categoryTable.id,
+      db.questionCategoryTable.id,
       db.questionTable.categoryId,
     ),
   );
@@ -2548,9 +2559,9 @@ final class $$CategoryTableTableReferences
   }
 }
 
-class $$CategoryTableTableFilterComposer
-    extends Composer<_$AppDatabase, $CategoryTableTable> {
-  $$CategoryTableTableFilterComposer({
+class $$QuestionCategoryTableTableFilterComposer
+    extends Composer<_$AppDatabase, $QuestionCategoryTableTable> {
+  $$QuestionCategoryTableTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2598,9 +2609,9 @@ class $$CategoryTableTableFilterComposer
   }
 }
 
-class $$CategoryTableTableOrderingComposer
-    extends Composer<_$AppDatabase, $CategoryTableTable> {
-  $$CategoryTableTableOrderingComposer({
+class $$QuestionCategoryTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $QuestionCategoryTableTable> {
+  $$QuestionCategoryTableTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2623,9 +2634,9 @@ class $$CategoryTableTableOrderingComposer
   );
 }
 
-class $$CategoryTableTableAnnotationComposer
-    extends Composer<_$AppDatabase, $CategoryTableTable> {
-  $$CategoryTableTableAnnotationComposer({
+class $$QuestionCategoryTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $QuestionCategoryTableTable> {
+  $$QuestionCategoryTableTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
@@ -2669,38 +2680,49 @@ class $$CategoryTableTableAnnotationComposer
   }
 }
 
-class $$CategoryTableTableTableManager
+class $$QuestionCategoryTableTableTableManager
     extends
         RootTableManager<
           _$AppDatabase,
-          $CategoryTableTable,
-          CategoryTableData,
-          $$CategoryTableTableFilterComposer,
-          $$CategoryTableTableOrderingComposer,
-          $$CategoryTableTableAnnotationComposer,
-          $$CategoryTableTableCreateCompanionBuilder,
-          $$CategoryTableTableUpdateCompanionBuilder,
-          (CategoryTableData, $$CategoryTableTableReferences),
-          CategoryTableData,
+          $QuestionCategoryTableTable,
+          QuestionCategoryTableData,
+          $$QuestionCategoryTableTableFilterComposer,
+          $$QuestionCategoryTableTableOrderingComposer,
+          $$QuestionCategoryTableTableAnnotationComposer,
+          $$QuestionCategoryTableTableCreateCompanionBuilder,
+          $$QuestionCategoryTableTableUpdateCompanionBuilder,
+          (QuestionCategoryTableData, $$QuestionCategoryTableTableReferences),
+          QuestionCategoryTableData,
           PrefetchHooks Function({bool questionTableRefs})
         > {
-  $$CategoryTableTableTableManager(_$AppDatabase db, $CategoryTableTable table)
-    : super(
+  $$QuestionCategoryTableTableTableManager(
+    _$AppDatabase db,
+    $QuestionCategoryTableTable table,
+  ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer: () =>
-              $$CategoryTableTableFilterComposer($db: db, $table: table),
+              $$QuestionCategoryTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
           createOrderingComposer: () =>
-              $$CategoryTableTableOrderingComposer($db: db, $table: table),
+              $$QuestionCategoryTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
           createComputedFieldComposer: () =>
-              $$CategoryTableTableAnnotationComposer($db: db, $table: table),
+              $$QuestionCategoryTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
                 Value<String> label = const Value.absent(),
                 Value<String?> description = const Value.absent(),
-              }) => CategoryTableCompanion(
+              }) => QuestionCategoryTableCompanion(
                 id: id,
                 label: label,
                 description: description,
@@ -2710,7 +2732,7 @@ class $$CategoryTableTableTableManager
                 Value<int> id = const Value.absent(),
                 required String label,
                 Value<String?> description = const Value.absent(),
-              }) => CategoryTableCompanion.insert(
+              }) => QuestionCategoryTableCompanion.insert(
                 id: id,
                 label: label,
                 description: description,
@@ -2719,7 +2741,7 @@ class $$CategoryTableTableTableManager
               .map(
                 (e) => (
                   e.readTable(table),
-                  $$CategoryTableTableReferences(db, table, e),
+                  $$QuestionCategoryTableTableReferences(db, table, e),
                 ),
               )
               .toList(),
@@ -2734,15 +2756,15 @@ class $$CategoryTableTableTableManager
                 return [
                   if (questionTableRefs)
                     await $_getPrefetchedData<
-                      CategoryTableData,
-                      $CategoryTableTable,
+                      QuestionCategoryTableData,
+                      $QuestionCategoryTableTable,
                       QuestionTableData
                     >(
                       currentTable: table,
-                      referencedTable: $$CategoryTableTableReferences
+                      referencedTable: $$QuestionCategoryTableTableReferences
                           ._questionTableRefsTable(db),
                       managerFromTypedResult: (p0) =>
-                          $$CategoryTableTableReferences(
+                          $$QuestionCategoryTableTableReferences(
                             db,
                             table,
                             p0,
@@ -2759,18 +2781,18 @@ class $$CategoryTableTableTableManager
       );
 }
 
-typedef $$CategoryTableTableProcessedTableManager =
+typedef $$QuestionCategoryTableTableProcessedTableManager =
     ProcessedTableManager<
       _$AppDatabase,
-      $CategoryTableTable,
-      CategoryTableData,
-      $$CategoryTableTableFilterComposer,
-      $$CategoryTableTableOrderingComposer,
-      $$CategoryTableTableAnnotationComposer,
-      $$CategoryTableTableCreateCompanionBuilder,
-      $$CategoryTableTableUpdateCompanionBuilder,
-      (CategoryTableData, $$CategoryTableTableReferences),
-      CategoryTableData,
+      $QuestionCategoryTableTable,
+      QuestionCategoryTableData,
+      $$QuestionCategoryTableTableFilterComposer,
+      $$QuestionCategoryTableTableOrderingComposer,
+      $$QuestionCategoryTableTableAnnotationComposer,
+      $$QuestionCategoryTableTableCreateCompanionBuilder,
+      $$QuestionCategoryTableTableUpdateCompanionBuilder,
+      (QuestionCategoryTableData, $$QuestionCategoryTableTableReferences),
+      QuestionCategoryTableData,
       PrefetchHooks Function({bool questionTableRefs})
     >;
 typedef $$QuestionTableTableCreateCompanionBuilder =
@@ -2801,17 +2823,20 @@ final class $$QuestionTableTableReferences
     super.$_typedResult,
   );
 
-  static $CategoryTableTable _categoryIdTable(_$AppDatabase db) =>
-      db.categoryTable.createAlias(
-        $_aliasNameGenerator(db.questionTable.categoryId, db.categoryTable.id),
+  static $QuestionCategoryTableTable _categoryIdTable(_$AppDatabase db) =>
+      db.questionCategoryTable.createAlias(
+        $_aliasNameGenerator(
+          db.questionTable.categoryId,
+          db.questionCategoryTable.id,
+        ),
       );
 
-  $$CategoryTableTableProcessedTableManager get categoryId {
+  $$QuestionCategoryTableTableProcessedTableManager get categoryId {
     final $_column = $_itemColumn<int>('category_id')!;
 
-    final manager = $$CategoryTableTableTableManager(
+    final manager = $$QuestionCategoryTableTableTableManager(
       $_db,
-      $_db.categoryTable,
+      $_db.questionCategoryTable,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_categoryIdTable($_db));
     if (item == null) return manager;
@@ -2882,26 +2907,27 @@ class $$QuestionTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  $$CategoryTableTableFilterComposer get categoryId {
-    final $$CategoryTableTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.categoryId,
-      referencedTable: $db.categoryTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CategoryTableTableFilterComposer(
-            $db: $db,
-            $table: $db.categoryTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
+  $$QuestionCategoryTableTableFilterComposer get categoryId {
+    final $$QuestionCategoryTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.categoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer,
-          ),
-    );
+              }) => $$QuestionCategoryTableTableFilterComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return composer;
   }
 
@@ -2965,26 +2991,27 @@ class $$QuestionTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  $$CategoryTableTableOrderingComposer get categoryId {
-    final $$CategoryTableTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.categoryId,
-      referencedTable: $db.categoryTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CategoryTableTableOrderingComposer(
-            $db: $db,
-            $table: $db.categoryTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
+  $$QuestionCategoryTableTableOrderingComposer get categoryId {
+    final $$QuestionCategoryTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.categoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer,
-          ),
-    );
+              }) => $$QuestionCategoryTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return composer;
   }
 }
@@ -3017,26 +3044,27 @@ class $$QuestionTableTableAnnotationComposer
     builder: (column) => column,
   );
 
-  $$CategoryTableTableAnnotationComposer get categoryId {
-    final $$CategoryTableTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.categoryId,
-      referencedTable: $db.categoryTable,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$CategoryTableTableAnnotationComposer(
-            $db: $db,
-            $table: $db.categoryTable,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
+  $$QuestionCategoryTableTableAnnotationComposer get categoryId {
+    final $$QuestionCategoryTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.categoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
                 $removeJoinBuilderFromRootComposer,
-          ),
-    );
+              }) => $$QuestionCategoryTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return composer;
   }
 
@@ -3546,8 +3574,8 @@ class $AppDatabaseManager {
       $$LicenseTableTableTableManager(_db, _db.licenseTable);
   $$UserTableTableTableManager get userTable =>
       $$UserTableTableTableManager(_db, _db.userTable);
-  $$CategoryTableTableTableManager get categoryTable =>
-      $$CategoryTableTableTableManager(_db, _db.categoryTable);
+  $$QuestionCategoryTableTableTableManager get questionCategoryTable =>
+      $$QuestionCategoryTableTableTableManager(_db, _db.questionCategoryTable);
   $$QuestionTableTableTableManager get questionTable =>
       $$QuestionTableTableTableManager(_db, _db.questionTable);
   $$QuestionOptionTableTableTableManager get questionOptionTable =>

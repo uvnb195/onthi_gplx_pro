@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
-import 'package:flutter/services.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/database/models/question_with_choices.dart';
 import 'package:onthi_gplx_pro/core/database/table/question_option_table.dart';
@@ -15,41 +12,33 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
   QuestionDao(super.attachedDatabase);
 
   // create seed data
-  Future<void> createQuestionsSeedData() async {
-    final questionsJsonString = await rootBundle.loadString(
-      'assets/data/questions.json',
-    );
-    final optionsJsonString = await rootBundle.loadString(
-      'assets/data/question_options.json',
-    );
-
-    final List<dynamic> questions = json.decode(questionsJsonString);
-    final List<dynamic> options = json.decode(optionsJsonString);
-
+  Future<void> createQuestionsSeedData({
+    required List<dynamic> questionsJson,
+    required List<dynamic> optionsJson,
+  }) async {
     await batch((batch) {
       batch.insertAll(
-        questionTable,
-        questions
-            .map(
-              (e) => QuestionTableCompanion.insert(
-                imageId: e['imageId'],
-                content: e['content'],
-                explanation: e['explanation'],
-                isCritical: e['isCritical'],
-                categoryId: e['categoryId'],
-              ),
-            )
-            .toList(),
-      );
-
-      batch.insertAll(
         questionOptionTable,
-        options
+        optionsJson
             .map(
               (e) => QuestionOptionTableCompanion.insert(
                 content: e['content'],
                 questionId: e['questionId'],
-                isCorrect: e['isCorrect'],
+                isCorrect: Value(e['isCorrect']),
+              ),
+            )
+            .toList(),
+      );
+      batch.insertAll(
+        questionTable,
+        questionsJson
+            .map(
+              (e) => QuestionTableCompanion.insert(
+                imageId: Value(e['imageId']),
+                content: e['content'],
+                explanation: Value(e['explanation']),
+                isCritical: Value(e['isCritical'] as bool),
+                categoryId: e['categoryId'],
               ),
             )
             .toList(),

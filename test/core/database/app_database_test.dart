@@ -12,7 +12,7 @@ void main() {
     late LicenseDao mockLicenseDao;
 
     setUp(() async {
-      mockDb = setupMockDb();
+      mockDb = setUpTestDb();
       mockUserDao = mockDb.userDao;
       mockLicenseDao = mockDb.licenseDao;
     });
