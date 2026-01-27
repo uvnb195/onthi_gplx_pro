@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 
@@ -6,6 +7,7 @@ abstract class LocalLicenseDataSource {
   Future<LicenseTableData?> getLicenseById(int id);
 }
 
+@LazySingleton(as: LocalLicenseDataSource)
 class LocalLicenseDataSourceImpl implements LocalLicenseDataSource {
   final AppDatabase _db;
   LocalLicenseDataSourceImpl(this._db);

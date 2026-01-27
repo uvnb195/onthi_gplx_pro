@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/extension/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/usecases/create_user.dart';
@@ -9,6 +10,7 @@ import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/ind
 part 'user_event.dart';
 part 'user_state.dart';
 
+@injectable
 class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
   final CreateUserUseCase createUserUseCase;
   final DeleteUserUseCase deleteUserUseCase;

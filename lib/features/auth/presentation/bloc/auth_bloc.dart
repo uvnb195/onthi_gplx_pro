@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/usecase/usecase.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/user_entity.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/usecases/index.dart';
@@ -7,6 +8,7 @@ import 'package:onthi_gplx_pro/features/user_management/domain/usecases/index.da
 part 'auth_event.dart';
 part 'auth_state.dart';
 
+@injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final WatchCurrentUserUseCase _watchCurrentUserUseCase;
   final DeleteUserUseCase _deleteUserUseCase;

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/usecase/usecase.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/usecases/index.dart';
@@ -7,6 +8,7 @@ import 'package:onthi_gplx_pro/features/user_management/domain/usecases/index.da
 part 'license_event.dart';
 part 'license_state.dart';
 
+@injectable
 class LicenseBloc extends Bloc<LicenseEvent, LicenseState> {
   final GetLicensesUseCase _getLicensesUseCase;
   LicenseBloc(this._getLicensesUseCase) : super(LicenseInitial()) {

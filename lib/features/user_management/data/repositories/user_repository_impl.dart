@@ -1,5 +1,6 @@
 import 'package:dart_either/dart_either.dart';
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/core/extension/gender_type.dart';
@@ -8,6 +9,7 @@ import 'package:onthi_gplx_pro/features/user_management/data/models/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
 
+@LazySingleton(as: UserRepository)
 class UserRepositoryImpl implements UserRepository {
   final LocalUserDataSource _localUserDataSource;
 

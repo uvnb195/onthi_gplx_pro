@@ -1,4 +1,5 @@
 import 'package:dart_either/src/dart_either.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local/index.dart';
@@ -6,6 +7,7 @@ import 'package:onthi_gplx_pro/features/user_management/data/models/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
 
+@LazySingleton(as: LicenseRepository)
 class LicenseRepositoryImpl implements LicenseRepository {
   final LocalLicenseDataSource _licenseDataSource;
   LicenseRepositoryImpl(this._licenseDataSource);

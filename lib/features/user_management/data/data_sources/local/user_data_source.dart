@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 
@@ -7,6 +8,7 @@ abstract class LocalUserDataSource {
   Future<int> createUser(UserTableCompanion user);
 }
 
+@LazySingleton(as: LocalUserDataSource)
 class LocalUserDataSourceImpl implements LocalUserDataSource {
   final AppDatabase _db;
 
