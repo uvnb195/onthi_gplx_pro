@@ -1,9 +1,12 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/collapse_menu.dart';
 
 class LearningDashBoardPage extends StatelessWidget {
@@ -13,13 +16,22 @@ class LearningDashBoardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth < 600) {
-            return _buildMobileLayout(context);
-          } else {
-            return _buildLargeLayout(context);
+      body: BlocBuilder<LearningBloc, LearningState>(
+        builder: (context, state) {
+          if (state.loading) {
+            return Center(
+              child: CircularProgressIndicator(color: AppColors.primaryColor),
+            );
           }
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return _buildMobileLayout(context);
+              } else {
+                return _buildLargeLayout(context);
+              }
+            },
+          );
         },
       ),
     );

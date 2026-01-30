@@ -4,6 +4,9 @@ part of 'question_category_dao.dart';
 
 // ignore_for_file: type=lint
 mixin _$QuestionCategoryDaoMixin on DatabaseAccessor<AppDatabase> {
+  $LicenseTableTable get licenseTable => attachedDatabase.licenseTable;
   $QuestionCategoryTableTable get questionCategoryTable =>
       attachedDatabase.questionCategoryTable;
+  $LicenseQuestionCategoryTableTable get licenseQuestionCategoryTable =>
+      attachedDatabase.licenseQuestionCategoryTable;
 }

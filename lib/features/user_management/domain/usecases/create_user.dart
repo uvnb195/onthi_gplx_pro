@@ -5,7 +5,7 @@ import 'package:onthi_gplx_pro/core/usecase/usecase.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/user_entity.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/user_repository.dart';
 
-@injectable
+@lazySingleton
 class CreateUserUseCase extends UseCase<int, UserEntity> {
   final UserRepository _repository;
 

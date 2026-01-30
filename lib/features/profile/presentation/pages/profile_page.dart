@@ -1,8 +1,10 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
+import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -145,7 +147,9 @@ class ProfilePage extends StatelessWidget {
               rightText: 'Hạng A1',
               subTitle: 'Xoá toàn bộ dữ liệu học tập',
               themeColor: AppColors.primaryColor,
-              onTap: () {},
+              onTap: () {
+                sl<AuthBloc>().add(AuthLoggedOut());
+              },
             ),
           ),
         ),

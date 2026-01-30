@@ -1091,6 +1091,251 @@ class QuestionCategoryTableCompanion
   }
 }
 
+class $LicenseQuestionCategoryTableTable extends LicenseQuestionCategoryTable
+    with
+        TableInfo<
+          $LicenseQuestionCategoryTableTable,
+          LicenseQuestionCategoryTableData
+        > {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LicenseQuestionCategoryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _licenseIdMeta = const VerificationMeta(
+    'licenseId',
+  );
+  @override
+  late final GeneratedColumn<int> licenseId = GeneratedColumn<int>(
+    'license_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES license_table (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _questionCategoryIdMeta =
+      const VerificationMeta('questionCategoryId');
+  @override
+  late final GeneratedColumn<int> questionCategoryId = GeneratedColumn<int>(
+    'question_category_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES question_category_table (id) ON DELETE CASCADE',
+    ),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [licenseId, questionCategoryId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'license_question_category_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LicenseQuestionCategoryTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('license_id')) {
+      context.handle(
+        _licenseIdMeta,
+        licenseId.isAcceptableOrUnknown(data['license_id']!, _licenseIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_licenseIdMeta);
+    }
+    if (data.containsKey('question_category_id')) {
+      context.handle(
+        _questionCategoryIdMeta,
+        questionCategoryId.isAcceptableOrUnknown(
+          data['question_category_id']!,
+          _questionCategoryIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_questionCategoryIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  LicenseQuestionCategoryTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LicenseQuestionCategoryTableData(
+      licenseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}license_id'],
+      )!,
+      questionCategoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}question_category_id'],
+      )!,
+    );
+  }
+
+  @override
+  $LicenseQuestionCategoryTableTable createAlias(String alias) {
+    return $LicenseQuestionCategoryTableTable(attachedDatabase, alias);
+  }
+}
+
+class LicenseQuestionCategoryTableData extends DataClass
+    implements Insertable<LicenseQuestionCategoryTableData> {
+  final int licenseId;
+  final int questionCategoryId;
+  const LicenseQuestionCategoryTableData({
+    required this.licenseId,
+    required this.questionCategoryId,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['license_id'] = Variable<int>(licenseId);
+    map['question_category_id'] = Variable<int>(questionCategoryId);
+    return map;
+  }
+
+  LicenseQuestionCategoryTableCompanion toCompanion(bool nullToAbsent) {
+    return LicenseQuestionCategoryTableCompanion(
+      licenseId: Value(licenseId),
+      questionCategoryId: Value(questionCategoryId),
+    );
+  }
+
+  factory LicenseQuestionCategoryTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LicenseQuestionCategoryTableData(
+      licenseId: serializer.fromJson<int>(json['licenseId']),
+      questionCategoryId: serializer.fromJson<int>(json['questionCategoryId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'licenseId': serializer.toJson<int>(licenseId),
+      'questionCategoryId': serializer.toJson<int>(questionCategoryId),
+    };
+  }
+
+  LicenseQuestionCategoryTableData copyWith({
+    int? licenseId,
+    int? questionCategoryId,
+  }) => LicenseQuestionCategoryTableData(
+    licenseId: licenseId ?? this.licenseId,
+    questionCategoryId: questionCategoryId ?? this.questionCategoryId,
+  );
+  LicenseQuestionCategoryTableData copyWithCompanion(
+    LicenseQuestionCategoryTableCompanion data,
+  ) {
+    return LicenseQuestionCategoryTableData(
+      licenseId: data.licenseId.present ? data.licenseId.value : this.licenseId,
+      questionCategoryId: data.questionCategoryId.present
+          ? data.questionCategoryId.value
+          : this.questionCategoryId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LicenseQuestionCategoryTableData(')
+          ..write('licenseId: $licenseId, ')
+          ..write('questionCategoryId: $questionCategoryId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(licenseId, questionCategoryId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LicenseQuestionCategoryTableData &&
+          other.licenseId == this.licenseId &&
+          other.questionCategoryId == this.questionCategoryId);
+}
+
+class LicenseQuestionCategoryTableCompanion
+    extends UpdateCompanion<LicenseQuestionCategoryTableData> {
+  final Value<int> licenseId;
+  final Value<int> questionCategoryId;
+  final Value<int> rowid;
+  const LicenseQuestionCategoryTableCompanion({
+    this.licenseId = const Value.absent(),
+    this.questionCategoryId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  LicenseQuestionCategoryTableCompanion.insert({
+    required int licenseId,
+    required int questionCategoryId,
+    this.rowid = const Value.absent(),
+  }) : licenseId = Value(licenseId),
+       questionCategoryId = Value(questionCategoryId);
+  static Insertable<LicenseQuestionCategoryTableData> custom({
+    Expression<int>? licenseId,
+    Expression<int>? questionCategoryId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (licenseId != null) 'license_id': licenseId,
+      if (questionCategoryId != null)
+        'question_category_id': questionCategoryId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LicenseQuestionCategoryTableCompanion copyWith({
+    Value<int>? licenseId,
+    Value<int>? questionCategoryId,
+    Value<int>? rowid,
+  }) {
+    return LicenseQuestionCategoryTableCompanion(
+      licenseId: licenseId ?? this.licenseId,
+      questionCategoryId: questionCategoryId ?? this.questionCategoryId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (licenseId.present) {
+      map['license_id'] = Variable<int>(licenseId.value);
+    }
+    if (questionCategoryId.present) {
+      map['question_category_id'] = Variable<int>(questionCategoryId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LicenseQuestionCategoryTableCompanion(')
+          ..write('licenseId: $licenseId, ')
+          ..write('questionCategoryId: $questionCategoryId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $QuestionTableTable extends QuestionTable
     with TableInfo<$QuestionTableTable, QuestionTableData> {
   @override
@@ -1825,6 +2070,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $UserTableTable userTable = $UserTableTable(this);
   late final $QuestionCategoryTableTable questionCategoryTable =
       $QuestionCategoryTableTable(this);
+  late final $LicenseQuestionCategoryTableTable licenseQuestionCategoryTable =
+      $LicenseQuestionCategoryTableTable(this);
   late final $QuestionTableTable questionTable = $QuestionTableTable(this);
   late final $QuestionOptionTableTable questionOptionTable =
       $QuestionOptionTableTable(this);
@@ -1842,11 +2089,30 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     licenseTable,
     userTable,
     questionCategoryTable,
+    licenseQuestionCategoryTable,
     questionTable,
     questionOptionTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'license_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('license_question_category_table', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'question_category_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('license_question_category_table', kind: UpdateKind.delete),
+      ],
+    ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'question_table',
@@ -1888,6 +2154,34 @@ final class $$LicenseTableTableReferences
     ).filter((f) => f.licenseId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_userTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $LicenseQuestionCategoryTableTable,
+    List<LicenseQuestionCategoryTableData>
+  >
+  _licenseQuestionCategoryTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.licenseQuestionCategoryTable,
+        aliasName: $_aliasNameGenerator(
+          db.licenseTable.id,
+          db.licenseQuestionCategoryTable.licenseId,
+        ),
+      );
+
+  $$LicenseQuestionCategoryTableTableProcessedTableManager
+  get licenseQuestionCategoryTableRefs {
+    final manager = $$LicenseQuestionCategoryTableTableTableManager(
+      $_db,
+      $_db.licenseQuestionCategoryTable,
+    ).filter((f) => f.licenseId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _licenseQuestionCategoryTableRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -1941,6 +2235,35 @@ class $$LicenseTableTableFilterComposer
                 $removeJoinBuilderFromRootComposer,
           ),
     );
+    return f(composer);
+  }
+
+  Expression<bool> licenseQuestionCategoryTableRefs(
+    Expression<bool> Function(
+      $$LicenseQuestionCategoryTableTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$LicenseQuestionCategoryTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.licenseQuestionCategoryTable,
+          getReferencedColumn: (t) => t.licenseId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LicenseQuestionCategoryTableTableFilterComposer(
+                $db: $db,
+                $table: $db.licenseQuestionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return f(composer);
   }
 }
@@ -2014,6 +2337,35 @@ class $$LicenseTableTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> licenseQuestionCategoryTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$LicenseQuestionCategoryTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$LicenseQuestionCategoryTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.licenseQuestionCategoryTable,
+          getReferencedColumn: (t) => t.licenseId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LicenseQuestionCategoryTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.licenseQuestionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$LicenseTableTableTableManager
@@ -2029,7 +2381,10 @@ class $$LicenseTableTableTableManager
           $$LicenseTableTableUpdateCompanionBuilder,
           (LicenseTableData, $$LicenseTableTableReferences),
           LicenseTableData,
-          PrefetchHooks Function({bool userTableRefs})
+          PrefetchHooks Function({
+            bool userTableRefs,
+            bool licenseQuestionCategoryTableRefs,
+          })
         > {
   $$LicenseTableTableTableManager(_$AppDatabase db, $LicenseTableTable table)
     : super(
@@ -2070,36 +2425,67 @@ class $$LicenseTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({userTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (userTableRefs) db.userTable],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (userTableRefs)
-                    await $_getPrefetchedData<
-                      LicenseTableData,
-                      $LicenseTableTable,
-                      UserTableData
-                    >(
-                      currentTable: table,
-                      referencedTable: $$LicenseTableTableReferences
-                          ._userTableRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$LicenseTableTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).userTableRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.licenseId == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({
+                userTableRefs = false,
+                licenseQuestionCategoryTableRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (userTableRefs) db.userTable,
+                    if (licenseQuestionCategoryTableRefs)
+                      db.licenseQuestionCategoryTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (userTableRefs)
+                        await $_getPrefetchedData<
+                          LicenseTableData,
+                          $LicenseTableTable,
+                          UserTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$LicenseTableTableReferences
+                              ._userTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$LicenseTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).userTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.licenseId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (licenseQuestionCategoryTableRefs)
+                        await $_getPrefetchedData<
+                          LicenseTableData,
+                          $LicenseTableTable,
+                          LicenseQuestionCategoryTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$LicenseTableTableReferences
+                              ._licenseQuestionCategoryTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$LicenseTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).licenseQuestionCategoryTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.licenseId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -2116,7 +2502,10 @@ typedef $$LicenseTableTableProcessedTableManager =
       $$LicenseTableTableUpdateCompanionBuilder,
       (LicenseTableData, $$LicenseTableTableReferences),
       LicenseTableData,
-      PrefetchHooks Function({bool userTableRefs})
+      PrefetchHooks Function({
+        bool userTableRefs,
+        bool licenseQuestionCategoryTableRefs,
+      })
     >;
 typedef $$UserTableTableCreateCompanionBuilder =
     UserTableCompanion Function({
@@ -2537,6 +2926,37 @@ final class $$QuestionCategoryTableTableReferences
     super.$_typedResult,
   );
 
+  static MultiTypedResultKey<
+    $LicenseQuestionCategoryTableTable,
+    List<LicenseQuestionCategoryTableData>
+  >
+  _licenseQuestionCategoryTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.licenseQuestionCategoryTable,
+        aliasName: $_aliasNameGenerator(
+          db.questionCategoryTable.id,
+          db.licenseQuestionCategoryTable.questionCategoryId,
+        ),
+      );
+
+  $$LicenseQuestionCategoryTableTableProcessedTableManager
+  get licenseQuestionCategoryTableRefs {
+    final manager =
+        $$LicenseQuestionCategoryTableTableTableManager(
+          $_db,
+          $_db.licenseQuestionCategoryTable,
+        ).filter(
+          (f) => f.questionCategoryId.id.sqlEquals($_itemColumn<int>('id')!),
+        );
+
+    final cache = $_typedResult.readTableOrNull(
+      _licenseQuestionCategoryTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<$QuestionTableTable, List<QuestionTableData>>
   _questionTableRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.questionTable,
@@ -2582,6 +3002,35 @@ class $$QuestionCategoryTableTableFilterComposer
     column: $table.description,
     builder: (column) => ColumnFilters(column),
   );
+
+  Expression<bool> licenseQuestionCategoryTableRefs(
+    Expression<bool> Function(
+      $$LicenseQuestionCategoryTableTableFilterComposer f,
+    )
+    f,
+  ) {
+    final $$LicenseQuestionCategoryTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.licenseQuestionCategoryTable,
+          getReferencedColumn: (t) => t.questionCategoryId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LicenseQuestionCategoryTableTableFilterComposer(
+                $db: $db,
+                $table: $db.licenseQuestionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 
   Expression<bool> questionTableRefs(
     Expression<bool> Function($$QuestionTableTableFilterComposer f) f,
@@ -2654,6 +3103,35 @@ class $$QuestionCategoryTableTableAnnotationComposer
     builder: (column) => column,
   );
 
+  Expression<T> licenseQuestionCategoryTableRefs<T extends Object>(
+    Expression<T> Function(
+      $$LicenseQuestionCategoryTableTableAnnotationComposer a,
+    )
+    f,
+  ) {
+    final $$LicenseQuestionCategoryTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.licenseQuestionCategoryTable,
+          getReferencedColumn: (t) => t.questionCategoryId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LicenseQuestionCategoryTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.licenseQuestionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
   Expression<T> questionTableRefs<T extends Object>(
     Expression<T> Function($$QuestionTableTableAnnotationComposer a) f,
   ) {
@@ -2693,7 +3171,10 @@ class $$QuestionCategoryTableTableTableManager
           $$QuestionCategoryTableTableUpdateCompanionBuilder,
           (QuestionCategoryTableData, $$QuestionCategoryTableTableReferences),
           QuestionCategoryTableData,
-          PrefetchHooks Function({bool questionTableRefs})
+          PrefetchHooks Function({
+            bool licenseQuestionCategoryTableRefs,
+            bool questionTableRefs,
+          })
         > {
   $$QuestionCategoryTableTableTableManager(
     _$AppDatabase db,
@@ -2745,38 +3226,69 @@ class $$QuestionCategoryTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({questionTableRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (questionTableRefs) db.questionTable,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (questionTableRefs)
-                    await $_getPrefetchedData<
-                      QuestionCategoryTableData,
-                      $QuestionCategoryTableTable,
-                      QuestionTableData
-                    >(
-                      currentTable: table,
-                      referencedTable: $$QuestionCategoryTableTableReferences
-                          ._questionTableRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$QuestionCategoryTableTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).questionTableRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.categoryId == item.id),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({
+                licenseQuestionCategoryTableRefs = false,
+                questionTableRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (licenseQuestionCategoryTableRefs)
+                      db.licenseQuestionCategoryTable,
+                    if (questionTableRefs) db.questionTable,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (licenseQuestionCategoryTableRefs)
+                        await $_getPrefetchedData<
+                          QuestionCategoryTableData,
+                          $QuestionCategoryTableTable,
+                          LicenseQuestionCategoryTableData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$QuestionCategoryTableTableReferences
+                                  ._licenseQuestionCategoryTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$QuestionCategoryTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).licenseQuestionCategoryTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.questionCategoryId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (questionTableRefs)
+                        await $_getPrefetchedData<
+                          QuestionCategoryTableData,
+                          $QuestionCategoryTableTable,
+                          QuestionTableData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$QuestionCategoryTableTableReferences
+                                  ._questionTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$QuestionCategoryTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).questionTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.categoryId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -2793,7 +3305,400 @@ typedef $$QuestionCategoryTableTableProcessedTableManager =
       $$QuestionCategoryTableTableUpdateCompanionBuilder,
       (QuestionCategoryTableData, $$QuestionCategoryTableTableReferences),
       QuestionCategoryTableData,
-      PrefetchHooks Function({bool questionTableRefs})
+      PrefetchHooks Function({
+        bool licenseQuestionCategoryTableRefs,
+        bool questionTableRefs,
+      })
+    >;
+typedef $$LicenseQuestionCategoryTableTableCreateCompanionBuilder =
+    LicenseQuestionCategoryTableCompanion Function({
+      required int licenseId,
+      required int questionCategoryId,
+      Value<int> rowid,
+    });
+typedef $$LicenseQuestionCategoryTableTableUpdateCompanionBuilder =
+    LicenseQuestionCategoryTableCompanion Function({
+      Value<int> licenseId,
+      Value<int> questionCategoryId,
+      Value<int> rowid,
+    });
+
+final class $$LicenseQuestionCategoryTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $LicenseQuestionCategoryTableTable,
+          LicenseQuestionCategoryTableData
+        > {
+  $$LicenseQuestionCategoryTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $LicenseTableTable _licenseIdTable(_$AppDatabase db) =>
+      db.licenseTable.createAlias(
+        $_aliasNameGenerator(
+          db.licenseQuestionCategoryTable.licenseId,
+          db.licenseTable.id,
+        ),
+      );
+
+  $$LicenseTableTableProcessedTableManager get licenseId {
+    final $_column = $_itemColumn<int>('license_id')!;
+
+    final manager = $$LicenseTableTableTableManager(
+      $_db,
+      $_db.licenseTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_licenseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $QuestionCategoryTableTable _questionCategoryIdTable(
+    _$AppDatabase db,
+  ) => db.questionCategoryTable.createAlias(
+    $_aliasNameGenerator(
+      db.licenseQuestionCategoryTable.questionCategoryId,
+      db.questionCategoryTable.id,
+    ),
+  );
+
+  $$QuestionCategoryTableTableProcessedTableManager get questionCategoryId {
+    final $_column = $_itemColumn<int>('question_category_id')!;
+
+    final manager = $$QuestionCategoryTableTableTableManager(
+      $_db,
+      $_db.questionCategoryTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_questionCategoryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$LicenseQuestionCategoryTableTableFilterComposer
+    extends Composer<_$AppDatabase, $LicenseQuestionCategoryTableTable> {
+  $$LicenseQuestionCategoryTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$LicenseTableTableFilterComposer get licenseId {
+    final $$LicenseTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.licenseId,
+      referencedTable: $db.licenseTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LicenseTableTableFilterComposer(
+            $db: $db,
+            $table: $db.licenseTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionCategoryTableTableFilterComposer get questionCategoryId {
+    final $$QuestionCategoryTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.questionCategoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionCategoryTableTableFilterComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$LicenseQuestionCategoryTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $LicenseQuestionCategoryTableTable> {
+  $$LicenseQuestionCategoryTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$LicenseTableTableOrderingComposer get licenseId {
+    final $$LicenseTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.licenseId,
+      referencedTable: $db.licenseTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LicenseTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.licenseTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionCategoryTableTableOrderingComposer get questionCategoryId {
+    final $$QuestionCategoryTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.questionCategoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionCategoryTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$LicenseQuestionCategoryTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LicenseQuestionCategoryTableTable> {
+  $$LicenseQuestionCategoryTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$LicenseTableTableAnnotationComposer get licenseId {
+    final $$LicenseTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.licenseId,
+      referencedTable: $db.licenseTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LicenseTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.licenseTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionCategoryTableTableAnnotationComposer get questionCategoryId {
+    final $$QuestionCategoryTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.questionCategoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionCategoryTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$LicenseQuestionCategoryTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $LicenseQuestionCategoryTableTable,
+          LicenseQuestionCategoryTableData,
+          $$LicenseQuestionCategoryTableTableFilterComposer,
+          $$LicenseQuestionCategoryTableTableOrderingComposer,
+          $$LicenseQuestionCategoryTableTableAnnotationComposer,
+          $$LicenseQuestionCategoryTableTableCreateCompanionBuilder,
+          $$LicenseQuestionCategoryTableTableUpdateCompanionBuilder,
+          (
+            LicenseQuestionCategoryTableData,
+            $$LicenseQuestionCategoryTableTableReferences,
+          ),
+          LicenseQuestionCategoryTableData,
+          PrefetchHooks Function({bool licenseId, bool questionCategoryId})
+        > {
+  $$LicenseQuestionCategoryTableTableTableManager(
+    _$AppDatabase db,
+    $LicenseQuestionCategoryTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LicenseQuestionCategoryTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$LicenseQuestionCategoryTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$LicenseQuestionCategoryTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> licenseId = const Value.absent(),
+                Value<int> questionCategoryId = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => LicenseQuestionCategoryTableCompanion(
+                licenseId: licenseId,
+                questionCategoryId: questionCategoryId,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required int licenseId,
+                required int questionCategoryId,
+                Value<int> rowid = const Value.absent(),
+              }) => LicenseQuestionCategoryTableCompanion.insert(
+                licenseId: licenseId,
+                questionCategoryId: questionCategoryId,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$LicenseQuestionCategoryTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({licenseId = false, questionCategoryId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (licenseId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.licenseId,
+                                referencedTable:
+                                    $$LicenseQuestionCategoryTableTableReferences
+                                        ._licenseIdTable(db),
+                                referencedColumn:
+                                    $$LicenseQuestionCategoryTableTableReferences
+                                        ._licenseIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+                    if (questionCategoryId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.questionCategoryId,
+                                referencedTable:
+                                    $$LicenseQuestionCategoryTableTableReferences
+                                        ._questionCategoryIdTable(db),
+                                referencedColumn:
+                                    $$LicenseQuestionCategoryTableTableReferences
+                                        ._questionCategoryIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$LicenseQuestionCategoryTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $LicenseQuestionCategoryTableTable,
+      LicenseQuestionCategoryTableData,
+      $$LicenseQuestionCategoryTableTableFilterComposer,
+      $$LicenseQuestionCategoryTableTableOrderingComposer,
+      $$LicenseQuestionCategoryTableTableAnnotationComposer,
+      $$LicenseQuestionCategoryTableTableCreateCompanionBuilder,
+      $$LicenseQuestionCategoryTableTableUpdateCompanionBuilder,
+      (
+        LicenseQuestionCategoryTableData,
+        $$LicenseQuestionCategoryTableTableReferences,
+      ),
+      LicenseQuestionCategoryTableData,
+      PrefetchHooks Function({bool licenseId, bool questionCategoryId})
     >;
 typedef $$QuestionTableTableCreateCompanionBuilder =
     QuestionTableCompanion Function({
@@ -3576,6 +4481,12 @@ class $AppDatabaseManager {
       $$UserTableTableTableManager(_db, _db.userTable);
   $$QuestionCategoryTableTableTableManager get questionCategoryTable =>
       $$QuestionCategoryTableTableTableManager(_db, _db.questionCategoryTable);
+  $$LicenseQuestionCategoryTableTableTableManager
+  get licenseQuestionCategoryTable =>
+      $$LicenseQuestionCategoryTableTableTableManager(
+        _db,
+        _db.licenseQuestionCategoryTable,
+      );
   $$QuestionTableTableTableManager get questionTable =>
       $$QuestionTableTableTableManager(_db, _db.questionTable);
   $$QuestionOptionTableTableTableManager get questionOptionTable =>

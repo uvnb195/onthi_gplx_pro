@@ -3,9 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/core/usecase/usecase.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/repositories/license_repository.dart';
 
-@injectable
+@lazySingleton
 class GetLicensesUseCase extends UseCase<List<LicenseEntity>, NoParams> {
   final LicenseRepository _licenseRepository;
 

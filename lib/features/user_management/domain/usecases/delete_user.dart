@@ -4,7 +4,7 @@ import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/core/usecase/usecase.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/user_repository.dart';
 
-@injectable
+@lazySingleton
 class DeleteUserUseCase extends UseCase<void, NoParams> {
   final UserRepository _userRepository;
 

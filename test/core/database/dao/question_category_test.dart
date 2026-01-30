@@ -20,7 +20,7 @@ void main() {
 
   group('Test Question Category Dao', () {
     test('check seed data inserted', () async {
-      final result = await questionCategoryDao.getCategories();
+      final result = await questionCategoryDao.getAllCategories();
 
       expect(result.length, greaterThan(0));
       expect(result.length, 6);

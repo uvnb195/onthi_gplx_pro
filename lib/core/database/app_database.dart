@@ -25,6 +25,7 @@ LazyDatabase _openConnection() {
   tables: [
     UserTable,
     LicenseTable,
+    LicenseQuestionCategoryTable,
     QuestionCategoryTable,
     QuestionTable,
     QuestionOptionTable,

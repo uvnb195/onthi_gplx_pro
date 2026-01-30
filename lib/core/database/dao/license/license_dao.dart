@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/database/table/license_table.dart';
 import 'package:onthi_gplx_pro/core/extension/index.dart';
@@ -6,6 +7,7 @@ import 'package:onthi_gplx_pro/core/extension/index.dart';
 part 'license_dao.g.dart';
 
 @DriftAccessor(tables: [LicenseTable])
+@lazySingleton
 class LicenseDao extends DatabaseAccessor<AppDatabase> with _$LicenseDaoMixin {
   LicenseDao(super.db);
 

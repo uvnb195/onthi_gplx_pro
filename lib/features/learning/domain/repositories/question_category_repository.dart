@@ -8,4 +8,7 @@ abstract class QuestionCategoryRepository {
   Future<Either<Failure, QuestionCategoryEntity>> getQuestionCategoryById(
     int id,
   );
+
+  Future<Either<Failure, List<QuestionCategoryEntity>>>
+  getQuestionCategoriesByLicense(int licenseId);
 }

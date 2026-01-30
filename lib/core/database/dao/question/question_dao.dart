@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/database/models/question_with_choices.dart';
 import 'package:onthi_gplx_pro/core/database/table/question_option_table.dart';
@@ -6,6 +7,7 @@ import 'package:onthi_gplx_pro/core/database/table/question_table.dart';
 
 part 'question_dao.g.dart';
 
+@lazySingleton
 @DriftAccessor(tables: [QuestionTable, QuestionOptionTable])
 class QuestionDao extends DatabaseAccessor<AppDatabase>
     with _$QuestionDaoMixin {

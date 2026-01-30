@@ -13,6 +13,21 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
+import '../../features/learning/data/repositories/question_category_impl.dart'
+    as _i497;
+import '../../features/learning/data/repositories/question_repository_impl.dart'
+    as _i969;
+import '../../features/learning/domain/repositories/question_category_repository.dart'
+    as _i764;
+import '../../features/learning/domain/repositories/question_repository.dart'
+    as _i359;
+import '../../features/learning/domain/usecases/get_all_question_categories.dart'
+    as _i214;
+import '../../features/learning/domain/usecases/get_question_categories_by_license.dart'
+    as _i246;
+import '../../features/learning/domain/usecases/get_question_category_by_id.dart'
+    as _i1050;
+import '../../features/learning/presentation/bloc/learning_bloc.dart' as _i591;
 import '../../features/user_management/data/data_sources/local/index.dart'
     as _i937;
 import '../../features/user_management/data/data_sources/local/license_data_source.dart'
@@ -24,6 +39,8 @@ import '../../features/user_management/data/repositories/license_repository_impl
 import '../../features/user_management/data/repositories/user_repository_impl.dart'
     as _i362;
 import '../../features/user_management/domain/repositories/index.dart' as _i245;
+import '../../features/user_management/domain/repositories/license_repository.dart'
+    as _i182;
 import '../../features/user_management/domain/repositories/user_repository.dart'
     as _i462;
 import '../../features/user_management/domain/usecases/create_user.dart'
@@ -42,6 +59,11 @@ import '../../features/user_management/presentation/bloc/license_bloc/license_bl
 import '../../features/user_management/presentation/bloc/user/user_bloc.dart'
     as _i172;
 import '../database/app_database.dart' as _i982;
+import '../database/dao/index.dart' as _i250;
+import '../database/dao/license/license_dao.dart' as _i957;
+import '../database/dao/question/question_dao.dart' as _i742;
+import '../database/dao/question_category/question_category_dao.dart' as _i792;
+import '../database/dao/user/user_dao.dart' as _i391;
 import 'register_module.dart' as _i291;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -53,28 +75,68 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.singleton<_i982.AppDatabase>(() => registerModule.database);
+    gh.lazySingleton<_i742.QuestionDao>(
+      () => _i742.QuestionDao(gh<_i982.AppDatabase>()),
+    );
+    gh.lazySingleton<_i792.QuestionCategoryDao>(
+      () => _i792.QuestionCategoryDao(gh<_i982.AppDatabase>()),
+    );
+    gh.lazySingleton<_i391.UserDao>(
+      () => _i391.UserDao(gh<_i982.AppDatabase>()),
+    );
+    gh.lazySingleton<_i957.LicenseDao>(
+      () => _i957.LicenseDao(gh<_i982.AppDatabase>()),
+    );
+    gh.lazySingleton<_i359.QuestionRepository>(
+      () => _i969.QuestionRepositoryImpl(gh<_i250.QuestionDao>()),
+    );
     gh.lazySingleton<_i737.LocalUserDataSource>(
       () => _i737.LocalUserDataSourceImpl(gh<_i982.AppDatabase>()),
     );
     gh.lazySingleton<_i193.LocalLicenseDataSource>(
       () => _i193.LocalLicenseDataSourceImpl(gh<_i982.AppDatabase>()),
     );
+    gh.lazySingleton<_i764.QuestionCategoryRepository>(
+      () => _i497.QuestionCategoryRepositoryImpl(
+        questionCategoryDao: gh<_i250.QuestionCategoryDao>(),
+        questionDao: gh<_i250.QuestionDao>(),
+      ),
+    );
+    gh.lazySingleton<_i214.GetAllQuestionCategoriesUseCase>(
+      () => _i214.GetAllQuestionCategoriesUseCase(
+        gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i246.GetQuestionCategoriesByLicenseUseCase>(
+      () => _i246.GetQuestionCategoriesByLicenseUseCase(
+        gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i1050.GetQuestionCategoriesByIdUseCase>(
+      () => _i1050.GetQuestionCategoriesByIdUseCase(
+        gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
     gh.lazySingleton<_i245.UserRepository>(
       () => _i362.UserRepositoryImpl(gh<_i937.LocalUserDataSource>()),
     );
-    gh.lazySingleton<_i245.LicenseRepository>(
+    gh.lazySingleton<_i182.LicenseRepository>(
       () => _i197.LicenseRepositoryImpl(gh<_i937.LocalLicenseDataSource>()),
     );
-    gh.factory<_i896.GetLicenseByIdUseCase>(
-      () => _i896.GetLicenseByIdUseCase(gh<_i245.LicenseRepository>()),
+    gh.factory<_i591.LearningBloc>(
+      () => _i591.LearningBloc(
+        getAllQuestionCategoriesUseCase:
+            gh<_i214.GetAllQuestionCategoriesUseCase>(),
+        getQuestionCategoriesByIdUseCase:
+            gh<_i1050.GetQuestionCategoriesByIdUseCase>(),
+        getQuestionCategoriesByLicenseUseCase:
+            gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
+      ),
     );
-    gh.factory<_i48.GetLicensesUseCase>(
-      () => _i48.GetLicensesUseCase(gh<_i245.LicenseRepository>()),
-    );
-    gh.factory<_i591.DeleteUserUseCase>(
+    gh.lazySingleton<_i591.DeleteUserUseCase>(
       () => _i591.DeleteUserUseCase(gh<_i462.UserRepository>()),
     );
-    gh.factory<_i315.CreateUserUseCase>(
+    gh.lazySingleton<_i315.CreateUserUseCase>(
       () => _i315.CreateUserUseCase(gh<_i462.UserRepository>()),
     );
     gh.factory<_i172.UserBloc>(
@@ -83,7 +145,13 @@ extension GetItInjectableX on _i174.GetIt {
         deleteUserUseCase: gh<_i591.DeleteUserUseCase>(),
       ),
     );
-    gh.factory<_i867.WatchCurrentUserUseCase>(
+    gh.lazySingleton<_i896.GetLicenseByIdUseCase>(
+      () => _i896.GetLicenseByIdUseCase(gh<_i182.LicenseRepository>()),
+    );
+    gh.lazySingleton<_i48.GetLicensesUseCase>(
+      () => _i48.GetLicensesUseCase(gh<_i182.LicenseRepository>()),
+    );
+    gh.lazySingleton<_i867.WatchCurrentUserUseCase>(
       () => _i867.WatchCurrentUserUseCase(gh<_i245.UserRepository>()),
     );
     gh.factory<_i704.LicenseBloc>(
