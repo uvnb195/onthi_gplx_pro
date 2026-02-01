@@ -71,5 +71,26 @@ void main() {
         );
       }
     });
+
+    test('make sure license_question_table have right seed datas', () async {
+      final a1Questions = await (db.select(
+        db.licenseQuestionTable,
+      )..where((tbl) => tbl.licenseId.equals(1))).get();
+      final aQuestions = await (db.select(
+        db.licenseQuestionTable,
+      )..where((tbl) => tbl.licenseId.equals(2))).get();
+      final b1Questions = await (db.select(
+        db.licenseQuestionTable,
+      )..where((tbl) => tbl.licenseId.equals(3))).get();
+      // all others GPLX will learn all (600questions)
+
+      expect(a1Questions.length, 250, reason: 'A1 should have 250 questions');
+      expect(
+        aQuestions.length,
+        250,
+        reason: 'A should be exactly same with A1',
+      );
+      expect(b1Questions.length, 300, reason: 'B1 should have 300 questions');
+    });
   });
 }

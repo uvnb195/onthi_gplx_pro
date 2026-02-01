@@ -1,4 +1,4 @@
-import 'package:dart_either/src/dart_either.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';

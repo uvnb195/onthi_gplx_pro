@@ -6,7 +6,7 @@ import 'package:onthi_gplx_pro/core/database/table/index.dart';
 part 'question_category_dao.g.dart';
 
 @DriftAccessor(
-  tables: [LicenseTable, LicenseQuestionCategoryTable, QuestionCategoryTable],
+  tables: [LicenseTable, LicenseCategoryTable, QuestionCategoryTable],
 )
 @lazySingleton
 class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
@@ -30,6 +30,29 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
     );
   }
 
+  Future<void> createLicenseCategoriesSeedData(
+    List<dynamic> licenseCategoriesJson,
+  ) async {
+    await batch((batch) {
+      final insertions = licenseCategoriesJson.expand((e) {
+        final licenseId = e['license_id'];
+        List<int> questionCategories = List<int>.from(e['data']);
+        if (questionCategories.isEmpty) {
+          questionCategories = List.generate(6, (i) => i + 1);
+        }
+
+        return questionCategories.map(
+          (e) => LicenseCategoryTableCompanion.insert(
+            licenseId: licenseId as int,
+            questionCategoryId: e,
+          ),
+        );
+      }).toList();
+
+      batch.insertAll(licenseCategoryTable, insertions, mode: .insertOrIgnore);
+    });
+  }
+
   Future<List<QuestionCategoryTableData>> getAllCategories() =>
       select(questionCategoryTable).get();
 
@@ -45,12 +68,12 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
   ) async {
     final query = select(questionCategoryTable).join([
       innerJoin(
-        licenseQuestionCategoryTable,
-        licenseQuestionCategoryTable.questionCategoryId.equalsExp(
+        licenseCategoryTable,
+        licenseCategoryTable.questionCategoryId.equalsExp(
           questionCategoryTable.id,
         ),
       ),
-    ])..where(licenseQuestionCategoryTable.licenseId.equals(licenseId));
+    ])..where(licenseCategoryTable.licenseId.equals(licenseId));
 
     final rows = await query.get();
     return rows.map((row) => row.readTable(questionCategoryTable)).toList();

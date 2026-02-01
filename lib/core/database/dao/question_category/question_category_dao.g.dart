@@ -7,6 +7,6 @@ mixin _$QuestionCategoryDaoMixin on DatabaseAccessor<AppDatabase> {
   $LicenseTableTable get licenseTable => attachedDatabase.licenseTable;
   $QuestionCategoryTableTable get questionCategoryTable =>
       attachedDatabase.questionCategoryTable;
-  $LicenseQuestionCategoryTableTable get licenseQuestionCategoryTable =>
-      attachedDatabase.licenseQuestionCategoryTable;
+  $LicenseCategoryTableTable get licenseCategoryTable =>
+      attachedDatabase.licenseCategoryTable;
 }

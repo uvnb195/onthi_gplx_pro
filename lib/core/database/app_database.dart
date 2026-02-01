@@ -25,8 +25,9 @@ LazyDatabase _openConnection() {
   tables: [
     UserTable,
     LicenseTable,
-    LicenseQuestionCategoryTable,
+    LicenseCategoryTable,
     QuestionCategoryTable,
+    LicenseQuestionTable,
     QuestionTable,
     QuestionOptionTable,
   ],
@@ -56,17 +57,33 @@ class AppDatabase extends _$AppDatabase {
         final String rawLicenses = await rootBundle.loadString(
           'assets/data/licenses.json',
         );
+        final String rawLicenseQuestions = await rootBundle.loadString(
+          'assets/data/license_questions.json',
+        );
+        final String rawLicenseCategories = await rootBundle.loadString(
+          'assets/data/license_categories.json',
+        );
 
         final List<dynamic> categoriesJson = json.decode(rawQuestionCategories);
         final List<dynamic> optionsJson = json.decode(rawQuestionOptions);
         final List<dynamic> questionsJson = json.decode(rawQuestions);
         final List<dynamic> licensesJson = json.decode(rawLicenses);
+        final List<dynamic> licenseQuestionsJson = json.decode(
+          rawLicenseQuestions,
+        );
+        final List<dynamic> licenseCategoriesJson = json.decode(
+          rawLicenseCategories,
+        );
 
         await licenseDao.createLicensesSeedData(licensesJson);
         await questionCategoryDao.createCategoriesSeedData(categoriesJson);
         await questionDao.createQuestionsSeedData(
           optionsJson: optionsJson,
           questionsJson: questionsJson,
+        );
+        await questionDao.createLicenseQuestionsSeedData(licenseQuestionsJson);
+        await questionCategoryDao.createLicenseCategoriesSeedData(
+          licenseCategoriesJson,
         );
       },
       beforeOpen: (details) async {

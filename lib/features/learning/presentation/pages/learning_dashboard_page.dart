@@ -2,7 +2,6 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
@@ -18,6 +17,53 @@ class LearningDashBoardPage extends StatelessWidget {
       appBar: AppBar(toolbarHeight: 0),
       body: BlocBuilder<LearningBloc, LearningState>(
         builder: (context, state) {
+          final List<Color> colors = AppColors.rainbowColors;
+          List<Color> getRotateRainbowColors(int startIndex) {
+            if (startIndex == -1 || startIndex >= colors.length) return colors;
+            return colors.sublist(startIndex)
+              ..addAll(colors.sublist(0, startIndex));
+          }
+
+          final theoryIconDatas = [
+            BootstrapIcons.bookmarks,
+            BootstrapIcons.shield_lock,
+            BootstrapIcons.journal_text,
+            BootstrapIcons.people,
+            BootstrapIcons.speedometer2,
+            BootstrapIcons.sign_stop,
+            BootstrapIcons.tools,
+            BootstrapIcons.stoplights,
+          ];
+
+          final theoryDropdownItemColors = getRotateRainbowColors(0);
+          final videoDropdownItemColors = getRotateRainbowColors(4);
+          final List<CollapseMenuItem> theoryDropdownItems = state.categories
+              .asMap()
+              .entries
+              .map(
+                (e) => CollapseMenuItem(
+                  title: e.value.label,
+                  iconData: theoryIconDatas[e.key],
+                  themeColor: e.key < colors.length
+                      ? theoryDropdownItemColors[e.key]
+                      : theoryDropdownItemColors[colors.length - 1],
+                ),
+              )
+              .toList();
+          final List<CollapseMenuItem> videoDropdownItems = state.categories
+              .asMap()
+              .entries
+              .map(
+                (e) => CollapseMenuItem(
+                  title: e.value.label,
+                  iconData: theoryIconDatas[e.key],
+                  themeColor: e.key < colors.length
+                      ? videoDropdownItemColors[e.key]
+                      : videoDropdownItemColors[colors.length - 1],
+                ),
+              )
+              .toList();
+
           if (state.loading) {
             return Center(
               child: CircularProgressIndicator(color: AppColors.primaryColor),
@@ -26,9 +72,18 @@ class LearningDashBoardPage extends StatelessWidget {
           return LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxWidth < 600) {
-                return _buildMobileLayout(context);
+                print('length: ${state.categories.length}');
+                return _buildMobileLayout(
+                  context,
+                  theoryCategories: theoryDropdownItems,
+                  videoCategories: theoryDropdownItems,
+                );
               } else {
-                return _buildLargeLayout(context);
+                return _buildLargeLayout(
+                  context,
+                  theoryCategories: theoryDropdownItems,
+                  videoCategories: videoDropdownItems,
+                );
               }
             },
           );
@@ -37,7 +92,13 @@ class LearningDashBoardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMobileLayout(BuildContext context) {
+  Widget _buildMobileLayout(
+    BuildContext context, {
+    required List<CollapseMenuItem> theoryCategories,
+    required List<CollapseMenuItem> videoCategories,
+  }) {
+    final List<Color> colors = AppColors.rainbowColors;
+
     return SafeArea(
       child: CustomScrollView(
         physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
@@ -102,7 +163,7 @@ class LearningDashBoardPage extends StatelessWidget {
             ).copyWith(top: 16),
             sliver: SliverToBoxAdapter(
               child: CollapseMenu(
-                items: theoryItems,
+                items: theoryCategories,
                 iconData: BootstrapIcons.list_check,
                 title: 'Học lý thuyết',
                 subTitle: '600 câu • 7 chủ đề',
@@ -165,8 +226,8 @@ class LearningDashBoardPage extends StatelessWidget {
             ).copyWith(top: 16),
             sliver: SliverToBoxAdapter(
               child: CollapseMenu(
-                items: simulationExamItems,
-                themeColor: AppColors.accentColor,
+                items: videoCategories,
+                themeColor: colors[4],
                 iconData: BootstrapIcons.list_check,
                 title: 'Học mô phỏng',
                 subTitle: '120 câu • 6 chủ đề',
@@ -260,7 +321,13 @@ class LearningDashBoardPage extends StatelessWidget {
     );
   }
 
-  Widget _buildLargeLayout(BuildContext context) {
+  Widget _buildLargeLayout(
+    BuildContext context, {
+    required List<CollapseMenuItem> theoryCategories,
+    required List<CollapseMenuItem> videoCategories,
+  }) {
+    final List<Color> colors = AppColors.rainbowColors;
+
     Widget getGridItem(int index) {
       switch (index) {
         case 0:
@@ -388,7 +455,7 @@ class LearningDashBoardPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: CollapseMenu(
-                      items: theoryItems,
+                      items: theoryCategories,
                       iconData: BootstrapIcons.list_check,
                       title: 'Học lý thuyết',
                       subTitle: '600 câu • 7 chủ đề',
@@ -397,7 +464,7 @@ class LearningDashBoardPage extends StatelessWidget {
                   SizedBox(width: 16),
                   Expanded(
                     child: CollapseMenu(
-                      items: simulationExamItems,
+                      items: videoCategories,
                       themeColor: AppColors.accentColor,
                       iconData: BootstrapIcons.list_check,
                       title: 'Học mô phỏng',

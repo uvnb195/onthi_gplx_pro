@@ -29,5 +29,27 @@ void main() {
         isTrue,
       );
     });
+
+    test('license_category seed data must be inserted ', () async {
+      final allResults = await db.select(db.licenseCategoryTable).get();
+      final licenseId1 = 1;
+      final licenseId2 = 3;
+      final resultsOfLicenseId1 = await (db.select(
+        db.licenseCategoryTable,
+      )..where((tbl) => tbl.licenseId.equals(licenseId1))).get();
+      final resultsOfLicenseId2 = await (db.select(
+        db.licenseCategoryTable,
+      )..where((tbl) => tbl.licenseId.equals(licenseId2))).get();
+
+      expect(
+        allResults.length,
+        6 * 15 - 2,
+        reason: '15 licenses, 6 chapters, A and A1 doesn\'t learn chapter 4',
+      );
+      expect(resultsOfLicenseId1.length, 5);
+      print(resultsOfLicenseId1);
+      expect(resultsOfLicenseId2.length, 6);
+      print(resultsOfLicenseId2);
+    });
   });
 }

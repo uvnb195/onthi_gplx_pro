@@ -36,7 +36,7 @@ class _HomeRouterState extends State<HomeRouter> {
 
     return BlocProvider(
       create: (context) =>
-          sl<LearningBloc>()..add(LoadCategories(licenseId: 1)),
+          sl<LearningBloc>()..add(LoadCategories(licenseId: 3)),
       child: Scaffold(
         body: buildBody(),
         bottomNavigationBar: StyledBottomNavbar(

@@ -5,13 +5,26 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/menu_item.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_scale_entrance.dart';
 
+class CollapseMenuItem {
+  final String title;
+  final String? subTitle;
+  final IconData iconData;
+  final Color themeColor;
+  const CollapseMenuItem({
+    required this.title,
+    this.subTitle,
+    required this.iconData,
+    required this.themeColor,
+  });
+}
+
 class CollapseMenu extends StatefulWidget {
   final IconData iconData;
   final String title;
   final String? subTitle;
   final double? percentage;
   final Color themeColor;
-  final List<Map<String, dynamic>> items;
+  final List<CollapseMenuItem> items;
   final VoidCallback? onTap;
   const CollapseMenu({
     super.key,
@@ -169,12 +182,11 @@ class _CollapseMenuState extends State<CollapseMenu> {
                                     ),
                                     child: MenuItem(
                                       themeColor:
-                                          widget.items[index]['themeColor'],
+                                          widget.items[index].themeColor,
                                       onTap: () {},
-                                      title: widget.items[index]['title'],
-                                      subTitle:
-                                          '${widget.items[index]['total']} câu hỏi',
-                                      iconData: widget.items[index]['iconData'],
+                                      title: widget.items[index].title,
+                                      subTitle: widget.items[index].subTitle,
+                                      iconData: widget.items[index].iconData,
                                     ),
                                   ),
                                 ),

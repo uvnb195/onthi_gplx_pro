@@ -29,14 +29,15 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
     LoadCategories event,
     Emitter<LearningState> emit,
   ) async {
-    print('loading...');
     emit(state.copyWith(loading: true));
     final result = await getQuestionCategoriesByLicenseUseCase.call(
       event.licenseId,
     );
 
     result.fold(
-      ifLeft: (error) => emit(state.copyWith(errorMessage: error.message)),
+      ifLeft: (error) {
+        emit(state.copyWith(errorMessage: error.message));
+      },
       ifRight: (success) => emit(state.copyWith(categories: success)),
     );
   }

@@ -29,4 +29,14 @@ class AppColors {
       900: Color(0xff3D1000),
     },
   );
+
+  static const rainbowColors = [
+    Colors.deepOrange,
+    Colors.deepOrangeAccent,
+    Colors.orange,
+    Colors.amber,
+    Colors.green,
+    AppColors.infoColor,
+    Colors.deepPurpleAccent,
+  ];
 }

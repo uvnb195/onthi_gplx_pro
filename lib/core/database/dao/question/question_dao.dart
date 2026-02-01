@@ -2,13 +2,16 @@ import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/database/models/question_with_choices.dart';
+import 'package:onthi_gplx_pro/core/database/table/license_question_table.dart';
 import 'package:onthi_gplx_pro/core/database/table/question_option_table.dart';
 import 'package:onthi_gplx_pro/core/database/table/question_table.dart';
 
 part 'question_dao.g.dart';
 
 @lazySingleton
-@DriftAccessor(tables: [QuestionTable, QuestionOptionTable])
+@DriftAccessor(
+  tables: [LicenseQuestionTable, QuestionTable, QuestionOptionTable],
+)
 class QuestionDao extends DatabaseAccessor<AppDatabase>
     with _$QuestionDaoMixin {
   QuestionDao(super.attachedDatabase);
@@ -45,6 +48,29 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
             )
             .toList(),
       );
+    });
+  }
+
+  Future<void> createLicenseQuestionsSeedData(
+    List<dynamic> licenseQuestionsJson,
+  ) async {
+    await batch((batch) {
+      final insertions = licenseQuestionsJson.expand((e) {
+        final licenseId = e['license_id'];
+        List<int> questionIds = List<int>.from(e['data']);
+        if (questionIds.isEmpty) {
+          questionIds = List.generate(600, (index) => index + 1);
+        }
+
+        return questionIds.map(
+          (qId) => LicenseQuestionTableCompanion.insert(
+            licenseId: licenseId as int,
+            questionId: qId,
+          ),
+        );
+      }).toList();
+
+      batch.insertAll(licenseQuestionTable, insertions, mode: .insertOrIgnore);
     });
   }
 

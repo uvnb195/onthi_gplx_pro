@@ -4,6 +4,7 @@ import 'package:onthi_gplx_pro/features/learning/domain/entities/question.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/index.dart';
 
 abstract class QuestionRepository {
+  // depend on License
   Future<Either<Failure, List<QuestionEntity>>> getQuestionsByCategory(
     int categoryId,
   );
