@@ -21,6 +21,10 @@ class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
   getQuestionCategories() async {
     try {
       final result = await questionCategoryDao.getAllCategories();
+      print('Total categories: ${result.length}');
+      for (var c in result) {
+        print('Category: ${c.id} - ${c.label}');
+      }
       return Right(result.map((e) => e.toEntity()).toList());
     } catch (e) {
       return Left(

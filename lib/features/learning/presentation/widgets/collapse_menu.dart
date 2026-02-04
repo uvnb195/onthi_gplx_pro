@@ -1,9 +1,13 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/di/injection.dart';
+import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/menu_item.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_scale_entrance.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
 
 class CollapseMenuItem {
   final String title;
@@ -43,6 +47,38 @@ class CollapseMenu extends StatefulWidget {
 
 class _CollapseMenuState extends State<CollapseMenu> {
   bool collapsed = true;
+
+  void _navigateToLearningInfoPage(int index) {
+    Navigator.pushNamed(
+      context,
+      RouteNames.learningInfo,
+      arguments: {
+        'title': widget.items[index].title,
+        'iconData': widget.items[index].iconData,
+        'themeColor': widget.items[index].themeColor,
+        'description': '',
+        'categoryId': 1,
+        'stats': [
+          {
+            'iconData': BootstrapIcons.book,
+            'title': 'Title1',
+            'description': 'Description',
+          },
+          {
+            'iconData': BootstrapIcons.book,
+            'title': 'Title1',
+            'description': 'Description',
+          },
+          {
+            'iconData': BootstrapIcons.book,
+            'title': 'Title1',
+            'description': 'Description',
+          },
+        ],
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StyledScaleEntrance(
@@ -165,33 +201,52 @@ class _CollapseMenuState extends State<CollapseMenu> {
                     curve: Curves.easeOut,
                     child: collapsed
                         ? SizedBox.shrink()
-                        : Column(
-                            children: List.generate(widget.items.length, (
-                              index,
-                            ) {
-                              return AnimationConfiguration.staggeredList(
-                                position: index,
-                                child: SlideAnimation(
-                                  duration: const Duration(milliseconds: 500),
-                                  horizontalOffset: -100,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom: (index == widget.items.length - 1)
-                                          ? 0
-                                          : 12.0,
+                        : BlocBuilder<LearningBloc, LearningState>(
+                            builder: (context, state) {
+                              if (state.categories.isEmpty) {
+                                return SizedBox.shrink();
+                              }
+                              return Column(
+                                children: List.generate(widget.items.length, (
+                                  index,
+                                ) {
+                                  return AnimationConfiguration.staggeredList(
+                                    position: index,
+                                    child: SlideAnimation(
+                                      duration: const Duration(
+                                        milliseconds: 500,
+                                      ),
+                                      horizontalOffset: -100,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom:
+                                              (index == widget.items.length - 1)
+                                              ? 0
+                                              : 12.0,
+                                        ),
+                                        child: MenuItem(
+                                          themeColor:
+                                              widget.items[index].themeColor,
+                                          onTap: () {
+                                            sl<LearningBloc>().add(
+                                              LoadQuestions(
+                                                state.categories[index],
+                                              ),
+                                            );
+                                            _navigateToLearningInfoPage(index);
+                                          },
+                                          title: widget.items[index].title,
+                                          subTitle:
+                                              widget.items[index].subTitle,
+                                          iconData:
+                                              widget.items[index].iconData,
+                                        ),
+                                      ),
                                     ),
-                                    child: MenuItem(
-                                      themeColor:
-                                          widget.items[index].themeColor,
-                                      onTap: () {},
-                                      title: widget.items[index].title,
-                                      subTitle: widget.items[index].subTitle,
-                                      iconData: widget.items[index].iconData,
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                }),
                               );
-                            }),
+                            },
                           ),
                   ),
                 ],

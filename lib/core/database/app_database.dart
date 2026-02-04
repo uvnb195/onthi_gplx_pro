@@ -37,54 +37,46 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (m) async {
-        await m.createAll();
+        try {
+          await m.createAll();
 
-        final rawQuestionCategories = await rootBundle.loadString(
-          'assets/data/question_categories.json',
-        );
-        final rawQuestionOptions = await rootBundle.loadString(
-          'assets/data/question_options.json',
-        );
-        final rawQuestions = await rootBundle.loadString(
-          'assets/data/questions.json',
-        );
-        final String rawLicenses = await rootBundle.loadString(
-          'assets/data/licenses.json',
-        );
-        final String rawLicenseQuestions = await rootBundle.loadString(
-          'assets/data/license_questions.json',
-        );
-        final String rawLicenseCategories = await rootBundle.loadString(
-          'assets/data/license_categories.json',
-        );
+          final seedDatas = await Future.wait([
+            rootBundle.loadString('assets/data/question_categories.json'),
+            rootBundle.loadString('assets/data/question_options.json'),
+            rootBundle.loadString('assets/data/questions.json'),
+            rootBundle.loadString('assets/data/licenses.json'),
+            rootBundle.loadString('assets/data/license_questions.json'),
+            rootBundle.loadString('assets/data/license_categories.json'),
+          ]);
 
-        final List<dynamic> categoriesJson = json.decode(rawQuestionCategories);
-        final List<dynamic> optionsJson = json.decode(rawQuestionOptions);
-        final List<dynamic> questionsJson = json.decode(rawQuestions);
-        final List<dynamic> licensesJson = json.decode(rawLicenses);
-        final List<dynamic> licenseQuestionsJson = json.decode(
-          rawLicenseQuestions,
-        );
-        final List<dynamic> licenseCategoriesJson = json.decode(
-          rawLicenseCategories,
-        );
+          final List<dynamic> categoriesJson = json.decode(seedDatas[0]);
+          final List<dynamic> optionsJson = json.decode(seedDatas[1]);
+          final List<dynamic> questionsJson = json.decode(seedDatas[2]);
+          final List<dynamic> licensesJson = json.decode(seedDatas[3]);
+          final List<dynamic> licenseQuestionsJson = json.decode(seedDatas[4]);
+          final List<dynamic> licenseCategoriesJson = json.decode(seedDatas[5]);
 
-        await licenseDao.createLicensesSeedData(licensesJson);
-        await questionCategoryDao.createCategoriesSeedData(categoriesJson);
-        await questionDao.createQuestionsSeedData(
-          optionsJson: optionsJson,
-          questionsJson: questionsJson,
-        );
-        await questionDao.createLicenseQuestionsSeedData(licenseQuestionsJson);
-        await questionCategoryDao.createLicenseCategoriesSeedData(
-          licenseCategoriesJson,
-        );
+          await licenseDao.createLicensesSeedData(licensesJson);
+          await questionCategoryDao.createCategoriesSeedData(categoriesJson);
+          await questionDao.createQuestionsSeedData(
+            optionsJson: optionsJson,
+            questionsJson: questionsJson,
+          );
+          await questionDao.createLicenseQuestionsSeedData(
+            licenseQuestionsJson,
+          );
+          await questionCategoryDao.createLicenseCategoriesSeedData(
+            licenseCategoriesJson,
+          );
+        } catch (e) {
+          print("LỖI ĐÂY RỒI: $e");
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');

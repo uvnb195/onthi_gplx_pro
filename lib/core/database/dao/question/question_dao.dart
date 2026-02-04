@@ -47,6 +47,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
               ),
             )
             .toList(),
+        mode: .insertOrReplace,
       );
     });
   }
@@ -70,7 +71,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
         );
       }).toList();
 
-      batch.insertAll(licenseQuestionTable, insertions, mode: .insertOrIgnore);
+      batch.insertAll(licenseQuestionTable, insertions, mode: .insertOrReplace);
     });
   }
 

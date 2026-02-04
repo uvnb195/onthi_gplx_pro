@@ -76,7 +76,7 @@ class LearningDashBoardPage extends StatelessWidget {
                 return _buildMobileLayout(
                   context,
                   theoryCategories: theoryDropdownItems,
-                  videoCategories: theoryDropdownItems,
+                  videoCategories: [],
                 );
               } else {
                 return _buildLargeLayout(

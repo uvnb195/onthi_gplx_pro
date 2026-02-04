@@ -20,7 +20,13 @@ class LicenseDao extends DatabaseAccessor<AppDatabase> with _$LicenseDaoMixin {
       );
     }).toList();
 
-    await batch((batch) => batch.insertAll(licenseTable, licenseCompanions));
+    await batch(
+      (batch) => batch.insertAll(
+        licenseTable,
+        licenseCompanions,
+        mode: .insertOrReplace,
+      ),
+    );
   }
 
   Future<List<LicenseTableData>> getLicenseList() => select(licenseTable).get();

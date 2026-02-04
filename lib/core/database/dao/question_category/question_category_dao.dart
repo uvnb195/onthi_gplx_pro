@@ -19,10 +19,16 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
         questionCategoryTable,
         categoriesJson
             .map(
-              (e) => QuestionCategoryTableCompanion.insert(
-                label: e['label'],
-                description: Value(e['description']),
-              ),
+              (e) => (e['id'] as int) == 0
+                  ? QuestionCategoryTableCompanion.insert(
+                      id: const Value(0),
+                      label: e['label'],
+                      description: Value(e['description']),
+                    )
+                  : QuestionCategoryTableCompanion.insert(
+                      label: e['label'],
+                      description: Value(e['description']),
+                    ),
             )
             .toList(),
         mode: .insertOrReplace,
@@ -49,7 +55,7 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
         );
       }).toList();
 
-      batch.insertAll(licenseCategoryTable, insertions, mode: .insertOrIgnore);
+      batch.insertAll(licenseCategoryTable, insertions, mode: .insertOrReplace);
     });
   }
 
@@ -66,14 +72,18 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
   Future<List<QuestionCategoryTableData>> getQuestionCategoriesByLicense(
     int licenseId,
   ) async {
-    final query = select(questionCategoryTable).join([
-      innerJoin(
-        licenseCategoryTable,
-        licenseCategoryTable.questionCategoryId.equalsExp(
-          questionCategoryTable.id,
-        ),
-      ),
-    ])..where(licenseCategoryTable.licenseId.equals(licenseId));
+    final query =
+        select(questionCategoryTable).join([
+          leftOuterJoin(
+            licenseCategoryTable,
+            licenseCategoryTable.questionCategoryId.equalsExp(
+              questionCategoryTable.id,
+            ),
+          ),
+        ])..where(
+          licenseCategoryTable.licenseId.equals(licenseId) |
+              questionCategoryTable.id.equals(0),
+        );
 
     final rows = await query.get();
     return rows.map((row) => row.readTable(questionCategoryTable)).toList();

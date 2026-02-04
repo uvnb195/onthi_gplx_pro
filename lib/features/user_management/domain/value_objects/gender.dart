@@ -22,4 +22,6 @@ class Gender {
       return Left(ValidationFailure(e.message));
     }
   }
+
+  const Gender.fromDrift(this.value);
 }

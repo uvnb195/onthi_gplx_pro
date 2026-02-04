@@ -23,6 +23,8 @@ import '../../features/learning/domain/repositories/question_repository.dart'
     as _i359;
 import '../../features/learning/domain/usecases/get_all_question_categories.dart'
     as _i214;
+import '../../features/learning/domain/usecases/get_question_by_category.dart'
+    as _i978;
 import '../../features/learning/domain/usecases/get_question_categories_by_license.dart'
     as _i246;
 import '../../features/learning/domain/usecases/get_question_category_by_id.dart'
@@ -117,21 +119,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i764.QuestionCategoryRepository>(),
       ),
     );
+    gh.lazySingleton<_i978.GetQuestionByCategoryUseCase>(
+      () => _i978.GetQuestionByCategoryUseCase(gh<_i359.QuestionRepository>()),
+    );
     gh.lazySingleton<_i245.UserRepository>(
       () => _i362.UserRepositoryImpl(gh<_i937.LocalUserDataSource>()),
     );
     gh.lazySingleton<_i182.LicenseRepository>(
       () => _i197.LicenseRepositoryImpl(gh<_i937.LocalLicenseDataSource>()),
-    );
-    gh.factory<_i591.LearningBloc>(
-      () => _i591.LearningBloc(
-        getAllQuestionCategoriesUseCase:
-            gh<_i214.GetAllQuestionCategoriesUseCase>(),
-        getQuestionCategoriesByIdUseCase:
-            gh<_i1050.GetQuestionCategoriesByIdUseCase>(),
-        getQuestionCategoriesByLicenseUseCase:
-            gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
-      ),
     );
     gh.lazySingleton<_i591.DeleteUserUseCase>(
       () => _i591.DeleteUserUseCase(gh<_i462.UserRepository>()),
@@ -143,6 +138,17 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i172.UserBloc(
         createUserUseCase: gh<_i315.CreateUserUseCase>(),
         deleteUserUseCase: gh<_i591.DeleteUserUseCase>(),
+      ),
+    );
+    gh.factory<_i591.LearningBloc>(
+      () => _i591.LearningBloc(
+        getAllQuestionCategoriesUseCase:
+            gh<_i214.GetAllQuestionCategoriesUseCase>(),
+        getQuestionCategoriesByIdUseCase:
+            gh<_i1050.GetQuestionCategoriesByIdUseCase>(),
+        getQuestionCategoriesByLicenseUseCase:
+            gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
+        getQuestionByCategoryUseCase: gh<_i978.GetQuestionByCategoryUseCase>(),
       ),
     );
     gh.lazySingleton<_i896.GetLicenseByIdUseCase>(

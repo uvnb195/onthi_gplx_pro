@@ -12,7 +12,7 @@ class PreLearningPage extends StatelessWidget {
   final Color themeColor;
   final String? description;
   final List<Map<String, dynamic>> stats;
-  final int categoryId; // 0 which mean do a test
+  final int categoryId;
   const PreLearningPage({
     super.key,
     required this.title,
@@ -157,7 +157,7 @@ class PreLearningPage extends StatelessWidget {
 
   Widget _buildMode(double screenWidth) {
     return StyledToggleButton(
-      themeColor: themeColor,
+      themeColor: Color.lerp(themeColor, Colors.black, 0.2)!,
       size: screenWidth > 600 ? Size(400, 50) : Size(double.maxFinite, 50),
     );
   }

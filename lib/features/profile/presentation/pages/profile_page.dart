@@ -1,10 +1,12 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/entities/user_entity.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -12,41 +14,50 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(),
-        ),
-        slivers: [
-          SliverAppBar(
-            primary: false,
-            titleSpacing: 0,
-            title: _buildHeader(context),
-            automaticallyImplyActions: false,
-            automaticallyImplyLeading: false,
-            toolbarHeight: 180,
-            actionsPadding: .zero,
-          ),
-          SliverPadding(
-            padding: const .symmetric(vertical: 40, horizontal: 16),
-            sliver: SliverToBoxAdapter(child: _buildContent()),
-          ),
-          SliverToBoxAdapter(
-            child: StyledScaleEntrance(
-              delayed: const Duration(milliseconds: 300),
-              child: Center(
-                child: Text(
-                  'Phiên bản: v2.0.1',
-                  style: TextStyle(color: AppColors.textDisableColor),
+      body: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is! Authenticated) {
+            return Center(
+              child: Text("Có lỗi xảy ra.\nVui lòng khởi động lại ứng dụng."),
+            );
+          }
+          return CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            slivers: [
+              SliverAppBar(
+                primary: false,
+                titleSpacing: 0,
+                title: _buildHeader(context, state.user),
+                automaticallyImplyActions: false,
+                automaticallyImplyLeading: false,
+                toolbarHeight: 180,
+                actionsPadding: .zero,
+              ),
+              SliverPadding(
+                padding: const .symmetric(vertical: 40, horizontal: 16),
+                sliver: SliverToBoxAdapter(child: _buildContent()),
+              ),
+              SliverToBoxAdapter(
+                child: StyledScaleEntrance(
+                  delayed: const Duration(milliseconds: 300),
+                  child: Center(
+                    child: Text(
+                      'Phiên bản: v2.0.1',
+                      style: TextStyle(color: AppColors.textDisableColor),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, UserEntity user) {
     return SizedBox(
       height: 180,
       width: double.maxFinite,
@@ -66,11 +77,18 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: .start,
             children: [
-              AvatarWrapper(imagePath: 'assets/images/app_logo.png', size: 68),
+              AvatarWrapper(
+                imagePath:
+                    user.avatarPath?.value ?? 'assets/images/app_logo.png',
+                size: 68,
+              ),
               SizedBox(height: 8),
-              Text('Quân', style: TextStyle(fontSize: 24, fontWeight: .w600)),
               Text(
-                'Tham gia từ 24/03/2024',
+                user.name.value,
+                style: TextStyle(fontSize: 24, fontWeight: .w600),
+              ),
+              Text(
+                'Tham gia từ ${user.createdAt}',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: .w400,

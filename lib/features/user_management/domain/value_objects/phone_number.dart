@@ -24,4 +24,6 @@ class PhoneNumber {
       return Left(ValidationFailure(e.message));
     }
   }
+
+  const PhoneNumber.fromDrift(this.value);
 }

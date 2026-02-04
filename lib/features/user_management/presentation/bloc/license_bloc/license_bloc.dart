@@ -19,8 +19,6 @@ class LicenseBloc extends Bloc<LicenseEvent, LicenseState> {
   void _onLoadLicenses(LoadLicenses event, Emitter<LicenseState> emit) async {
     emit(LicenseLoading());
 
-    await Future.delayed(const Duration(seconds: 2));
-
     final result = await _getLicensesUseCase(NoParams());
 
     result.fold(

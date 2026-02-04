@@ -5,7 +5,7 @@ import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/core/extension/gender_type.dart';
 import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/data/models/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/data/data_sources/mappers/user_mapper.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
 
@@ -30,15 +30,30 @@ class UserRepositoryImpl implements UserRepository {
       final userId = await _localUserDataSource.createUser(companion);
       return Right(userId);
     } catch (e) {
-      return Left(DatabaseFailure('Lỗi khởi tạo người dùng. Vui lòng thử lại'));
+      return Left(
+        DatabaseFailure('Lỗi khởi tạo người dùng. Vui lòng thử lại.'),
+      );
     }
   }
 
   @override
-  Stream<UserEntity?> watchCurrentUser() {
-    return _localUserDataSource.currentUserStream().map((data) {
-      return data == null ? null : UserModel.fromDrift(data);
-    });
+  Stream<Either<Failure, UserEntity>> watchCurrentUser() {
+    return _localUserDataSource
+        .currentUserStream()
+        .map<Either<Failure, UserEntity>>((user) {
+          if (user == null) {
+            return Left(CacheFailure('Không tìm thấy User.'));
+          } else {
+            return Right(user.toEntity());
+          }
+        })
+        .handleError(
+          (e) => Left(
+            DatabaseFailure(
+              'Lỗi khi lấy thông tin người dùng. Vui lòng thử lại sau. ${e.toString()}',
+            ),
+          ),
+        );
   }
 
   @override

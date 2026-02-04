@@ -1,28 +1,35 @@
 part of 'learning_bloc.dart';
 
 class LearningState extends Equatable {
-  final int? selectedCategoryId;
+  // categoryId == 0 => critical questions
+  // categoryId == -1 => saved question
+  // exam attempt should be use other flag
+  final QuestionCategoryEntity? selectedCategory;
   final List<QuestionCategoryEntity> categories;
+  final List<QuestionEntity> questions;
 
   final bool loading;
   final String? errorMessage;
 
   const LearningState({
-    required this.selectedCategoryId,
+    required this.selectedCategory,
     required this.categories,
+    this.questions = const [],
     this.loading = false,
     this.errorMessage,
   });
 
   LearningState copyWith({
-    int? selectedCategoryId,
+    QuestionCategoryEntity? selectedCategory,
     List<QuestionCategoryEntity>? categories,
+    List<QuestionEntity>? questions,
     bool loading = false,
     String? errorMessage,
   }) {
     return LearningState(
-      selectedCategoryId: selectedCategoryId,
+      selectedCategory: selectedCategory,
       categories: categories ?? this.categories,
+      questions: questions ?? this.questions,
       loading: loading,
       errorMessage: errorMessage ?? this.errorMessage,
     );
@@ -30,8 +37,9 @@ class LearningState extends Equatable {
 
   @override
   List<Object?> get props => [
-    selectedCategoryId,
+    selectedCategory,
     categories,
+    questions,
     loading,
     errorMessage,
   ];

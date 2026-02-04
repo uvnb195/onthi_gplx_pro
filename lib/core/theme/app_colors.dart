@@ -31,11 +31,12 @@ class AppColors {
   );
 
   static const rainbowColors = [
-    Colors.deepOrange,
     Colors.deepOrangeAccent,
     Colors.orange,
     Colors.amber,
+    Colors.limeAccent,
     Colors.green,
+    Colors.cyan,
     AppColors.infoColor,
     Colors.deepPurpleAccent,
   ];

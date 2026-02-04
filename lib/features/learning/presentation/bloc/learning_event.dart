@@ -4,7 +4,7 @@ sealed class LearningEvent extends Equatable {
   const LearningEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class LoadCategories extends LearningEvent {
@@ -13,6 +13,15 @@ final class LoadCategories extends LearningEvent {
 
   @override
   List<Object> get props => [licenseId];
+}
+
+final class LoadQuestions extends LearningEvent {
+  final QuestionCategoryEntity category;
+
+  const LoadQuestions(this.category);
+
+  @override
+  List<Object?> get props => [category];
 }
 
 final class ToggleSaveQuestion extends LearningEvent {

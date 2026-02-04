@@ -32,4 +32,6 @@ class Name {
       return Left(ValidationFailure(e.message));
     }
   }
+
+  const Name.fromDrift(this.value);
 }

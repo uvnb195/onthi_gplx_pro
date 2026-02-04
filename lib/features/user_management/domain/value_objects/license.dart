@@ -24,4 +24,6 @@ class License {
       return Left(ValidationFailure(e.message));
     }
   }
+
+  const License.fromDrift(this.value);
 }

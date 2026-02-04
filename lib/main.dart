@@ -6,7 +6,7 @@ import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_theme.dart';
 import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
   runApp(const MyApp());
