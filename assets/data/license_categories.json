@@ -1,0 +1,23 @@
+[
+  {
+    "license_id": 1,
+    "data": [1, 2, 3, 5, 6]
+  },
+  {
+    "license_id": 2,
+    "data": [1, 2, 3, 5, 6]
+  },
+  { "license_id": 3, "data": [] },
+  { "license_id": 4, "data": [] },
+  { "license_id": 5, "data": [] },
+  { "license_id": 6, "data": [] },
+  { "license_id": 7, "data": [] },
+  { "license_id": 8, "data": [] },
+  { "license_id": 9, "data": [] },
+  { "license_id": 10, "data": [] },
+  { "license_id": 11, "data": [] },
+  { "license_id": 12, "data": [] },
+  { "license_id": 13, "data": [] },
+  { "license_id": 14, "data": [] },
+  { "license_id": 15, "data": [] }
+]

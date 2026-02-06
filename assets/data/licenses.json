@@ -1,0 +1,77 @@
+[
+  {
+    "id": 1,
+    "code": "a1",
+    "description": "Mô tô đến 125cm3 hoặc điện đến 11kW"
+  },
+  {
+    "id": 2,
+    "code": "a",
+    "description": "Mô tô trên 125cm3 hoặc điện trên 11kW; gồm A1"
+  },
+  {
+    "id": 3,
+    "code": "b1",
+    "description": "Mô tô 3 bánh và các loại xe hạng A1"
+  },
+  {
+    "id": 4,
+    "code": "b",
+    "description": "Ô tô đến 8 chỗ; tải đến 3.5 tấn; kéo rơ moóc đến 750kg"
+  },
+  {
+    "id": 5,
+    "code": "c1",
+    "description": "Tải 3.5 - 7.5 tấn; kéo rơ moóc đến 750kg; gồm hạng B"
+  },
+  {
+    "id": 6,
+    "code": "c",
+    "description": "Tải trên 7.5 tấn; kéo rơ moóc đến 750kg; gồm hạng B, C1"
+  },
+  {
+    "id": 7,
+    "code": "d1",
+    "description": "Ô tô 8 - 16 chỗ; kéo rơ moóc đến 750kg; gồm hạng B, C1, C"
+  },
+  {
+    "id": 8,
+    "code": "d2",
+    "description": "Ô tô 16 - 29 chỗ; kéo rơ moóc đến 750kg; gồm hạng B, C1, C, D1"
+  },
+  {
+    "id": 9,
+    "code": "d",
+    "description": "Ô tô trên 29 chỗ; giường nằm; kéo rơ moóc đến 750kg; gồm B, C1, C, D1, D2"
+  },
+  {
+    "id": 10,
+    "code": "be",
+    "description": "Ô tô hạng B kéo rơ moóc trên 750kg"
+  },
+  {
+    "id": 11,
+    "code": "c1e",
+    "description": "Ô tô hạng C1 kéo rơ moóc trên 750kg"
+  },
+  {
+    "id": 12,
+    "code": "ce",
+    "description": "Ô tô hạng C kéo rơ moóc trên 750kg; xe đầu kéo sơ mi rơ moóc"
+  },
+  {
+    "id": 13,
+    "code": "d1e",
+    "description": "Ô tô hạng D1 kéo rơ moóc trên 750kg"
+  },
+  {
+    "id": 14,
+    "code": "d2e",
+    "description": "Ô tô hạng D2 kéo rơ moóc trên 750kg"
+  },
+  {
+    "id": 15,
+    "code": "de",
+    "description": "Ô tô hạng D kéo rơ moóc trên 750kg; xe khách nối toa"
+  }
+]

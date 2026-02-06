@@ -1,0 +1,1234 @@
+[
+  {
+    "_comment": "===QUY TẮC CHUNG CHO BÀI THI LÝ THUYẾT===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 1,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 25 câu được chọn ngẫu nhiên trong 250 câu hỏi quy định."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "content": "08 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (câu điểm liệt)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "content": "01 câu về Kỹ thuật Lái xe hoặc Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "content": "08 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 1,
+    "examType": 0,
+    "content": "06 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+
+  {
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 2,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 25 câu được chọn ngẫu nhiên trong 250 câu hỏi quy định."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "content": "08 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (câu điểm liệt)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "content": "01 câu về Kỹ thuật Lái xe hoặc Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "content": "08 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 2,
+    "examType": 0,
+    "content": "06 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 3,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 25 câu được chọn ngẫu nhiên trong 300 câu hỏi quy định."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "content": "08 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (câu điểm liệt)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "content": "01 câu về Kỹ thuật Lái xe hoặc Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "content": "08 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 3,
+    "examType": 0,
+    "content": "06 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng B ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 4,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 30 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "content": "08 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (câu điểm liệt)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "content": "01 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "content": "09 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 4,
+    "examType": 0,
+    "content": "09 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng C1 ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 5,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 35 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "content": "10 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 5,
+    "examType": 0,
+    "content": "10 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng C ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 6,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 40 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "content": "14 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 6,
+    "examType": 0,
+    "content": "11 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng D1 ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 7,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 7,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng D2 ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 8,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 8,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng D ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 9,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 9,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng BE ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 10,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 10,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng C1E ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 11,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 11,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng CE ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 12,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 12,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng D1E ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 13,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 13,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng D2E ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 14,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 14,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+  {
+    "_comment": "=== GPLX Hạng DE ===",
+    "categoryId": null,
+    "examType": 0,
+    "licenseId": 15,
+    "title": "Số lượng câu hỏi",
+    "content": "gồm 45 câu được chọn ngẫu nhiên trong bộ 600 câu hỏi."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "title": "Điều kiện đạt",
+    "content": "Thí sinh phải đạt số câu đúng theo quy định và KHÔNG ĐƯỢC SAI câu điểm liệt."
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "title": "Cấu trúc đề thi gồm"
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "content": "10 câu về một số Quy định chung & Quy tắc Giao thông đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "content": "01 câu hỏi về tình huống mất an toàn giao thông nghiêm trọng (ĐIỂM LIỆT)",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "content": "01 câu về Văn hóa giao thông & Đạo đức người lái xe, kỹ năng phòng cháy/chữa cháy và cứu hộ/ cứu nạn",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "content": "02 câu về Kỹ thuật Lái xe",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "content": "01 câu về Cấu tạo - Sửa chữa",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "content": "16 câu về Báo hiệu Đường bộ",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": 15,
+    "examType": 0,
+    "content": "14 câu về Giải thế Sa hình và Kỹ năng xử lý tình huống Giao thông",
+    "level": 1
+  },
+
+  {
+    "_comment": "===QUY TẮC CHUNG CHO BÀI THI MÔ PHỎNG===",
+    "categoryId": null,
+    "licenseId": null,
+    "examType": 1,
+    "title": "Số lượng",
+    "content": "10 tình huống, lấy ngẫu nhiên từ 6 chương chuẩn bộ GTVT"
+  },
+  {
+    "categoryId": null,
+    "licenseId": null,
+    "examType": 1,
+    "title": "Thang điểm",
+    "content": "Mỗi tình huống có điểm tối đa là 5 điểm và tối thiểu là 0 điểm."
+  },
+  {
+    "categoryId": null,
+    "licenseId": null,
+    "examType": 1,
+    "title": "Điều kiện đạt",
+    "content": "Cần đạt tối thiểu 35/50 điểm để vượt qua phần thi này"
+  },
+  {
+    "categoryId": null,
+    "licenseId": null,
+    "examType": 1,
+    "title": "Tính điểm",
+    "content": "Điểm số phụ thuộc vào thời điểm thí sinh nhấn phím"
+  },
+  {
+    "categoryId": null,
+    "licenseId": null,
+    "examType": 1,
+    "title": "5 điểm",
+    "content": "Nhấn ngay khi phát hiện tình huống nguy hiểm bắt đầu xuất hiện.",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": null,
+    "examType": 1,
+    "title": "Giảm dần (4-1 điểm)",
+    "content": "Số điểm sẽ giảm dần theo thời gian phản ứng của thí sinh.",
+    "level": 1
+  },
+  {
+    "categoryId": null,
+    "licenseId": null,
+    "examType": 1,
+    "title": "0 điểm",
+    "content": "Mất điểm khi nhấn quá sớm (chưa có dấu hiệu nguy hiểm) hoặc quá muộn (tai nạn xảy ra hoặc tình huống đã kết thúc)",
+    "level": 1
+  },
+
+  {
+    "categoryId": 3,
+    "examType": null,
+    "licenseId": null,
+    "title": "Nội dung trọng tâm",
+    "content": "Gồm 180 câu (từ câu 1-180) về khái niệm, quy tắc giao thông, tốc độ và khoảng cách.",
+    "level": 1
+  },
+  {
+    "categoryId": 3,
+    "examType": null,
+    "licenseId": null,
+    "title": "Số lượng câu điểm liệt",
+    "content": "Danh mục này có 42 câu điểm liệt liên quan đến các hành vi bị nghiêm cấm và quy tắc nhường đường.",
+    "level": 1
+  },
+  {
+    "categoryId": 3,
+    "examType": null,
+    "licenseId": null,
+    "title": "Lưu ý quan trọng",
+    "content": "Chỉ cần SAI 01 câu điểm liệt trong danh mục này, thí sinh sẽ bị TRƯỢT trực tiếp dù các câu khác đúng.",
+    "level": 2
+  },
+
+  {
+    "categoryId": 4,
+    "examType": null,
+    "licenseId": null,
+    "title": "Văn hóa & Đạo đức",
+    "content": "Gồm gồm 25 câu (từ câu 181-205) về trách nhiệm người lái xe và kỹ năng cứu hộ cứu nạn.",
+    "level": 1
+  },
+  {
+    "categoryId": 4,
+    "examType": null,
+    "licenseId": null,
+    "title": "Số lượng câu điểm liệt",
+    "content": "Danh mục này có 04 câu điểm liệt về sử dụng rượu bia, ma túy và đạo đức nghề nghiệp.",
+    "level": 1
+  },
+  {
+    "categoryId": 4,
+    "examType": null,
+    "licenseId": null,
+    "title": "Lưu ý quan trọng",
+    "content": "Các câu hỏi về nồng độ cồn và chất kích thích là lỗi liệt nặng nhất. Sai 01 câu sẽ bị TRƯỢT ngay.",
+    "level": 2
+  },
+
+  {
+    "categoryId": 5,
+    "examType": null,
+    "licenseId": null,
+    "title": "Kỹ thuật lái xe",
+    "content": "Gồm 58 câu (từ câu 206-263) về cách điều khiển xe trên địa hình khó và xử lý sự cố.",
+    "level": 1
+  },
+  {
+    "categoryId": 5,
+    "examType": null,
+    "licenseId": null,
+    "title": "Số lượng câu điểm liệt",
+    "content": "Danh mục này có 11 câu điểm liệt về thao tác xử lý nguy hiểm (nhầm chân ga, phanh gấp).",
+    "level": 1
+  },
+  {
+    "categoryId": 5,
+    "examType": null,
+    "licenseId": null,
+    "title": "Lưu ý quan trọng",
+    "content": "Tập trung vào các tình huống xử lý khi qua đường ray và đường cao tốc. Sai 01 câu sẽ bị TRƯỢT ngay.",
+    "level": 2
+  },
+
+  {
+    "categoryId": 6,
+    "examType": null,
+    "licenseId": null,
+    "title": "Cấu tạo & Sửa chữa",
+    "content": "Gồm 37 câu (từ câu 264-300) về động cơ, hệ thống phanh, lốp và bảo dưỡng xe.",
+    "level": 1
+  },
+  {
+    "categoryId": 6,
+    "examType": null,
+    "licenseId": null,
+    "title": "Số lượng câu điểm liệt",
+    "content": "Danh mục này KHÔNG có câu điểm liệt trực tiếp, nhưng là kiến thức bổ trợ cho kỹ thuật lái xe.",
+    "level": 1
+  },
+  {
+    "categoryId": 6,
+    "examType": null,
+    "licenseId": null,
+    "title": "Mục tiêu học tập",
+    "content": "Cần nắm vững ý nghĩa các loại đèn báo lỗi trên táp lô để phòng tránh các hư hỏng gây tai nạn.",
+    "level": 1
+  },
+
+  {
+    "categoryId": 7,
+    "examType": null,
+    "licenseId": null,
+    "title": "Hệ thống biển báo",
+    "content": "Gồm 185 câu (từ câu 301-485) về biển cấm, biển nguy hiểm, hiệu lệnh và chỉ dẫn.",
+    "level": 1
+  },
+  {
+    "categoryId": 7,
+    "examType": null,
+    "licenseId": null,
+    "title": "Số lượng câu điểm liệt",
+    "content": "Danh mục này có 01 câu điểm liệt liên quan đến biển báo cấm đi ngược chiều.",
+    "level": 1
+  },
+  {
+    "categoryId": 7,
+    "examType": null,
+    "licenseId": null,
+    "title": "Lưu ý quan trọng",
+    "content": "Việc không chấp hành biển báo cấm hoặc biển hiệu lệnh cơ bản sẽ dẫn đến lỗi TRƯỢT trực tiếp.",
+    "level": 2
+  },
+
+  {
+    "categoryId": 8,
+    "examType": null,
+    "licenseId": null,
+    "title": "Giải thế Sa hình",
+    "content": "Gồm 115 câu (từ câu 486-600) về thứ tự xe đi tại các giao lộ thực tế.",
+    "level": 1
+  },
+  {
+    "categoryId": 8,
+    "examType": null,
+    "licenseId": null,
+    "title": "Số lượng câu điểm liệt",
+    "content": "Danh mục này có 02 câu điểm liệt về việc nhường đường cho xe ưu tiên và chấp hành đèn tín hiệu.",
+    "level": 1
+  },
+  {
+    "categoryId": 8,
+    "examType": null,
+    "licenseId": null,
+    "title": "Lưu ý quan trọng",
+    "content": "Việc vi phạm làn đường của xe cứu thương/chữa cháy sẽ bị TRƯỢT ngay.",
+    "level": 2
+  }
+]
