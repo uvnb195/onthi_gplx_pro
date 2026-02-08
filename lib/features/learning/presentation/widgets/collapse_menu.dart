@@ -2,11 +2,12 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/menu_item.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_scale_entrance.dart';
+import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:onthi_gplx_pro/features/learning/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
 
 class CollapseMenuItem {
@@ -48,7 +49,19 @@ class CollapseMenu extends StatefulWidget {
 class _CollapseMenuState extends State<CollapseMenu> {
   bool collapsed = true;
 
-  void _navigateToLearningInfoPage(int index) {
+  void _navigateToLearningInfoPage(
+    int index,
+    QuestionCategoryEntity selectedCategory,
+  ) {
+    final licenseId = switch (context.read<AuthBloc>().state) {
+      Authenticated(user: var u) => u.license.id,
+      _ => null,
+    };
+    if (licenseId != null) {
+      context.read<LearningBloc>().add(
+        LoadLearningQuestions(category: selectedCategory, licenseId: licenseId),
+      );
+    }
     Navigator.pushNamed(
       context,
       RouteNames.learningInfo,
@@ -56,8 +69,6 @@ class _CollapseMenuState extends State<CollapseMenu> {
         'title': widget.items[index].title,
         'iconData': widget.items[index].iconData,
         'themeColor': widget.items[index].themeColor,
-        'description': '',
-        'categoryId': 1,
         'stats': [
           {
             'iconData': BootstrapIcons.book,
@@ -228,12 +239,10 @@ class _CollapseMenuState extends State<CollapseMenu> {
                                           themeColor:
                                               widget.items[index].themeColor,
                                           onTap: () {
-                                            sl<LearningBloc>().add(
-                                              LoadQuestions(
-                                                state.categories[index],
-                                              ),
+                                            _navigateToLearningInfoPage(
+                                              index,
+                                              state.categories[index],
                                             );
-                                            _navigateToLearningInfoPage(index);
                                           },
                                           title: widget.items[index].title,
                                           subTitle:

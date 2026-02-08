@@ -13,8 +13,8 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
-import '../../features/learning/data/repositories/question_category_impl.dart'
-    as _i497;
+import '../../features/learning/data/repositories/question_category_repository_impl.dart'
+    as _i121;
 import '../../features/learning/data/repositories/question_repository_impl.dart'
     as _i969;
 import '../../features/learning/domain/repositories/question_category_repository.dart'
@@ -29,6 +29,8 @@ import '../../features/learning/domain/usecases/get_question_categories_by_licen
     as _i246;
 import '../../features/learning/domain/usecases/get_question_category_by_id.dart'
     as _i1050;
+import '../../features/learning/domain/usecases/get_random_questions.dart'
+    as _i307;
 import '../../features/learning/presentation/bloc/learning_bloc.dart' as _i591;
 import '../../features/user_management/data/data_sources/local/index.dart'
     as _i937;
@@ -99,24 +101,8 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i193.LocalLicenseDataSourceImpl(gh<_i982.AppDatabase>()),
     );
     gh.lazySingleton<_i764.QuestionCategoryRepository>(
-      () => _i497.QuestionCategoryRepositoryImpl(
+      () => _i121.QuestionCategoryRepositoryImpl(
         questionCategoryDao: gh<_i250.QuestionCategoryDao>(),
-        questionDao: gh<_i250.QuestionDao>(),
-      ),
-    );
-    gh.lazySingleton<_i214.GetAllQuestionCategoriesUseCase>(
-      () => _i214.GetAllQuestionCategoriesUseCase(
-        gh<_i764.QuestionCategoryRepository>(),
-      ),
-    );
-    gh.lazySingleton<_i246.GetQuestionCategoriesByLicenseUseCase>(
-      () => _i246.GetQuestionCategoriesByLicenseUseCase(
-        gh<_i764.QuestionCategoryRepository>(),
-      ),
-    );
-    gh.lazySingleton<_i1050.GetQuestionCategoriesByIdUseCase>(
-      () => _i1050.GetQuestionCategoriesByIdUseCase(
-        gh<_i764.QuestionCategoryRepository>(),
       ),
     );
     gh.lazySingleton<_i978.GetQuestionByCategoryUseCase>(
@@ -134,21 +120,31 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i315.CreateUserUseCase>(
       () => _i315.CreateUserUseCase(gh<_i462.UserRepository>()),
     );
+    gh.lazySingleton<_i307.GetRandomQuestionsUseCase>(
+      () => _i307.GetRandomQuestionsUseCase(
+        questionRepository: gh<_i359.QuestionRepository>(),
+        questionCategoryRepository: gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i214.GetAllQuestionCategoriesUseCase>(
+      () => _i214.GetAllQuestionCategoriesUseCase(
+        gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i246.GetQuestionCategoriesByLicenseUseCase>(
+      () => _i246.GetQuestionCategoriesByLicenseUseCase(
+        gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i1050.GetQuestionCategoriesByIdUseCase>(
+      () => _i1050.GetQuestionCategoriesByIdUseCase(
+        gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
     gh.factory<_i172.UserBloc>(
       () => _i172.UserBloc(
         createUserUseCase: gh<_i315.CreateUserUseCase>(),
         deleteUserUseCase: gh<_i591.DeleteUserUseCase>(),
-      ),
-    );
-    gh.factory<_i591.LearningBloc>(
-      () => _i591.LearningBloc(
-        getAllQuestionCategoriesUseCase:
-            gh<_i214.GetAllQuestionCategoriesUseCase>(),
-        getQuestionCategoriesByIdUseCase:
-            gh<_i1050.GetQuestionCategoriesByIdUseCase>(),
-        getQuestionCategoriesByLicenseUseCase:
-            gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
-        getQuestionByCategoryUseCase: gh<_i978.GetQuestionByCategoryUseCase>(),
       ),
     );
     gh.lazySingleton<_i896.GetLicenseByIdUseCase>(
@@ -163,10 +159,22 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i704.LicenseBloc>(
       () => _i704.LicenseBloc(gh<_i743.GetLicensesUseCase>()),
     );
-    gh.factory<_i797.AuthBloc>(
+    gh.lazySingleton<_i797.AuthBloc>(
       () => _i797.AuthBloc(
         watchCurrentUserUseCase: gh<_i743.WatchCurrentUserUseCase>(),
         deleteUserUseCase: gh<_i743.DeleteUserUseCase>(),
+      ),
+    );
+    gh.lazySingleton<_i591.LearningBloc>(
+      () => _i591.LearningBloc(
+        getAllQuestionCategoriesUseCase:
+            gh<_i214.GetAllQuestionCategoriesUseCase>(),
+        getQuestionCategoriesByIdUseCase:
+            gh<_i1050.GetQuestionCategoriesByIdUseCase>(),
+        getQuestionCategoriesByLicenseUseCase:
+            gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
+        getRandomQuestionsUseCase: gh<_i307.GetRandomQuestionsUseCase>(),
+        getQuestionByCategoryUseCase: gh<_i978.GetQuestionByCategoryUseCase>(),
       ),
     );
     return this;

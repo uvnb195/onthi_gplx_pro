@@ -2,89 +2,161 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/di/injection.dart';
+import 'package:onthi_gplx_pro/core/extension/exam_type.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
+import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/collapse_menu.dart';
 
 class LearningDashBoardPage extends StatelessWidget {
   const LearningDashBoardPage({super.key});
 
+  void _navigateToLearningInfoPage(
+    BuildContext context, {
+    required String title,
+    required IconData iconData,
+    required Color themeColor,
+    String? description,
+    required ExamType examType,
+  }) {
+    final authBloc = context.read<AuthBloc>();
+    final licenseId = switch (authBloc.state) {
+      Authenticated(user: var u) => u.license.id,
+      _ => null,
+    };
+    if (licenseId == null) return;
+
+    context.read<LearningBloc>().add(
+      LoadExamQuestions(licenseId: licenseId, examType: examType.index),
+    );
+    Navigator.pushNamed(
+      context,
+      RouteNames.learningInfo,
+      arguments: {
+        'title': title,
+        'iconData': iconData,
+        'themeColor': themeColor,
+        'description': description,
+        'isLearning': false,
+        'stats': [
+          {
+            'iconData': BootstrapIcons.book,
+            'title': 'Title1',
+            'description': 'Description',
+          },
+          {
+            'iconData': BootstrapIcons.book,
+            'title': 'Title1',
+            'description': 'Description',
+          },
+          {
+            'iconData': BootstrapIcons.book,
+            'title': 'Title1',
+            'description': 'Description',
+          },
+        ],
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
-      body: BlocBuilder<LearningBloc, LearningState>(
-        builder: (context, state) {
-          final List<Color> colors = AppColors.rainbowColors;
-          List<Color> getRotateRainbowColors(int startIndex) {
-            if (startIndex == -1 || startIndex >= colors.length) return colors;
-            return colors.sublist(startIndex)
-              ..addAll(colors.sublist(0, startIndex));
+      body: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, authState) {
+          if (authState is! Authenticated) {
+            return SizedBox.shrink();
           }
+          return BlocBuilder<LearningBloc, LearningState>(
+            builder: (context, state) {
+              final List<Color> colors = AppColors.rainbowColors;
+              List<Color> getRotateRainbowColors(int startIndex) {
+                if (startIndex == -1 || startIndex >= colors.length) {
+                  return colors;
+                }
+                return colors.sublist(startIndex)
+                  ..addAll(colors.sublist(0, startIndex));
+              }
 
-          final theoryIconDatas = [
-            BootstrapIcons.bookmarks,
-            BootstrapIcons.shield_lock,
-            BootstrapIcons.journal_text,
-            BootstrapIcons.people,
-            BootstrapIcons.speedometer2,
-            BootstrapIcons.sign_stop,
-            BootstrapIcons.tools,
-            BootstrapIcons.stoplights,
-          ];
+              final theoryIconDatas = authState.user.license.id <= 2
+                  ? [
+                      BootstrapIcons.bookmarks,
+                      BootstrapIcons.shield_lock,
+                      BootstrapIcons.journal_text,
+                      BootstrapIcons.people,
+                      BootstrapIcons.speedometer2,
+                      BootstrapIcons.sign_stop,
+                      BootstrapIcons.stoplights,
+                    ]
+                  : [
+                      BootstrapIcons.bookmarks,
+                      BootstrapIcons.shield_lock,
+                      BootstrapIcons.journal_text,
+                      BootstrapIcons.people,
+                      BootstrapIcons.speedometer2,
+                      BootstrapIcons.sign_stop,
+                      BootstrapIcons.tools,
+                      BootstrapIcons.stoplights,
+                    ];
 
-          final theoryDropdownItemColors = getRotateRainbowColors(0);
-          final videoDropdownItemColors = getRotateRainbowColors(4);
-          final List<CollapseMenuItem> theoryDropdownItems = state.categories
-              .asMap()
-              .entries
-              .map(
-                (e) => CollapseMenuItem(
-                  title: e.value.label,
-                  iconData: theoryIconDatas[e.key],
-                  themeColor: e.key < colors.length
-                      ? theoryDropdownItemColors[e.key]
-                      : theoryDropdownItemColors[colors.length - 1],
-                ),
-              )
-              .toList();
-          final List<CollapseMenuItem> videoDropdownItems = state.categories
-              .asMap()
-              .entries
-              .map(
-                (e) => CollapseMenuItem(
-                  title: e.value.label,
-                  iconData: theoryIconDatas[e.key],
-                  themeColor: e.key < colors.length
-                      ? videoDropdownItemColors[e.key]
-                      : videoDropdownItemColors[colors.length - 1],
-                ),
-              )
-              .toList();
+              final theoryDropdownItemColors = getRotateRainbowColors(0);
+              final videoDropdownItemColors = getRotateRainbowColors(4);
+              final List<CollapseMenuItem> theoryDropdownItems = state
+                  .categories
+                  .asMap()
+                  .entries
+                  .map(
+                    (e) => CollapseMenuItem(
+                      title: e.value.label,
+                      iconData: theoryIconDatas[e.key],
+                      themeColor: e.key < colors.length
+                          ? theoryDropdownItemColors[e.key]
+                          : theoryDropdownItemColors[colors.length - 1],
+                    ),
+                  )
+                  .toList();
+              final List<CollapseMenuItem> videoDropdownItems = state.categories
+                  .asMap()
+                  .entries
+                  .map(
+                    (e) => CollapseMenuItem(
+                      title: e.value.label,
+                      iconData: theoryIconDatas[e.key],
+                      themeColor: e.key < colors.length
+                          ? videoDropdownItemColors[e.key]
+                          : videoDropdownItemColors[colors.length - 1],
+                    ),
+                  )
+                  .toList();
 
-          if (state.loading) {
-            return Center(
-              child: CircularProgressIndicator(color: AppColors.primaryColor),
-            );
-          }
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth < 600) {
-                print('length: ${state.categories.length}');
-                return _buildMobileLayout(
-                  context,
-                  theoryCategories: theoryDropdownItems,
-                  videoCategories: [],
-                );
-              } else {
-                return _buildLargeLayout(
-                  context,
-                  theoryCategories: theoryDropdownItems,
-                  videoCategories: videoDropdownItems,
+              if (state.loading) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryColor,
+                  ),
                 );
               }
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  if (constraints.maxWidth < 600) {
+                    return _buildMobileLayout(
+                      context,
+                      theoryCategories: theoryDropdownItems,
+                      videoCategories: [],
+                    );
+                  } else {
+                    return _buildLargeLayout(
+                      context,
+                      theoryCategories: theoryDropdownItems,
+                      videoCategories: videoDropdownItems,
+                    );
+                  }
+                },
+              );
             },
           );
         },
@@ -98,6 +170,7 @@ class LearningDashBoardPage extends StatelessWidget {
     required List<CollapseMenuItem> videoCategories,
   }) {
     final List<Color> colors = AppColors.rainbowColors;
+    final learningBloc = sl<LearningBloc>();
 
     return SafeArea(
       child: CustomScrollView(
@@ -123,33 +196,12 @@ class LearningDashBoardPage extends StatelessWidget {
                       'Thi thử bộ đề ngẫu nhiên từ 600 câu hỏi. Cấu trúc chuẩn bộ GTVT.',
                   percentage: 0.8,
                   onTap: () {
-                    Navigator.pushNamed(
+                    _navigateToLearningInfoPage(
                       context,
-                      RouteNames.learningInfo,
-                      arguments: {
-                        'themeColor': AppColors.accentVariantColor,
-                        'title': 'Thi lý thuyết',
-                        'iconData': BootstrapIcons.clipboard_check,
-                        'description': 'Thi lý thuyết chuẩn bộ GTVT',
-                        'categoryId': 1,
-                        'stats': [
-                          {
-                            'iconData': BootstrapIcons.file_earmark_text,
-                            'title': '30',
-                            'description': 'Câu hỏi',
-                          },
-                          {
-                            'iconData': BootstrapIcons.clock_history,
-                            'title': '19',
-                            'description': 'phút',
-                          },
-                          {
-                            'iconData': BootstrapIcons.bullseye,
-                            'title': '21',
-                            'description': 'Điểm tối thiểu',
-                          },
-                        ],
-                      },
+                      title: 'Thi lý thuyết',
+                      iconData: BootstrapIcons.clipboard_check,
+                      themeColor: AppColors.accentVariantColor,
+                      examType: ExamType.theory,
                     );
                   },
                 ),
@@ -186,33 +238,13 @@ class LearningDashBoardPage extends StatelessWidget {
                       'Thi thử bộ đề ngẫu nhiên từ 120 câu hỏi mô phỏng. Cấu trúc chuẩn bộ GTVT.',
                   percentage: 0.8,
                   onTap: () {
-                    Navigator.pushNamed(
+                    _navigateToLearningInfoPage(
                       context,
-                      RouteNames.learningInfo,
-                      arguments: {
-                        'themeColor': AppColors.secondaryColor,
-                        'title': 'Thi mô phỏng',
-                        'iconData': BootstrapIcons.tv,
-                        'description': 'Thi mô phỏng chuẩn bộ GTVT',
-                        'categoryId': 1,
-                        'stats': [
-                          {
-                            'iconData': BootstrapIcons.file_earmark_text,
-                            'title': '30',
-                            'description': 'Câu hỏi',
-                          },
-                          {
-                            'iconData': BootstrapIcons.clock_history,
-                            'title': '19',
-                            'description': 'phút',
-                          },
-                          {
-                            'iconData': BootstrapIcons.bullseye,
-                            'title': '21',
-                            'description': 'Điểm tối thiểu',
-                          },
-                        ],
-                      },
+                      title: 'Thi mô phỏng',
+                      iconData: BootstrapIcons.tv,
+                      themeColor: AppColors.secondaryColor,
+                      description: 'Thi mô phỏng chuẩn bộ GTVT',
+                      examType: ExamType.simulation,
                     );
                   },
                 ),

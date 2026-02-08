@@ -6,6 +6,8 @@ import 'package:drift/native.dart';
 import 'package:flutter/services.dart';
 import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
+import 'package:onthi_gplx_pro/core/database/table/rule_table.dart';
+import 'package:onthi_gplx_pro/core/extension/exam_type.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -27,6 +29,7 @@ LazyDatabase _openConnection() {
     LicenseTable,
     LicenseCategoryTable,
     QuestionCategoryTable,
+    RuleTable,
     LicenseQuestionTable,
     QuestionTable,
     QuestionOptionTable,
@@ -37,7 +40,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
@@ -53,6 +56,7 @@ class AppDatabase extends _$AppDatabase {
             rootBundle.loadString('assets/data/licenses.json'),
             rootBundle.loadString('assets/data/license_questions.json'),
             rootBundle.loadString('assets/data/license_categories.json'),
+            rootBundle.loadString('assets/data/question_category_rules.json'),
           ]);
 
           final List<dynamic> categoriesJson = json.decode(seedDatas[0]);
@@ -61,6 +65,7 @@ class AppDatabase extends _$AppDatabase {
           final List<dynamic> licensesJson = json.decode(seedDatas[3]);
           final List<dynamic> licenseQuestionsJson = json.decode(seedDatas[4]);
           final List<dynamic> licenseCategoriesJson = json.decode(seedDatas[5]);
+          final rulesJson = json.decode(seedDatas[6]);
 
           await licenseDao.createLicensesSeedData(licensesJson);
           await questionCategoryDao.createCategoriesSeedData(categoriesJson);
@@ -74,6 +79,7 @@ class AppDatabase extends _$AppDatabase {
           await questionCategoryDao.createLicenseCategoriesSeedData(
             licenseCategoriesJson,
           );
+          await questionCategoryDao.createCategoryRulesSeedData(rulesJson);
         } catch (e) {
           print("LỖI ĐÂY RỒI: $e");
         }

@@ -3,28 +3,22 @@ import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/features/learning/data/mappers/question_category_mapper.dart';
+import 'package:onthi_gplx_pro/features/learning/data/mappers/rule.dart';
+import 'package:onthi_gplx_pro/features/learning/domain/entities/category_rule.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/question_category.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/repositories/question_category_repository.dart';
 
 @LazySingleton(as: QuestionCategoryRepository)
 class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
   final QuestionCategoryDao questionCategoryDao;
-  final QuestionDao questionDao;
 
-  QuestionCategoryRepositoryImpl({
-    required this.questionCategoryDao,
-    required this.questionDao,
-  });
+  QuestionCategoryRepositoryImpl({required this.questionCategoryDao});
 
   @override
   Future<Either<Failure, List<QuestionCategoryEntity>>>
   getQuestionCategories() async {
     try {
       final result = await questionCategoryDao.getAllCategories();
-      print('Total categories: ${result.length}');
-      for (var c in result) {
-        print('Category: ${c.id} - ${c.label}');
-      }
       return Right(result.map((e) => e.toEntity()).toList());
     } catch (e) {
       return Left(
@@ -66,6 +60,26 @@ class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
       return Left(
         DatabaseFailure(
           'An error occur while getting Question Category by License (licenseID: $licenseId): ${e.toString()}',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CategoryRuleEntity>>> getExamRules(
+    int examType,
+    int licenseId,
+  ) async {
+    try {
+      final result = await questionCategoryDao.getExamRules(
+        examType,
+        licenseId,
+      );
+      return Right(result.map((e) => e.toEntity()).toList());
+    } catch (e) {
+      return Left(
+        DatabaseFailure(
+          'An error occur while getting Exam Rules (licenseID: $licenseId, examType: $examType): ${e.toString()}',
         ),
       );
     }

@@ -10,7 +10,7 @@ import 'package:onthi_gplx_pro/features/user_management/domain/usecases/index.da
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-@injectable
+@lazySingleton
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final WatchCurrentUserUseCase _watchCurrentUserUseCase;
   final DeleteUserUseCase _deleteUserUseCase;

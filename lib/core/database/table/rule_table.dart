@@ -7,7 +7,7 @@ class RuleTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get title => text().nullable()();
   TextColumn get content => text().nullable()();
-  IntColumn get level => integer().withDefault(const Constant(0))();
+  IntColumn get level => integer().withDefault(const Constant(1))();
 
   // rule chỉ được phép thuộc về 1 trong 2
   // (category hoặc exam)
@@ -18,7 +18,4 @@ class RuleTable extends Table {
   IntColumn get examType => intEnum<ExamType>().nullable()();
   IntColumn get licenseId =>
       integer().references(LicenseTable, #id).nullable()();
-
-  @override
-  Set<Column<Object>>? get primaryKey => {id};
 }

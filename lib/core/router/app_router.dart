@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/features/achievement/presentation/pages/achievement_page.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/pages/home_router.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/pre_learning_page.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/questions_page.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/pages/video_questions_page.dart';
@@ -26,13 +29,16 @@ class AppRouter {
       case RouteNames.learningInfo:
         final args = routeSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => PreLearningPage(
-            title: args['title'],
-            description: args['description'],
-            stats: args['stats'],
-            categoryId: args['categoryId'],
-            iconData: args['iconData'],
-            themeColor: args['themeColor'],
+          builder: (context) => BlocProvider.value(
+            value: sl<LearningBloc>(),
+            child: PreLearningPage(
+              title: args['title'],
+              description: args['description'],
+              stats: args['stats'],
+              iconData: args['iconData'],
+              themeColor: args['themeColor'],
+              isLearning: args['isLearning'] ?? true,
+            ),
           ),
         );
 

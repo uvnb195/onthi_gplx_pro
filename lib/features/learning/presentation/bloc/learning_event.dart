@@ -15,13 +15,27 @@ final class LoadCategories extends LearningEvent {
   List<Object> get props => [licenseId];
 }
 
-final class LoadQuestions extends LearningEvent {
+final class LoadLearningQuestions extends LearningEvent {
   final QuestionCategoryEntity category;
+  final int licenseId;
 
-  const LoadQuestions(this.category);
+  const LoadLearningQuestions({
+    required this.category,
+    required this.licenseId,
+  });
 
   @override
   List<Object?> get props => [category];
+}
+
+final class LoadExamQuestions extends LearningEvent {
+  final int examType;
+  final int licenseId;
+
+  const LoadExamQuestions({required this.licenseId, required this.examType});
+
+  @override
+  List<Object?> get props => [licenseId, examType];
 }
 
 final class ToggleSaveQuestion extends LearningEvent {

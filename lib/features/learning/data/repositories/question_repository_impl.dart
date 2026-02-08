@@ -6,7 +6,6 @@ import 'package:onthi_gplx_pro/features/learning/data/mappers/question_mapper.da
 import 'package:onthi_gplx_pro/features/learning/data/mappers/question_option_mapper.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/question.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/repositories/question_repository.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license.dart';
 
 @LazySingleton(as: QuestionRepository)
 class QuestionRepositoryImpl implements QuestionRepository {
@@ -23,6 +22,7 @@ class QuestionRepositoryImpl implements QuestionRepository {
   @override
   Future<Either<Failure, List<QuestionEntity>>> getQuestionsByCategory(
     int categoryId,
+    int licenseId,
   ) async {
     try {
       final returnedDatas = await _questionDao.getQuestionsByCategory(
@@ -50,11 +50,14 @@ class QuestionRepositoryImpl implements QuestionRepository {
   }
 
   @override
-  Future<Either<Failure, List<QuestionEntity>>> getRandomQuestionsForLicense(
-    LicenseType licenseType,
-  ) {
-    // TODO: implement getRandomQuestionsForLicense
-    throw UnimplementedError();
+  Future<Either<Failure, List<QuestionEntity>>> getRandomQuestions(
+    int licenseId,
+  ) async {
+    try {
+      return Right([]);
+    } catch (e) {
+      return Left(DatabaseFailure(""));
+    }
   }
 
   @override

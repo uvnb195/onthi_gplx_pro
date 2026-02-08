@@ -9,4 +9,5 @@ mixin _$QuestionCategoryDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.questionCategoryTable;
   $LicenseCategoryTableTable get licenseCategoryTable =>
       attachedDatabase.licenseCategoryTable;
+  $RuleTableTable get ruleTable => attachedDatabase.ruleTable;
 }

@@ -1,11 +1,11 @@
 [
   {
     "license_id": 1,
-    "data": [1, 2, 3, 5, 6]
+    "data": [1, 2, 3, 4, 5, 7, 8]
   },
   {
     "license_id": 2,
-    "data": [1, 2, 3, 5, 6]
+    "data": [1, 2, 3, 4, 5, 7, 8]
   },
   { "license_id": 3, "data": [] },
   { "license_id": 4, "data": [] },
