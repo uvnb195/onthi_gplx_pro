@@ -23,12 +23,12 @@ import '../../features/learning/domain/repositories/question_repository.dart'
     as _i359;
 import '../../features/learning/domain/usecases/get_all_question_categories.dart'
     as _i214;
-import '../../features/learning/domain/usecases/get_question_by_category.dart'
-    as _i978;
 import '../../features/learning/domain/usecases/get_question_categories_by_license.dart'
     as _i246;
 import '../../features/learning/domain/usecases/get_question_category_by_id.dart'
     as _i1050;
+import '../../features/learning/domain/usecases/get_questions_by_category.dart'
+    as _i655;
 import '../../features/learning/domain/usecases/get_random_questions.dart'
     as _i307;
 import '../../features/learning/presentation/bloc/learning_bloc.dart' as _i591;
@@ -105,8 +105,8 @@ extension GetItInjectableX on _i174.GetIt {
         questionCategoryDao: gh<_i250.QuestionCategoryDao>(),
       ),
     );
-    gh.lazySingleton<_i978.GetQuestionByCategoryUseCase>(
-      () => _i978.GetQuestionByCategoryUseCase(gh<_i359.QuestionRepository>()),
+    gh.lazySingleton<_i655.GetQuestionsByCategoryUseCase>(
+      () => _i655.GetQuestionsByCategoryUseCase(gh<_i359.QuestionRepository>()),
     );
     gh.lazySingleton<_i245.UserRepository>(
       () => _i362.UserRepositoryImpl(gh<_i937.LocalUserDataSource>()),
@@ -174,7 +174,8 @@ extension GetItInjectableX on _i174.GetIt {
         getQuestionCategoriesByLicenseUseCase:
             gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
         getRandomQuestionsUseCase: gh<_i307.GetRandomQuestionsUseCase>(),
-        getQuestionByCategoryUseCase: gh<_i978.GetQuestionByCategoryUseCase>(),
+        getQuestionsByCategoryUseCase:
+            gh<_i655.GetQuestionsByCategoryUseCase>(),
       ),
     );
     return this;

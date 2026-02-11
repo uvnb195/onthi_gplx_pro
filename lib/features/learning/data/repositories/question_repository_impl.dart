@@ -20,13 +20,14 @@ class QuestionRepositoryImpl implements QuestionRepository {
   }
 
   @override
-  Future<Either<Failure, List<QuestionEntity>>> getQuestionsByCategory(
-    int categoryId,
-    int licenseId,
-  ) async {
+  Future<Either<Failure, List<QuestionEntity>>> getQuestionsByCategory({
+    required int categoryId,
+    required int licenseId,
+  }) async {
     try {
       final returnedDatas = await _questionDao.getQuestionsByCategory(
-        categoryId,
+        categoryId: categoryId,
+        licenseId: categoryId,
       );
 
       return Right(

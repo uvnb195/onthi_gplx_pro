@@ -92,5 +92,16 @@ void main() {
       );
       expect(b1Questions.length, 300, reason: 'B1 should have 300 questions');
     });
+
+    test('make sure getQuestionByCategory work right way', () async {
+      final licenseId = 1;
+      final categoryId = 4;
+      final results = await db.questionDao.getQuestionsByCategory(
+        categoryId: categoryId,
+        licenseId: licenseId,
+      );
+
+      expect(results.length, 10);
+    });
   });
 }

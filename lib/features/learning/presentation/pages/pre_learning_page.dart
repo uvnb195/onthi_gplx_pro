@@ -28,7 +28,6 @@ class PreLearningPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('is learning = $isLearning');
     final screenWidth = MediaQuery.sizeOf(context).width;
     final learningBloc = context.watch<LearningBloc>();
     return Scaffold(
@@ -79,17 +78,21 @@ class PreLearningPage extends StatelessWidget {
             showDone: false,
             showPrev: false,
             onNext: () {
-              // Navigator.pushNamed(
-              //   context,
-              //   RouteNames.learning,
-              //   arguments: {'title': title, 'isStudy': true, 'categoryId': 1},
-              // );
-
               Navigator.pushNamed(
                 context,
-                RouteNames.videoLearning,
-                arguments: screenWidth > 600,
+                RouteNames.learning,
+                arguments: {
+                  'title': title,
+                  'isStudy': true,
+                  'categoryId': learningBloc.state.selectedCategory?.id,
+                },
               );
+
+              // Navigator.pushNamed(
+              //   context,
+              //   RouteNames.videoLearning,
+              //   arguments: screenWidth > 600,
+              // );
             },
             onPrev: () {},
           ),

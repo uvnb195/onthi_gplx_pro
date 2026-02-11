@@ -4,9 +4,9 @@ import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/category_rule.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/usecases/get_all_question_categories.dart';
-import 'package:onthi_gplx_pro/features/learning/domain/usecases/get_question_by_category.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/usecases/get_question_categories_by_license.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/usecases/get_question_category_by_id.dart';
+import 'package:onthi_gplx_pro/features/learning/domain/usecases/get_questions_by_category.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/usecases/get_random_questions.dart';
 
 part 'learning_event.dart';
@@ -21,14 +21,14 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
 
   final GetRandomQuestionsUseCase getRandomQuestionsUseCase;
 
-  final GetQuestionByCategoryUseCase getQuestionByCategoryUseCase;
+  final GetQuestionsByCategoryUseCase getQuestionsByCategoryUseCase;
 
   LearningBloc({
     required this.getAllQuestionCategoriesUseCase,
     required this.getQuestionCategoriesByIdUseCase,
     required this.getQuestionCategoriesByLicenseUseCase,
     required this.getRandomQuestionsUseCase,
-    required this.getQuestionByCategoryUseCase,
+    required this.getQuestionsByCategoryUseCase,
   }) : super(LearningState(selectedCategory: null, categories: [])) {
     on<LoadCategories>(_onLoadCategories);
     on<LoadLearningQuestions>(_onLoadLearningQuestions);
@@ -61,8 +61,8 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
     Emitter<LearningState> emit,
   ) async {
     emit(state.copyWith(loading: true, selectedCategory: event.category));
-    final result = await getQuestionByCategoryUseCase(
-      GetQuestionByCategoryParams(
+    final result = await getQuestionsByCategoryUseCase(
+      GetQuestionsByCategoryParams(
         categoryId: event.category.id,
         licenseId: event.licenseId,
       ),

@@ -76,31 +76,36 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
   }
 
   // get questions by category
-  Future<List<QuestionWithChoices>> getQuestionsByCategory(
-    int categoryId,
-  ) async {
-    final query = select(questionTable).join([
-      leftOuterJoin(
-        questionOptionTable,
-        questionOptionTable.questionId.equalsExp(questionTable.id),
-      ),
-    ]);
+  Future<List<QuestionWithChoices>> getQuestionsByCategory({
+    required int categoryId,
+    required int licenseId,
+  }) async {
+    final query =
+        select(questionTable).join([
+          innerJoin(
+            licenseQuestionTable,
+            licenseQuestionTable.questionId.equalsExp(questionTable.id),
+          ),
+        ])..where(
+          licenseQuestionTable.licenseId.equals(licenseId) &
+              questionTable.categoryId.equals(categoryId),
+        );
     final rows = await query.get();
-    final groupedData = <int, QuestionWithChoices>{};
-    for (var row in rows) {
-      final question = row.readTable(questionTable);
-      final option = row.readTableOrNull(questionOptionTable);
+    final questions = rows.map((r) => r.readTable(questionTable)).toList();
+    final questionIds = questions.map((q) => q.id).toList();
 
-      final entry = groupedData.putIfAbsent(
-        question.id,
-        () => QuestionWithChoices(question: question, options: []),
-      );
-      if (option != null) {
-        entry.options.add(option);
-      }
-    }
+    final allOptions = await (select(
+      questionOptionTable,
+    )..where((tbl) => tbl.questionId.isIn(questionIds))).get();
 
-    return groupedData.values.toList();
+    return questions
+        .map(
+          (q) => QuestionWithChoices(
+            question: q,
+            options: allOptions.where((o) => o.questionId == q.id).toList(),
+          ),
+        )
+        .toList();
   }
 
   // get questions by id list

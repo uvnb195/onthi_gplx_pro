@@ -4,10 +4,10 @@ import 'package:onthi_gplx_pro/features/learning/domain/entities/question.dart';
 
 abstract class QuestionRepository {
   // depend on License
-  Future<Either<Failure, List<QuestionEntity>>> getQuestionsByCategory(
-    int categoryId,
-    int licenseId,
-  );
+  Future<Either<Failure, List<QuestionEntity>>> getQuestionsByCategory({
+    required int categoryId,
+    required int licenseId,
+  });
 
   Future<Either<Failure, List<QuestionEntity>>> getQuestionsByExam(int examId);
 

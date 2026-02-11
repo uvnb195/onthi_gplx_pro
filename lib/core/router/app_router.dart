@@ -45,10 +45,13 @@ class AppRouter {
       case RouteNames.learning:
         final args = routeSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => QuestionsPage(
-            title: args['title'],
-            isStudy: args['isStudy'],
-            categoryId: args['categoryId'],
+          builder: (_) => BlocProvider.value(
+            value: sl<LearningBloc>(),
+            child: QuestionsPage(
+              title: args['title'],
+              isStudy: args['isStudy'],
+              categoryId: args['categoryId'],
+            ),
           ),
         );
 
