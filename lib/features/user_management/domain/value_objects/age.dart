@@ -26,4 +26,6 @@ class Age {
       return Left(ValidationFailure(e.message));
     }
   }
+
+  const Age.fromDrift(this.value);
 }

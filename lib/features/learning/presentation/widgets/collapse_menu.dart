@@ -1,9 +1,27 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/menu_item.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_scale_entrance.dart';
+import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:onthi_gplx_pro/features/learning/domain/entities/index.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
+
+class CollapseMenuItem {
+  final String title;
+  final String? subTitle;
+  final IconData iconData;
+  final Color themeColor;
+  const CollapseMenuItem({
+    required this.title,
+    this.subTitle,
+    required this.iconData,
+    required this.themeColor,
+  });
+}
 
 class CollapseMenu extends StatefulWidget {
   final IconData iconData;
@@ -11,7 +29,7 @@ class CollapseMenu extends StatefulWidget {
   final String? subTitle;
   final double? percentage;
   final Color themeColor;
-  final List<Map<String, dynamic>> items;
+  final List<CollapseMenuItem> items;
   final VoidCallback? onTap;
   const CollapseMenu({
     super.key,
@@ -30,6 +48,64 @@ class CollapseMenu extends StatefulWidget {
 
 class _CollapseMenuState extends State<CollapseMenu> {
   bool collapsed = true;
+
+  void _navigateToLearningInfoPage(
+    int index,
+    QuestionCategoryEntity selectedCategory,
+  ) {
+    final licenseId = switch (context.read<AuthBloc>().state) {
+      Authenticated(user: var u) => u.license.value.id,
+      _ => null,
+    };
+
+    final learningBloc = context.read<LearningBloc>();
+
+    if (licenseId != null) {
+      context.read<LearningBloc>().add(
+        LoadLearningQuestions(category: selectedCategory, licenseId: licenseId),
+      );
+    }
+
+    if (learningBloc.state.loading) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
+        ),
+      );
+    }
+
+    final totalQuestions = learningBloc.state.questions.length;
+
+    Navigator.pushNamed(
+      context,
+      RouteNames.learningInfo,
+      arguments: {
+        'title': widget.items[index].title,
+        'iconData': widget.items[index].iconData,
+        'themeColor': widget.items[index].themeColor,
+        'stats': [
+          {
+            'iconData': BootstrapIcons.file_earmark_text,
+            'title': '$totalQuestions',
+            'description': 'Câu hỏi',
+          },
+          {
+            'iconData': BootstrapIcons.ui_checks,
+            'title': '19',
+            'description': 'Đã học',
+          },
+          {
+            'iconData': BootstrapIcons.percent,
+            'title': '85',
+            'description': 'Tỉ lệ đúng',
+          },
+        ],
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StyledScaleEntrance(
@@ -152,34 +228,50 @@ class _CollapseMenuState extends State<CollapseMenu> {
                     curve: Curves.easeOut,
                     child: collapsed
                         ? SizedBox.shrink()
-                        : Column(
-                            children: List.generate(widget.items.length, (
-                              index,
-                            ) {
-                              return AnimationConfiguration.staggeredList(
-                                position: index,
-                                child: SlideAnimation(
-                                  duration: const Duration(milliseconds: 500),
-                                  horizontalOffset: -100,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom: (index == widget.items.length - 1)
-                                          ? 0
-                                          : 12.0,
+                        : BlocBuilder<LearningBloc, LearningState>(
+                            builder: (context, state) {
+                              if (state.categories.isEmpty) {
+                                return SizedBox.shrink();
+                              }
+                              return Column(
+                                children: List.generate(widget.items.length, (
+                                  index,
+                                ) {
+                                  return AnimationConfiguration.staggeredList(
+                                    position: index,
+                                    child: SlideAnimation(
+                                      duration: const Duration(
+                                        milliseconds: 500,
+                                      ),
+                                      horizontalOffset: -100,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom:
+                                              (index == widget.items.length - 1)
+                                              ? 0
+                                              : 12.0,
+                                        ),
+                                        child: MenuItem(
+                                          themeColor:
+                                              widget.items[index].themeColor,
+                                          onTap: () {
+                                            _navigateToLearningInfoPage(
+                                              index,
+                                              state.categories[index],
+                                            );
+                                          },
+                                          title: widget.items[index].title,
+                                          subTitle:
+                                              widget.items[index].subTitle,
+                                          iconData:
+                                              widget.items[index].iconData,
+                                        ),
+                                      ),
                                     ),
-                                    child: MenuItem(
-                                      themeColor:
-                                          widget.items[index]['themeColor'],
-                                      onTap: () {},
-                                      title: widget.items[index]['title'],
-                                      subTitle:
-                                          '${widget.items[index]['total']} câu hỏi',
-                                      iconData: widget.items[index]['iconData'],
-                                    ),
-                                  ),
-                                ),
+                                  );
+                                }),
                               );
-                            }),
+                            },
                           ),
                   ),
                 ],

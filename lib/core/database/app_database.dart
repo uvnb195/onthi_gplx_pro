@@ -1,10 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/services.dart';
+import 'package:onthi_gplx_pro/core/constants/index.dart';
 import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -23,27 +25,64 @@ LazyDatabase _openConnection() {
   tables: [
     UserTable,
     LicenseTable,
+    LicenseCategoryTable,
     QuestionCategoryTable,
+    RuleTable,
+    LicenseQuestionTable,
     QuestionTable,
     QuestionOptionTable,
+    QuestionStatusTable,
+    LearningProgressTable,
   ],
-  daos: [UserDao, LicenseDao, QuestionCategoryDao, QuestionDao],
+  daos: [UserDao, CategoryDao, QuestionDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 6;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       onCreate: (m) async {
-        await m.createAll();
+        try {
+          await m.createAll();
 
-        await licenseDao.createLicensesSeedData();
-        await categoryDao.createCategoriesSeedData();
-        await questionDao.createQuestionsSeedData();
+          final seedDatas = await Future.wait([
+            rootBundle.loadString('assets/data/question_categories.json'),
+            rootBundle.loadString('assets/data/question_options.json'),
+            rootBundle.loadString('assets/data/questions.json'),
+            rootBundle.loadString('assets/data/licenses.json'),
+            rootBundle.loadString('assets/data/license_questions.json'),
+            rootBundle.loadString('assets/data/license_categories.json'),
+            rootBundle.loadString('assets/data/question_category_rules.json'),
+          ]);
+
+          final List<dynamic> categoriesJson = json.decode(seedDatas[0]);
+          final List<dynamic> optionsJson = json.decode(seedDatas[1]);
+          final List<dynamic> questionsJson = json.decode(seedDatas[2]);
+          final List<dynamic> licensesJson = json.decode(seedDatas[3]);
+          final List<dynamic> licenseQuestionsJson = json.decode(seedDatas[4]);
+          final List<dynamic> licenseCategoriesJson = json.decode(seedDatas[5]);
+          final rulesJson = json.decode(seedDatas[6]);
+
+          await userDao.createLicensesSeedData(licensesJson);
+          await categoryDao.createCategoriesSeedData(categoriesJson);
+          await questionDao.createQuestionsSeedData(
+            optionsJson: optionsJson,
+            questionsJson: questionsJson,
+          );
+          await questionDao.createLicenseQuestionsSeedData(
+            licenseQuestionsJson,
+          );
+          await categoryDao.createLicenseCategoriesSeedData(
+            licenseCategoriesJson,
+          );
+          await categoryDao.createCategoryRulesSeedData(rulesJson);
+        } catch (e) {
+          print("Error: $e");
+        }
       },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');

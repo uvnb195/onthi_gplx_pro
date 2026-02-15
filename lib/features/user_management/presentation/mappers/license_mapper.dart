@@ -1,4 +1,4 @@
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/index.dart';
+import 'package:onthi_gplx_pro/core/constants/index.dart';
 
 extension LicenseMapper on LicenseType {
   String get displayName => switch (this) {

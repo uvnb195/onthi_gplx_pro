@@ -30,4 +30,6 @@ class AvatarPath {
       return Left(ValidationFailure(e.message));
     }
   }
+
+  const AvatarPath.fromDrift(this.value);
 }

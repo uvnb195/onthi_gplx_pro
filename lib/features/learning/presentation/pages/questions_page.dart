@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:onthi_gplx_pro/features/learning/presentation/widgets/mock_questions.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onthi_gplx_pro/features/learning/domain/entities/index.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/question_content.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/question_wrapper.dart';
 
@@ -20,7 +22,6 @@ class QuestionsPage extends StatefulWidget {
 }
 
 class _QuestionsPageState extends State<QuestionsPage> {
-  late final List<Map<String, dynamic>> questionsData;
   final ValueNotifier<int> _currentIndexNotifier = ValueNotifier(0);
   late final PageController _pageController;
 
@@ -35,7 +36,6 @@ class _QuestionsPageState extends State<QuestionsPage> {
 
   @override
   void initState() {
-    questionsData = mockQuestionsData;
     _pageController = PageController();
 
     super.initState();
@@ -50,6 +50,8 @@ class _QuestionsPageState extends State<QuestionsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final learningBloc = context.watch<LearningBloc>();
+    final questions = learningBloc.state.questions;
     return ValueListenableBuilder(
       valueListenable: _currentIndexNotifier,
       builder: (context, value, child) {
@@ -58,38 +60,38 @@ class _QuestionsPageState extends State<QuestionsPage> {
           categoryId: widget.categoryId,
           currentIndex: _currentIndexNotifier.value,
           onQuestionChanged: _onPageChanged,
-          totalQuestion: questionsData.length,
+          totalQuestion: questions.length,
           child: PageView.builder(
             physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
-            itemCount: questionsData.length,
-            itemBuilder: (context, index) => _buildQuestion(index),
+            itemCount: questions.length,
+            itemBuilder: (context, index) => _buildQuestion(questions[index]),
           ),
         );
       },
     );
   }
 
-  Widget _buildQuestion(int index) {
+  Widget _buildQuestion(QuestionEntity question) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: QuestionContent(
         total: 32,
         content: QuestionArgs(
-          id: questionsData[index]['id'],
-          imagePath: index % 2 == 0 ? "" : null,
-          description: questionsData[index]['description'],
-          explanation: questionsData[index]['explanation'],
-          options: (questionsData[index]['options'] as List)
+          id: question.id,
+          imagePath: question.imageId,
+          description: question.content,
+          explanation: question.explanation,
+          options: question.options
               .map(
-                (e) => OptionObject(
-                  id: e['id'],
-                  content: e['content'],
-                  isCorrect: e['isCorrect'],
+                (opt) => OptionObject(
+                  id: opt.id,
+                  content: opt.content,
+                  isCorrect: opt.isCorrect,
                 ),
               )
               .toList(),
-          isCritical: questionsData[index]['isCritical'],
+          isCritical: question.isCritical,
         ),
       ),
     );

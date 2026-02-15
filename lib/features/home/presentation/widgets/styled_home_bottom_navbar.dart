@@ -73,7 +73,7 @@ class StyledBottomNavbar extends StatelessWidget {
                               Transform.translate(
                                 offset: selected ? Offset.zero : Offset(0, 6),
                                 child: AnimatedScale(
-                                  scale: selected ? 1.1 : 1,
+                                  scale: selected ? 1 : 0.9,
                                   duration: const Duration(milliseconds: 200),
                                   curve: Curves.easeOutBack,
                                   child: Icon(

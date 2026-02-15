@@ -1,3 +1,4 @@
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 
@@ -6,6 +7,7 @@ abstract class LocalLicenseDataSource {
   Future<LicenseTableData?> getLicenseById(int id);
 }
 
+@LazySingleton(as: LocalLicenseDataSource)
 class LocalLicenseDataSourceImpl implements LocalLicenseDataSource {
   final AppDatabase _db;
   LocalLicenseDataSourceImpl(this._db);
@@ -13,7 +15,7 @@ class LocalLicenseDataSourceImpl implements LocalLicenseDataSource {
   @override
   Future<LicenseTableData?> getLicenseById(int id) async {
     try {
-      return await _db.licenseDao.getLicenseById(id);
+      return await _db.userDao.getLicenseById(id);
     } catch (e) {
       throw CacheException();
     }
@@ -22,7 +24,7 @@ class LocalLicenseDataSourceImpl implements LocalLicenseDataSource {
   @override
   Future<List<LicenseTableData>> getLicenses() async {
     try {
-      return await _db.licenseDao.getLicenseList();
+      return await _db.userDao.getAllLicenses();
     } catch (e) {
       throw CacheException();
     }

@@ -28,7 +28,7 @@ final class AgeChanged extends UserEvent {
 }
 
 final class GenderChanged extends UserEvent {
-  final GenderType? gender;
+  final GenderType gender;
   const GenderChanged(this.gender);
 }
 

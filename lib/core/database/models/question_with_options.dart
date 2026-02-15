@@ -1,8 +1,8 @@
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 
-class QuestionWithChoices {
+class QuestionWithOptions {
   final QuestionTableData question;
   final List<QuestionOptionTableData> options;
 
-  const QuestionWithChoices({required this.question, required this.options});
+  const QuestionWithOptions({required this.question, required this.options});
 }

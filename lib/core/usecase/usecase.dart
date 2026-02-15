@@ -8,3 +8,7 @@ abstract class UseCase<Result, Params> {
 class NoParams {
   const NoParams();
 }
+
+abstract class StreamUseCase<Result, Params> {
+  Stream<Either<Failure, Result>> call(Params params);
+}

@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license.dart';
+import 'package:onthi_gplx_pro/core/constants/license_type.dart';
 
 class LicenseTable extends Table {
   IntColumn get id => integer().autoIncrement()();

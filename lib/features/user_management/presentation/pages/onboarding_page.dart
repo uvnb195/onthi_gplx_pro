@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onthi_gplx_pro/dependencies_container.dart';
+import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/license_bloc/license_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/widgets/step_wrapper.dart';

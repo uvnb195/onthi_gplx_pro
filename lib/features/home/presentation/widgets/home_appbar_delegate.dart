@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
 import 'package:onthi_gplx_pro/features/home/presentation/widgets/streak_animation.dart';
+import 'package:onthi_gplx_pro/features/user_management/domain/entities/user_entity.dart';
 
 class HomeAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
   final double collapsedHeight;
+  final UserEntity user;
 
   HomeAppBarDelegate({
     required this.expandedHeight,
     this.collapsedHeight = kToolbarHeight + 16,
+    required this.user,
   });
 
   @override
@@ -34,7 +37,8 @@ class HomeAppBarDelegate extends SliverPersistentHeaderDelegate {
             mainAxisSize: .max,
             children: [
               AvatarWrapper(
-                imagePath: 'assets/images/app_logo.png',
+                imagePath:
+                    user.avatarPath?.value ?? 'assets/images/app_logo.png',
                 size: progress * 48,
               ),
 
@@ -53,7 +57,7 @@ class HomeAppBarDelegate extends SliverPersistentHeaderDelegate {
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(
-                          "Quân",
+                          user.name.value,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -105,7 +109,7 @@ class HomeAppBarDelegate extends SliverPersistentHeaderDelegate {
                           from: .RIGHT,
                           child: RichText(
                             text: TextSpan(
-                              text: "Xin chào, Quân! 👋",
+                              text: "Xin chào, ${user.name.value}! 👋",
                               children: [
                                 TextSpan(
                                   text:

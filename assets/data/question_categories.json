@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "label": "Câu hỏi đã lưu",
+    "description": "Các câu hỏi đã được lưu lại để ôn tập."
+  },
+  {
+    "id": 2,
+    "label": "Câu điểm liệt",
+    "description": "Các câu hỏi điểm liệt cần đặc biệt chú ý."
+  },
+  {
+    "id": 3,
+    "label": "Khái Niệm và Quy Tắc",
+    "description": "Định nghĩa cơ bản, quy tắc đi đường, tốc độ và khoảng cách an toàn."
+  },
+  {
+    "id": 4,
+    "label": "Văn hóa & Đạo đức",
+    "description": "Trách nhiệm của người lái xe, văn hóa ứng xử và kỹ năng sơ cứu."
+  },
+  {
+    "id": 5,
+    "label": "Kỹ thuật Lái xe",
+    "description": "Cách điều khiển xe trên dốc, đường trơn, đường hầm và xử lý sự cố."
+  },
+  {
+    "id": 6,
+    "label": "Cấu Tạo và Sửa Chữa",
+    "description": "Tìm hiểu về động cơ, phanh, lốp và các bộ phận cơ bản của xe ô tô."
+  },
+  {
+    "id": 7,
+    "label": "Hệ thống Biển báo",
+    "description": "Biển báo cấm, biển nguy hiểm, biển hiệu lệnh và biển chỉ dẫn."
+  },
+  {
+    "id": 8,
+    "label": "Giải thế Sa hình",
+    "description": "Quy tắc nhường đường tại ngã tư và các tình huống giao thông thực tế."
+  }
+]

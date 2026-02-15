@@ -1,11 +1,10 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onthi_gplx_pro/core/extension/gender_type.dart';
+import 'package:onthi_gplx_pro/core/constants/index.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_dropdown.dart';
 import 'package:onthi_gplx_pro/core/widgets/styled_text_field.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/gender.dart';
 import 'package:onthi_gplx_pro/features/user_management/presentation/bloc/user/user_bloc.dart';
 
 class InformationStep extends StatefulWidget {
@@ -85,13 +84,11 @@ class _InformationStepState extends State<InformationStep>
                   child: StyledDropdown(
                     errorText: state.genderError,
                     options: GenderType.values
-                        .map((e) => e.displayName)
+                        .map((e) => ({'id': e.id, 'label': e.label}))
                         .toList(),
                     customLabel: 'Giới tính',
                     onChanged: (value) {
-                      userBloc.add(
-                        GenderChanged(GenderTypeExt.fromString(value)),
-                      );
+                      userBloc.add(GenderChanged(GenderType.fromInt(value!)));
                     },
                   ),
                 ),

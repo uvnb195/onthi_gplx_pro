@@ -1,88 +1,109 @@
-import 'dart:convert';
-
 import 'package:drift/drift.dart';
-import 'package:flutter/services.dart';
+import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
-import 'package:onthi_gplx_pro/core/database/models/question_with_choices.dart';
-import 'package:onthi_gplx_pro/core/database/table/question_option_table.dart';
-import 'package:onthi_gplx_pro/core/database/table/question_table.dart';
+import 'package:onthi_gplx_pro/core/database/models/question_with_options.dart';
+import 'package:onthi_gplx_pro/core/database/table/index.dart';
 
 part 'question_dao.g.dart';
 
-@DriftAccessor(tables: [QuestionTable, QuestionOptionTable])
+@lazySingleton
+@DriftAccessor(
+  tables: [LicenseQuestionTable, QuestionTable, QuestionOptionTable],
+)
 class QuestionDao extends DatabaseAccessor<AppDatabase>
     with _$QuestionDaoMixin {
   QuestionDao(super.attachedDatabase);
 
-  // create seed data
-  Future<void> createQuestionsSeedData() async {
-    final questionsJsonString = await rootBundle.loadString(
-      'assets/data/questions.json',
-    );
-    final optionsJsonString = await rootBundle.loadString(
-      'assets/data/question_options.json',
-    );
-
-    final List<dynamic> questions = json.decode(questionsJsonString);
-    final List<dynamic> options = json.decode(optionsJsonString);
-
+  // S E E D - D A T A
+  Future<void> createQuestionsSeedData({
+    required List<dynamic> questionsJson,
+    required List<dynamic> optionsJson,
+  }) async {
     await batch((batch) {
       batch.insertAll(
-        questionTable,
-        questions
-            .map(
-              (e) => QuestionTableCompanion.insert(
-                imageId: e['imageId'],
-                content: e['content'],
-                explanation: e['explanation'],
-                isCritical: e['isCritical'],
-                categoryId: e['categoryId'],
-              ),
-            )
-            .toList(),
-      );
-
-      batch.insertAll(
         questionOptionTable,
-        options
+        optionsJson
             .map(
               (e) => QuestionOptionTableCompanion.insert(
                 content: e['content'],
                 questionId: e['questionId'],
-                isCorrect: e['isCorrect'],
+                isCorrect: Value(e['isCorrect']),
               ),
             )
             .toList(),
       );
+      batch.insertAll(
+        questionTable,
+        questionsJson
+            .map(
+              (e) => QuestionTableCompanion.insert(
+                imageId: Value(e['imageId']),
+                content: e['content'],
+                explanation: Value(e['explanation']),
+                isCritical: Value(e['isCritical'] as bool),
+                categoryId: e['categoryId'],
+              ),
+            )
+            .toList(),
+        mode: .insertOrReplace,
+      );
     });
   }
 
-  // get questions by category
-  Future<List<QuestionWithChoices>> getQuestionsByCategory(
-    int categoryId,
+  Future<void> createLicenseQuestionsSeedData(
+    List<dynamic> licenseQuestionsJson,
   ) async {
-    final query = select(questionTable).join([
-      leftOuterJoin(
-        questionOptionTable,
-        questionOptionTable.questionId.equalsExp(questionTable.id),
-      ),
-    ]);
+    await batch((batch) {
+      final insertions = licenseQuestionsJson.expand((e) {
+        final licenseId = e['license_id'];
+        List<int> questionIds = List<int>.from(e['data']);
+        if (questionIds.isEmpty) {
+          questionIds = List.generate(600, (index) => index + 1);
+        }
+
+        return questionIds.map(
+          (qId) => LicenseQuestionTableCompanion.insert(
+            licenseId: licenseId as int,
+            questionId: qId,
+          ),
+        );
+      }).toList();
+
+      batch.insertAll(licenseQuestionTable, insertions, mode: .insertOrReplace);
+    });
+  }
+
+  // - - - - - - - - - - - - -
+  Future<List<QuestionWithOptions>> getQuestionsByCategory({
+    required int categoryId,
+    required int licenseId,
+  }) async {
+    final query =
+        select(questionTable).join([
+          innerJoin(
+            licenseQuestionTable,
+            licenseQuestionTable.questionId.equalsExp(questionTable.id),
+          ),
+        ])..where(
+          licenseQuestionTable.licenseId.equals(licenseId) &
+              questionTable.categoryId.equals(categoryId),
+        );
     final rows = await query.get();
-    final groupedData = <int, QuestionWithChoices>{};
-    for (var row in rows) {
-      final question = row.readTable(questionTable);
-      final option = row.readTableOrNull(questionOptionTable);
+    final questions = rows.map((r) => r.readTable(questionTable)).toList();
+    final questionIds = questions.map((q) => q.id).toList();
 
-      final entry = groupedData.putIfAbsent(
-        question.id,
-        () => QuestionWithChoices(question: question, options: []),
-      );
-      if (option != null) {
-        entry.options.add(option);
-      }
-    }
+    final allOptions = await (select(
+      questionOptionTable,
+    )..where((tbl) => tbl.questionId.isIn(questionIds))).get();
 
-    return groupedData.values.toList();
+    return questions
+        .map(
+          (q) => QuestionWithOptions(
+            question: q,
+            options: allOptions.where((o) => o.questionId == q.id).toList(),
+          ),
+        )
+        .toList();
   }
 
   // get questions by id list

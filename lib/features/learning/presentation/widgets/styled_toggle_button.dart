@@ -18,6 +18,16 @@ class StyledToggleButton extends StatefulWidget {
 }
 
 class _StyledToggleButtonState extends State<StyledToggleButton> {
+  Color _getTextColor() {
+    final Brightness brightness = ThemeData.estimateBrightnessForColor(
+      widget.themeColor,
+    );
+    if (brightness == Brightness.light) {
+      return AppColors.backgroundColor;
+    }
+    return AppColors.textColor;
+  }
+
   final List<String> options = ['Học tất cả', 'Học câu sai'];
   bool checked = false;
   @override
@@ -99,8 +109,8 @@ class _StyledToggleButtonState extends State<StyledToggleButton> {
                           final isGoingToChecked =
                               child.key == ValueKey('checked');
                           final beginOffset = isGoingToChecked
-                              ? const Offset(1.2, 0.0) // Chạy từ phải vào
-                              : const Offset(-1.2, 0.0); // Chạy từ trái vào
+                              ? const Offset(1.2, 0.0)
+                              : const Offset(-1.2, 0.0);
                           final offset = Tween<Offset>(
                             begin: beginOffset,
                             end: .zero,
@@ -120,6 +130,7 @@ class _StyledToggleButtonState extends State<StyledToggleButton> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: .w500,
+                                  color: _getTextColor(),
                                 ),
                               )
                             : Text(
@@ -128,6 +139,8 @@ class _StyledToggleButtonState extends State<StyledToggleButton> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: .w500,
+
+                                  color: _getTextColor(),
                                 ),
                               ),
                       ),
