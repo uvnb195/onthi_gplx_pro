@@ -57,11 +57,27 @@ class _CollapseMenuState extends State<CollapseMenu> {
       Authenticated(user: var u) => u.license.id,
       _ => null,
     };
+
+    final learningBloc = context.read<LearningBloc>();
+
     if (licenseId != null) {
       context.read<LearningBloc>().add(
         LoadLearningQuestions(category: selectedCategory, licenseId: licenseId),
       );
     }
+
+    if (learningBloc.state.loading) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
+        ),
+      );
+    }
+
+    final totalQuestions = learningBloc.state.questions.length;
+
     Navigator.pushNamed(
       context,
       RouteNames.learningInfo,
@@ -71,19 +87,19 @@ class _CollapseMenuState extends State<CollapseMenu> {
         'themeColor': widget.items[index].themeColor,
         'stats': [
           {
-            'iconData': BootstrapIcons.book,
-            'title': 'Title1',
-            'description': 'Description',
+            'iconData': BootstrapIcons.file_earmark_text,
+            'title': '$totalQuestions',
+            'description': 'Câu hỏi',
           },
           {
-            'iconData': BootstrapIcons.book,
-            'title': 'Title1',
-            'description': 'Description',
+            'iconData': BootstrapIcons.ui_checks,
+            'title': '19',
+            'description': 'Đã học',
           },
           {
-            'iconData': BootstrapIcons.book,
-            'title': 'Title1',
-            'description': 'Description',
+            'iconData': BootstrapIcons.percent,
+            'title': '85',
+            'description': 'Tỉ lệ đúng',
           },
         ],
       },

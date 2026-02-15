@@ -33,6 +33,8 @@ LazyDatabase _openConnection() {
     LicenseQuestionTable,
     QuestionTable,
     QuestionOptionTable,
+    QuestionStatusTable,
+    LearningProgressTable,
   ],
   daos: [UserDao, LicenseDao, QuestionCategoryDao, QuestionDao],
 )

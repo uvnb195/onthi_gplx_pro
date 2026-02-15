@@ -5,6 +5,7 @@ import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/category_rule.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/widgets/page_wrapper.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_question_page_bottom.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_toggle_button.dart';
 import 'package:onthi_gplx_pro/features/progress/presentation/widgets/info_card.dart';
@@ -30,71 +31,75 @@ class PreLearningPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final learningBloc = context.watch<LearningBloc>();
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyActions: false,
-        shape: Border(
-          bottom: BorderSide(
-            color: AppColors.textSecondaryColor.withAlpha(50),
-            width: 1,
+    return PageWrapper(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          automaticallyImplyActions: false,
+          shape: Border(
+            bottom: BorderSide(
+              color: AppColors.textSecondaryColor.withAlpha(50),
+              width: 1,
+            ),
           ),
         ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics(),
-          ),
-          child: Column(
-            children: [
-              _buildHeader(),
-              SizedBox(height: 16),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            child: Column(
+              children: [
+                _buildHeader(),
+                SizedBox(height: 16),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: _buildMode(screenWidth),
-              ),
-              SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: _buildExplanation(
-                  isLearning == false
-                      ? learningBloc.state.examRules
-                      : learningBloc.state.selectedCategory?.rules,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _buildMode(screenWidth),
                 ),
-              ),
+                SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _buildExplanation(
+                    isLearning == false
+                        ? learningBloc.state.examRules
+                        : learningBloc.state.selectedCategory?.rules,
+                  ),
+                ),
 
-              SizedBox(height: 40),
-            ],
+                SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: StyledQuestionPageBottom(
-            nextText: 'Bắt đầu',
-            prevText: '',
-            showDone: false,
-            showPrev: false,
-            onNext: () {
-              Navigator.pushNamed(
-                context,
-                RouteNames.learning,
-                arguments: {
-                  'title': title,
-                  'isStudy': true,
-                  'categoryId': learningBloc.state.selectedCategory?.id,
-                },
-              );
+        bottomNavigationBar: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: StyledQuestionPageBottom(
+              nextText: 'Bắt đầu',
+              prevText: '',
+              showDone: false,
+              showPrev: false,
+              onNext: () {
+                Navigator.pushNamed(
+                  context,
+                  RouteNames.learning,
+                  arguments: {
+                    'title': title,
+                    'isStudy': true,
+                    'categoryId': learningBloc.state.selectedCategory?.id,
+                  },
+                );
 
-              // Navigator.pushNamed(
-              //   context,
-              //   RouteNames.videoLearning,
-              //   arguments: screenWidth > 600,
-              // );
-            },
-            onPrev: () {},
+                // Navigator.pushNamed(
+                //   context,
+                //   RouteNames.videoLearning,
+                //   arguments: screenWidth > 600,
+                // );
+              },
+              onPrev: () {},
+            ),
           ),
         ),
       ),

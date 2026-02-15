@@ -8,5 +8,5 @@ class QuestionTable extends Table {
   TextColumn get explanation => text().nullable()();
   BoolColumn get isCritical => boolean().withDefault(const Constant(false))();
   IntColumn get categoryId =>
-      integer().references(QuestionCategoryTable, #id)();
+      integer().references(QuestionCategoryTable, #id, onDelete: .cascade)();
 }

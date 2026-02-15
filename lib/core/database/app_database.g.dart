@@ -1872,7 +1872,7 @@ class $QuestionTableTable extends QuestionTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_category_table (id)',
+      'REFERENCES question_category_table (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -2757,6 +2757,1056 @@ class QuestionOptionTableCompanion
   }
 }
 
+class $QuestionStatusTableTable extends QuestionStatusTable
+    with TableInfo<$QuestionStatusTableTable, QuestionStatusTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $QuestionStatusTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES user_table (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _questionIdMeta = const VerificationMeta(
+    'questionId',
+  );
+  @override
+  late final GeneratedColumn<int> questionId = GeneratedColumn<int>(
+    'question_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES question_table (id) ON DELETE NO ACTION',
+    ),
+  );
+  static const VerificationMeta _optionIdMeta = const VerificationMeta(
+    'optionId',
+  );
+  @override
+  late final GeneratedColumn<int> optionId = GeneratedColumn<int>(
+    'option_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES question_option_table (id) ON DELETE NO ACTION',
+    ),
+  );
+  static const VerificationMeta _isCorrectMeta = const VerificationMeta(
+    'isCorrect',
+  );
+  @override
+  late final GeneratedColumn<bool> isCorrect = GeneratedColumn<bool>(
+    'is_correct',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_correct" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userId,
+    questionId,
+    optionId,
+    isCorrect,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'question_status_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<QuestionStatusTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('question_id')) {
+      context.handle(
+        _questionIdMeta,
+        questionId.isAcceptableOrUnknown(data['question_id']!, _questionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_questionIdMeta);
+    }
+    if (data.containsKey('option_id')) {
+      context.handle(
+        _optionIdMeta,
+        optionId.isAcceptableOrUnknown(data['option_id']!, _optionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_optionIdMeta);
+    }
+    if (data.containsKey('is_correct')) {
+      context.handle(
+        _isCorrectMeta,
+        isCorrect.isAcceptableOrUnknown(data['is_correct']!, _isCorrectMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_isCorrectMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  QuestionStatusTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return QuestionStatusTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}user_id'],
+      )!,
+      questionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}question_id'],
+      )!,
+      optionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}option_id'],
+      )!,
+      isCorrect: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_correct'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $QuestionStatusTableTable createAlias(String alias) {
+    return $QuestionStatusTableTable(attachedDatabase, alias);
+  }
+}
+
+class QuestionStatusTableData extends DataClass
+    implements Insertable<QuestionStatusTableData> {
+  final int id;
+  final int userId;
+  final int questionId;
+  final int optionId;
+  final bool isCorrect;
+  final DateTime updatedAt;
+  const QuestionStatusTableData({
+    required this.id,
+    required this.userId,
+    required this.questionId,
+    required this.optionId,
+    required this.isCorrect,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<int>(userId);
+    map['question_id'] = Variable<int>(questionId);
+    map['option_id'] = Variable<int>(optionId);
+    map['is_correct'] = Variable<bool>(isCorrect);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  QuestionStatusTableCompanion toCompanion(bool nullToAbsent) {
+    return QuestionStatusTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      questionId: Value(questionId),
+      optionId: Value(optionId),
+      isCorrect: Value(isCorrect),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory QuestionStatusTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return QuestionStatusTableData(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<int>(json['userId']),
+      questionId: serializer.fromJson<int>(json['questionId']),
+      optionId: serializer.fromJson<int>(json['optionId']),
+      isCorrect: serializer.fromJson<bool>(json['isCorrect']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<int>(userId),
+      'questionId': serializer.toJson<int>(questionId),
+      'optionId': serializer.toJson<int>(optionId),
+      'isCorrect': serializer.toJson<bool>(isCorrect),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  QuestionStatusTableData copyWith({
+    int? id,
+    int? userId,
+    int? questionId,
+    int? optionId,
+    bool? isCorrect,
+    DateTime? updatedAt,
+  }) => QuestionStatusTableData(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    questionId: questionId ?? this.questionId,
+    optionId: optionId ?? this.optionId,
+    isCorrect: isCorrect ?? this.isCorrect,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  QuestionStatusTableData copyWithCompanion(QuestionStatusTableCompanion data) {
+    return QuestionStatusTableData(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      questionId: data.questionId.present
+          ? data.questionId.value
+          : this.questionId,
+      optionId: data.optionId.present ? data.optionId.value : this.optionId,
+      isCorrect: data.isCorrect.present ? data.isCorrect.value : this.isCorrect,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestionStatusTableData(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('questionId: $questionId, ')
+          ..write('optionId: $optionId, ')
+          ..write('isCorrect: $isCorrect, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, userId, questionId, optionId, isCorrect, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is QuestionStatusTableData &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.questionId == this.questionId &&
+          other.optionId == this.optionId &&
+          other.isCorrect == this.isCorrect &&
+          other.updatedAt == this.updatedAt);
+}
+
+class QuestionStatusTableCompanion
+    extends UpdateCompanion<QuestionStatusTableData> {
+  final Value<int> id;
+  final Value<int> userId;
+  final Value<int> questionId;
+  final Value<int> optionId;
+  final Value<bool> isCorrect;
+  final Value<DateTime> updatedAt;
+  const QuestionStatusTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.questionId = const Value.absent(),
+    this.optionId = const Value.absent(),
+    this.isCorrect = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  QuestionStatusTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int userId,
+    required int questionId,
+    required int optionId,
+    required bool isCorrect,
+    this.updatedAt = const Value.absent(),
+  }) : userId = Value(userId),
+       questionId = Value(questionId),
+       optionId = Value(optionId),
+       isCorrect = Value(isCorrect);
+  static Insertable<QuestionStatusTableData> custom({
+    Expression<int>? id,
+    Expression<int>? userId,
+    Expression<int>? questionId,
+    Expression<int>? optionId,
+    Expression<bool>? isCorrect,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (questionId != null) 'question_id': questionId,
+      if (optionId != null) 'option_id': optionId,
+      if (isCorrect != null) 'is_correct': isCorrect,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  QuestionStatusTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? userId,
+    Value<int>? questionId,
+    Value<int>? optionId,
+    Value<bool>? isCorrect,
+    Value<DateTime>? updatedAt,
+  }) {
+    return QuestionStatusTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      questionId: questionId ?? this.questionId,
+      optionId: optionId ?? this.optionId,
+      isCorrect: isCorrect ?? this.isCorrect,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
+    }
+    if (questionId.present) {
+      map['question_id'] = Variable<int>(questionId.value);
+    }
+    if (optionId.present) {
+      map['option_id'] = Variable<int>(optionId.value);
+    }
+    if (isCorrect.present) {
+      map['is_correct'] = Variable<bool>(isCorrect.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('QuestionStatusTableCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('questionId: $questionId, ')
+          ..write('optionId: $optionId, ')
+          ..write('isCorrect: $isCorrect, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LearningProgressTableTable extends LearningProgressTable
+    with TableInfo<$LearningProgressTableTable, LearningProgressTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LearningProgressTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES user_table (id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _licenseIdMeta = const VerificationMeta(
+    'licenseId',
+  );
+  @override
+  late final GeneratedColumn<int> licenseId = GeneratedColumn<int>(
+    'license_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES license_table (id) ON DELETE NO ACTION',
+    ),
+  );
+  static const VerificationMeta _questionCategoryIdMeta =
+      const VerificationMeta('questionCategoryId');
+  @override
+  late final GeneratedColumn<int> questionCategoryId = GeneratedColumn<int>(
+    'question_category_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES question_category_table (id) ON DELETE NO ACTION',
+    ),
+  );
+  static const VerificationMeta _totalQuestionsMeta = const VerificationMeta(
+    'totalQuestions',
+  );
+  @override
+  late final GeneratedColumn<int> totalQuestions = GeneratedColumn<int>(
+    'total_questions',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _answeredQuestionsMeta = const VerificationMeta(
+    'answeredQuestions',
+  );
+  @override
+  late final GeneratedColumn<int> answeredQuestions = GeneratedColumn<int>(
+    'answered_questions',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _correctAnswersMeta = const VerificationMeta(
+    'correctAnswers',
+  );
+  @override
+  late final GeneratedColumn<int> correctAnswers = GeneratedColumn<int>(
+    'correct_answers',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _totalAttemptsMeta = const VerificationMeta(
+    'totalAttempts',
+  );
+  @override
+  late final GeneratedColumn<int> totalAttempts = GeneratedColumn<int>(
+    'total_attempts',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _correctAttemptsMeta = const VerificationMeta(
+    'correctAttempts',
+  );
+  @override
+  late final GeneratedColumn<int> correctAttempts = GeneratedColumn<int>(
+    'correct_attempts',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    defaultValue: currentDateAndTime,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    userId,
+    licenseId,
+    questionCategoryId,
+    totalQuestions,
+    answeredQuestions,
+    correctAnswers,
+    totalAttempts,
+    correctAttempts,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'learning_progress_table';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LearningProgressTableData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('license_id')) {
+      context.handle(
+        _licenseIdMeta,
+        licenseId.isAcceptableOrUnknown(data['license_id']!, _licenseIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_licenseIdMeta);
+    }
+    if (data.containsKey('question_category_id')) {
+      context.handle(
+        _questionCategoryIdMeta,
+        questionCategoryId.isAcceptableOrUnknown(
+          data['question_category_id']!,
+          _questionCategoryIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('total_questions')) {
+      context.handle(
+        _totalQuestionsMeta,
+        totalQuestions.isAcceptableOrUnknown(
+          data['total_questions']!,
+          _totalQuestionsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('answered_questions')) {
+      context.handle(
+        _answeredQuestionsMeta,
+        answeredQuestions.isAcceptableOrUnknown(
+          data['answered_questions']!,
+          _answeredQuestionsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('correct_answers')) {
+      context.handle(
+        _correctAnswersMeta,
+        correctAnswers.isAcceptableOrUnknown(
+          data['correct_answers']!,
+          _correctAnswersMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_correctAnswersMeta);
+    }
+    if (data.containsKey('total_attempts')) {
+      context.handle(
+        _totalAttemptsMeta,
+        totalAttempts.isAcceptableOrUnknown(
+          data['total_attempts']!,
+          _totalAttemptsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('correct_attempts')) {
+      context.handle(
+        _correctAttemptsMeta,
+        correctAttempts.isAcceptableOrUnknown(
+          data['correct_attempts']!,
+          _correctAttemptsMeta,
+        ),
+      );
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LearningProgressTableData map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LearningProgressTableData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}user_id'],
+      )!,
+      licenseId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}license_id'],
+      )!,
+      questionCategoryId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}question_category_id'],
+      ),
+      totalQuestions: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_questions'],
+      )!,
+      answeredQuestions: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}answered_questions'],
+      )!,
+      correctAnswers: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_answers'],
+      )!,
+      totalAttempts: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}total_attempts'],
+      )!,
+      correctAttempts: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}correct_attempts'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $LearningProgressTableTable createAlias(String alias) {
+    return $LearningProgressTableTable(attachedDatabase, alias);
+  }
+}
+
+class LearningProgressTableData extends DataClass
+    implements Insertable<LearningProgressTableData> {
+  final int id;
+  final int userId;
+  final int licenseId;
+  final int? questionCategoryId;
+  final int totalQuestions;
+  final int answeredQuestions;
+  final int correctAnswers;
+  final int totalAttempts;
+  final int correctAttempts;
+  final DateTime updatedAt;
+  const LearningProgressTableData({
+    required this.id,
+    required this.userId,
+    required this.licenseId,
+    this.questionCategoryId,
+    required this.totalQuestions,
+    required this.answeredQuestions,
+    required this.correctAnswers,
+    required this.totalAttempts,
+    required this.correctAttempts,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<int>(userId);
+    map['license_id'] = Variable<int>(licenseId);
+    if (!nullToAbsent || questionCategoryId != null) {
+      map['question_category_id'] = Variable<int>(questionCategoryId);
+    }
+    map['total_questions'] = Variable<int>(totalQuestions);
+    map['answered_questions'] = Variable<int>(answeredQuestions);
+    map['correct_answers'] = Variable<int>(correctAnswers);
+    map['total_attempts'] = Variable<int>(totalAttempts);
+    map['correct_attempts'] = Variable<int>(correctAttempts);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  LearningProgressTableCompanion toCompanion(bool nullToAbsent) {
+    return LearningProgressTableCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      licenseId: Value(licenseId),
+      questionCategoryId: questionCategoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(questionCategoryId),
+      totalQuestions: Value(totalQuestions),
+      answeredQuestions: Value(answeredQuestions),
+      correctAnswers: Value(correctAnswers),
+      totalAttempts: Value(totalAttempts),
+      correctAttempts: Value(correctAttempts),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory LearningProgressTableData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LearningProgressTableData(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<int>(json['userId']),
+      licenseId: serializer.fromJson<int>(json['licenseId']),
+      questionCategoryId: serializer.fromJson<int?>(json['questionCategoryId']),
+      totalQuestions: serializer.fromJson<int>(json['totalQuestions']),
+      answeredQuestions: serializer.fromJson<int>(json['answeredQuestions']),
+      correctAnswers: serializer.fromJson<int>(json['correctAnswers']),
+      totalAttempts: serializer.fromJson<int>(json['totalAttempts']),
+      correctAttempts: serializer.fromJson<int>(json['correctAttempts']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<int>(userId),
+      'licenseId': serializer.toJson<int>(licenseId),
+      'questionCategoryId': serializer.toJson<int?>(questionCategoryId),
+      'totalQuestions': serializer.toJson<int>(totalQuestions),
+      'answeredQuestions': serializer.toJson<int>(answeredQuestions),
+      'correctAnswers': serializer.toJson<int>(correctAnswers),
+      'totalAttempts': serializer.toJson<int>(totalAttempts),
+      'correctAttempts': serializer.toJson<int>(correctAttempts),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  LearningProgressTableData copyWith({
+    int? id,
+    int? userId,
+    int? licenseId,
+    Value<int?> questionCategoryId = const Value.absent(),
+    int? totalQuestions,
+    int? answeredQuestions,
+    int? correctAnswers,
+    int? totalAttempts,
+    int? correctAttempts,
+    DateTime? updatedAt,
+  }) => LearningProgressTableData(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    licenseId: licenseId ?? this.licenseId,
+    questionCategoryId: questionCategoryId.present
+        ? questionCategoryId.value
+        : this.questionCategoryId,
+    totalQuestions: totalQuestions ?? this.totalQuestions,
+    answeredQuestions: answeredQuestions ?? this.answeredQuestions,
+    correctAnswers: correctAnswers ?? this.correctAnswers,
+    totalAttempts: totalAttempts ?? this.totalAttempts,
+    correctAttempts: correctAttempts ?? this.correctAttempts,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  LearningProgressTableData copyWithCompanion(
+    LearningProgressTableCompanion data,
+  ) {
+    return LearningProgressTableData(
+      id: data.id.present ? data.id.value : this.id,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      licenseId: data.licenseId.present ? data.licenseId.value : this.licenseId,
+      questionCategoryId: data.questionCategoryId.present
+          ? data.questionCategoryId.value
+          : this.questionCategoryId,
+      totalQuestions: data.totalQuestions.present
+          ? data.totalQuestions.value
+          : this.totalQuestions,
+      answeredQuestions: data.answeredQuestions.present
+          ? data.answeredQuestions.value
+          : this.answeredQuestions,
+      correctAnswers: data.correctAnswers.present
+          ? data.correctAnswers.value
+          : this.correctAnswers,
+      totalAttempts: data.totalAttempts.present
+          ? data.totalAttempts.value
+          : this.totalAttempts,
+      correctAttempts: data.correctAttempts.present
+          ? data.correctAttempts.value
+          : this.correctAttempts,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LearningProgressTableData(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('licenseId: $licenseId, ')
+          ..write('questionCategoryId: $questionCategoryId, ')
+          ..write('totalQuestions: $totalQuestions, ')
+          ..write('answeredQuestions: $answeredQuestions, ')
+          ..write('correctAnswers: $correctAnswers, ')
+          ..write('totalAttempts: $totalAttempts, ')
+          ..write('correctAttempts: $correctAttempts, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    userId,
+    licenseId,
+    questionCategoryId,
+    totalQuestions,
+    answeredQuestions,
+    correctAnswers,
+    totalAttempts,
+    correctAttempts,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LearningProgressTableData &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.licenseId == this.licenseId &&
+          other.questionCategoryId == this.questionCategoryId &&
+          other.totalQuestions == this.totalQuestions &&
+          other.answeredQuestions == this.answeredQuestions &&
+          other.correctAnswers == this.correctAnswers &&
+          other.totalAttempts == this.totalAttempts &&
+          other.correctAttempts == this.correctAttempts &&
+          other.updatedAt == this.updatedAt);
+}
+
+class LearningProgressTableCompanion
+    extends UpdateCompanion<LearningProgressTableData> {
+  final Value<int> id;
+  final Value<int> userId;
+  final Value<int> licenseId;
+  final Value<int?> questionCategoryId;
+  final Value<int> totalQuestions;
+  final Value<int> answeredQuestions;
+  final Value<int> correctAnswers;
+  final Value<int> totalAttempts;
+  final Value<int> correctAttempts;
+  final Value<DateTime> updatedAt;
+  const LearningProgressTableCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.licenseId = const Value.absent(),
+    this.questionCategoryId = const Value.absent(),
+    this.totalQuestions = const Value.absent(),
+    this.answeredQuestions = const Value.absent(),
+    this.correctAnswers = const Value.absent(),
+    this.totalAttempts = const Value.absent(),
+    this.correctAttempts = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  });
+  LearningProgressTableCompanion.insert({
+    this.id = const Value.absent(),
+    required int userId,
+    required int licenseId,
+    this.questionCategoryId = const Value.absent(),
+    this.totalQuestions = const Value.absent(),
+    this.answeredQuestions = const Value.absent(),
+    required int correctAnswers,
+    this.totalAttempts = const Value.absent(),
+    this.correctAttempts = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+  }) : userId = Value(userId),
+       licenseId = Value(licenseId),
+       correctAnswers = Value(correctAnswers);
+  static Insertable<LearningProgressTableData> custom({
+    Expression<int>? id,
+    Expression<int>? userId,
+    Expression<int>? licenseId,
+    Expression<int>? questionCategoryId,
+    Expression<int>? totalQuestions,
+    Expression<int>? answeredQuestions,
+    Expression<int>? correctAnswers,
+    Expression<int>? totalAttempts,
+    Expression<int>? correctAttempts,
+    Expression<DateTime>? updatedAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (licenseId != null) 'license_id': licenseId,
+      if (questionCategoryId != null)
+        'question_category_id': questionCategoryId,
+      if (totalQuestions != null) 'total_questions': totalQuestions,
+      if (answeredQuestions != null) 'answered_questions': answeredQuestions,
+      if (correctAnswers != null) 'correct_answers': correctAnswers,
+      if (totalAttempts != null) 'total_attempts': totalAttempts,
+      if (correctAttempts != null) 'correct_attempts': correctAttempts,
+      if (updatedAt != null) 'updated_at': updatedAt,
+    });
+  }
+
+  LearningProgressTableCompanion copyWith({
+    Value<int>? id,
+    Value<int>? userId,
+    Value<int>? licenseId,
+    Value<int?>? questionCategoryId,
+    Value<int>? totalQuestions,
+    Value<int>? answeredQuestions,
+    Value<int>? correctAnswers,
+    Value<int>? totalAttempts,
+    Value<int>? correctAttempts,
+    Value<DateTime>? updatedAt,
+  }) {
+    return LearningProgressTableCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      licenseId: licenseId ?? this.licenseId,
+      questionCategoryId: questionCategoryId ?? this.questionCategoryId,
+      totalQuestions: totalQuestions ?? this.totalQuestions,
+      answeredQuestions: answeredQuestions ?? this.answeredQuestions,
+      correctAnswers: correctAnswers ?? this.correctAnswers,
+      totalAttempts: totalAttempts ?? this.totalAttempts,
+      correctAttempts: correctAttempts ?? this.correctAttempts,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
+    }
+    if (licenseId.present) {
+      map['license_id'] = Variable<int>(licenseId.value);
+    }
+    if (questionCategoryId.present) {
+      map['question_category_id'] = Variable<int>(questionCategoryId.value);
+    }
+    if (totalQuestions.present) {
+      map['total_questions'] = Variable<int>(totalQuestions.value);
+    }
+    if (answeredQuestions.present) {
+      map['answered_questions'] = Variable<int>(answeredQuestions.value);
+    }
+    if (correctAnswers.present) {
+      map['correct_answers'] = Variable<int>(correctAnswers.value);
+    }
+    if (totalAttempts.present) {
+      map['total_attempts'] = Variable<int>(totalAttempts.value);
+    }
+    if (correctAttempts.present) {
+      map['correct_attempts'] = Variable<int>(correctAttempts.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LearningProgressTableCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('licenseId: $licenseId, ')
+          ..write('questionCategoryId: $questionCategoryId, ')
+          ..write('totalQuestions: $totalQuestions, ')
+          ..write('answeredQuestions: $answeredQuestions, ')
+          ..write('correctAnswers: $correctAnswers, ')
+          ..write('totalAttempts: $totalAttempts, ')
+          ..write('correctAttempts: $correctAttempts, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2772,6 +3822,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $LicenseQuestionTableTable(this);
   late final $QuestionOptionTableTable questionOptionTable =
       $QuestionOptionTableTable(this);
+  late final $QuestionStatusTableTable questionStatusTable =
+      $QuestionStatusTableTable(this);
+  late final $LearningProgressTableTable learningProgressTable =
+      $LearningProgressTableTable(this);
   late final UserDao userDao = UserDao(this as AppDatabase);
   late final LicenseDao licenseDao = LicenseDao(this as AppDatabase);
   late final QuestionCategoryDao questionCategoryDao = QuestionCategoryDao(
@@ -2791,6 +3845,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     questionTable,
     licenseQuestionTable,
     questionOptionTable,
+    questionStatusTable,
+    learningProgressTable,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -2807,6 +3863,13 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('license_category_table', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'question_category_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('question_table', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -2828,6 +3891,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.delete,
       ),
       result: [TableUpdate('question_option_table', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'user_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('question_status_table', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'user_table',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('learning_progress_table', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -2936,6 +4013,34 @@ final class $$LicenseTableTableReferences
 
     final cache = $_typedResult.readTableOrNull(
       _licenseQuestionTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $LearningProgressTableTable,
+    List<LearningProgressTableData>
+  >
+  _learningProgressTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.learningProgressTable,
+        aliasName: $_aliasNameGenerator(
+          db.licenseTable.id,
+          db.learningProgressTable.licenseId,
+        ),
+      );
+
+  $$LearningProgressTableTableProcessedTableManager
+  get learningProgressTableRefs {
+    final manager = $$LearningProgressTableTableTableManager(
+      $_db,
+      $_db.learningProgressTable,
+    ).filter((f) => f.licenseId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _learningProgressTableRefsTable($_db),
     );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
@@ -3065,6 +4170,32 @@ class $$LicenseTableTableFilterComposer
                 $removeJoinBuilderFromRootComposer,
           ),
     );
+    return f(composer);
+  }
+
+  Expression<bool> learningProgressTableRefs(
+    Expression<bool> Function($$LearningProgressTableTableFilterComposer f) f,
+  ) {
+    final $$LearningProgressTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.learningProgressTable,
+          getReferencedColumn: (t) => t.licenseId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LearningProgressTableTableFilterComposer(
+                $db: $db,
+                $table: $db.learningProgressTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return f(composer);
   }
 }
@@ -3215,6 +4346,32 @@ class $$LicenseTableTableAnnotationComposer
         );
     return f(composer);
   }
+
+  Expression<T> learningProgressTableRefs<T extends Object>(
+    Expression<T> Function($$LearningProgressTableTableAnnotationComposer a) f,
+  ) {
+    final $$LearningProgressTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.learningProgressTable,
+          getReferencedColumn: (t) => t.licenseId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LearningProgressTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.learningProgressTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$LicenseTableTableTableManager
@@ -3235,6 +4392,7 @@ class $$LicenseTableTableTableManager
             bool licenseCategoryTableRefs,
             bool ruleTableRefs,
             bool licenseQuestionTableRefs,
+            bool learningProgressTableRefs,
           })
         > {
   $$LicenseTableTableTableManager(_$AppDatabase db, $LicenseTableTable table)
@@ -3282,6 +4440,7 @@ class $$LicenseTableTableTableManager
                 licenseCategoryTableRefs = false,
                 ruleTableRefs = false,
                 licenseQuestionTableRefs = false,
+                learningProgressTableRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -3290,6 +4449,7 @@ class $$LicenseTableTableTableManager
                     if (licenseCategoryTableRefs) db.licenseCategoryTable,
                     if (ruleTableRefs) db.ruleTable,
                     if (licenseQuestionTableRefs) db.licenseQuestionTable,
+                    if (learningProgressTableRefs) db.learningProgressTable,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -3378,6 +4538,27 @@ class $$LicenseTableTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (learningProgressTableRefs)
+                        await $_getPrefetchedData<
+                          LicenseTableData,
+                          $LicenseTableTable,
+                          LearningProgressTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$LicenseTableTableReferences
+                              ._learningProgressTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$LicenseTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).learningProgressTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.licenseId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -3403,6 +4584,7 @@ typedef $$LicenseTableTableProcessedTableManager =
         bool licenseCategoryTableRefs,
         bool ruleTableRefs,
         bool licenseQuestionTableRefs,
+        bool learningProgressTableRefs,
       })
     >;
 typedef $$UserTableTableCreateCompanionBuilder =
@@ -3450,6 +4632,61 @@ final class $$UserTableTableReferences
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $QuestionStatusTableTable,
+    List<QuestionStatusTableData>
+  >
+  _questionStatusTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.questionStatusTable,
+        aliasName: $_aliasNameGenerator(
+          db.userTable.id,
+          db.questionStatusTable.userId,
+        ),
+      );
+
+  $$QuestionStatusTableTableProcessedTableManager get questionStatusTableRefs {
+    final manager = $$QuestionStatusTableTableTableManager(
+      $_db,
+      $_db.questionStatusTable,
+    ).filter((f) => f.userId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _questionStatusTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $LearningProgressTableTable,
+    List<LearningProgressTableData>
+  >
+  _learningProgressTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.learningProgressTable,
+        aliasName: $_aliasNameGenerator(
+          db.userTable.id,
+          db.learningProgressTable.userId,
+        ),
+      );
+
+  $$LearningProgressTableTableProcessedTableManager
+  get learningProgressTableRefs {
+    final manager = $$LearningProgressTableTableTableManager(
+      $_db,
+      $_db.learningProgressTable,
+    ).filter((f) => f.userId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _learningProgressTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
     );
   }
 }
@@ -3524,6 +4761,57 @@ class $$UserTableTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> questionStatusTableRefs(
+    Expression<bool> Function($$QuestionStatusTableTableFilterComposer f) f,
+  ) {
+    final $$QuestionStatusTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.questionStatusTable,
+      getReferencedColumn: (t) => t.userId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionStatusTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionStatusTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> learningProgressTableRefs(
+    Expression<bool> Function($$LearningProgressTableTableFilterComposer f) f,
+  ) {
+    final $$LearningProgressTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.learningProgressTable,
+          getReferencedColumn: (t) => t.userId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LearningProgressTableTableFilterComposer(
+                $db: $db,
+                $table: $db.learningProgressTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
   }
 }
 
@@ -3659,6 +4947,58 @@ class $$UserTableTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> questionStatusTableRefs<T extends Object>(
+    Expression<T> Function($$QuestionStatusTableTableAnnotationComposer a) f,
+  ) {
+    final $$QuestionStatusTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.questionStatusTable,
+          getReferencedColumn: (t) => t.userId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionStatusTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionStatusTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> learningProgressTableRefs<T extends Object>(
+    Expression<T> Function($$LearningProgressTableTableAnnotationComposer a) f,
+  ) {
+    final $$LearningProgressTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.learningProgressTable,
+          getReferencedColumn: (t) => t.userId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LearningProgressTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.learningProgressTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$UserTableTableTableManager
@@ -3674,7 +5014,11 @@ class $$UserTableTableTableManager
           $$UserTableTableUpdateCompanionBuilder,
           (UserTableData, $$UserTableTableReferences),
           UserTableData,
-          PrefetchHooks Function({bool licenseId})
+          PrefetchHooks Function({
+            bool licenseId,
+            bool questionStatusTableRefs,
+            bool learningProgressTableRefs,
+          })
         > {
   $$UserTableTableTableManager(_$AppDatabase db, $UserTableTable table)
     : super(
@@ -3739,47 +5083,98 @@ class $$UserTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({licenseId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (licenseId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.licenseId,
-                                referencedTable: $$UserTableTableReferences
-                                    ._licenseIdTable(db),
-                                referencedColumn: $$UserTableTableReferences
-                                    ._licenseIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({
+                licenseId = false,
+                questionStatusTableRefs = false,
+                learningProgressTableRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (questionStatusTableRefs) db.questionStatusTable,
+                    if (learningProgressTableRefs) db.learningProgressTable,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (licenseId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.licenseId,
+                                    referencedTable: $$UserTableTableReferences
+                                        ._licenseIdTable(db),
+                                    referencedColumn: $$UserTableTableReferences
+                                        ._licenseIdTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (questionStatusTableRefs)
+                        await $_getPrefetchedData<
+                          UserTableData,
+                          $UserTableTable,
+                          QuestionStatusTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$UserTableTableReferences
+                              ._questionStatusTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UserTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).questionStatusTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.userId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (learningProgressTableRefs)
+                        await $_getPrefetchedData<
+                          UserTableData,
+                          $UserTableTable,
+                          LearningProgressTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$UserTableTableReferences
+                              ._learningProgressTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$UserTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).learningProgressTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.userId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -3796,7 +5191,11 @@ typedef $$UserTableTableProcessedTableManager =
       $$UserTableTableUpdateCompanionBuilder,
       (UserTableData, $$UserTableTableReferences),
       UserTableData,
-      PrefetchHooks Function({bool licenseId})
+      PrefetchHooks Function({
+        bool licenseId,
+        bool questionStatusTableRefs,
+        bool learningProgressTableRefs,
+      })
     >;
 typedef $$QuestionCategoryTableTableCreateCompanionBuilder =
     QuestionCategoryTableCompanion Function({
@@ -3892,6 +5291,37 @@ final class $$QuestionCategoryTableTableReferences
     ).filter((f) => f.categoryId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_questionTableRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $LearningProgressTableTable,
+    List<LearningProgressTableData>
+  >
+  _learningProgressTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.learningProgressTable,
+        aliasName: $_aliasNameGenerator(
+          db.questionCategoryTable.id,
+          db.learningProgressTable.questionCategoryId,
+        ),
+      );
+
+  $$LearningProgressTableTableProcessedTableManager
+  get learningProgressTableRefs {
+    final manager =
+        $$LearningProgressTableTableTableManager(
+          $_db,
+          $_db.learningProgressTable,
+        ).filter(
+          (f) => f.questionCategoryId.id.sqlEquals($_itemColumn<int>('id')!),
+        );
+
+    final cache = $_typedResult.readTableOrNull(
+      _learningProgressTableRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -3994,6 +5424,32 @@ class $$QuestionCategoryTableTableFilterComposer
                 $removeJoinBuilderFromRootComposer,
           ),
     );
+    return f(composer);
+  }
+
+  Expression<bool> learningProgressTableRefs(
+    Expression<bool> Function($$LearningProgressTableTableFilterComposer f) f,
+  ) {
+    final $$LearningProgressTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.learningProgressTable,
+          getReferencedColumn: (t) => t.questionCategoryId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LearningProgressTableTableFilterComposer(
+                $db: $db,
+                $table: $db.learningProgressTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
     return f(composer);
   }
 }
@@ -4118,6 +5574,32 @@ class $$QuestionCategoryTableTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> learningProgressTableRefs<T extends Object>(
+    Expression<T> Function($$LearningProgressTableTableAnnotationComposer a) f,
+  ) {
+    final $$LearningProgressTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.learningProgressTable,
+          getReferencedColumn: (t) => t.questionCategoryId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$LearningProgressTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.learningProgressTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$QuestionCategoryTableTableTableManager
@@ -4137,6 +5619,7 @@ class $$QuestionCategoryTableTableTableManager
             bool licenseCategoryTableRefs,
             bool ruleTableRefs,
             bool questionTableRefs,
+            bool learningProgressTableRefs,
           })
         > {
   $$QuestionCategoryTableTableTableManager(
@@ -4194,6 +5677,7 @@ class $$QuestionCategoryTableTableTableManager
                 licenseCategoryTableRefs = false,
                 ruleTableRefs = false,
                 questionTableRefs = false,
+                learningProgressTableRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
@@ -4201,6 +5685,7 @@ class $$QuestionCategoryTableTableTableManager
                     if (licenseCategoryTableRefs) db.licenseCategoryTable,
                     if (ruleTableRefs) db.ruleTable,
                     if (questionTableRefs) db.questionTable,
+                    if (learningProgressTableRefs) db.learningProgressTable,
                   ],
                   addJoins: null,
                   getPrefetchedDataCallback: (items) async {
@@ -4271,6 +5756,28 @@ class $$QuestionCategoryTableTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (learningProgressTableRefs)
+                        await $_getPrefetchedData<
+                          QuestionCategoryTableData,
+                          $QuestionCategoryTableTable,
+                          LearningProgressTableData
+                        >(
+                          currentTable: table,
+                          referencedTable:
+                              $$QuestionCategoryTableTableReferences
+                                  ._learningProgressTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$QuestionCategoryTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).learningProgressTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.questionCategoryId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -4295,6 +5802,7 @@ typedef $$QuestionCategoryTableTableProcessedTableManager =
         bool licenseCategoryTableRefs,
         bool ruleTableRefs,
         bool questionTableRefs,
+        bool learningProgressTableRefs,
       })
     >;
 typedef $$LicenseCategoryTableTableCreateCompanionBuilder =
@@ -5229,6 +6737,33 @@ final class $$QuestionTableTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<
+    $QuestionStatusTableTable,
+    List<QuestionStatusTableData>
+  >
+  _questionStatusTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.questionStatusTable,
+        aliasName: $_aliasNameGenerator(
+          db.questionTable.id,
+          db.questionStatusTable.questionId,
+        ),
+      );
+
+  $$QuestionStatusTableTableProcessedTableManager get questionStatusTableRefs {
+    final manager = $$QuestionStatusTableTableTableManager(
+      $_db,
+      $_db.questionStatusTable,
+    ).filter((f) => f.questionId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _questionStatusTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$QuestionTableTableFilterComposer
@@ -5330,6 +6865,31 @@ class $$QuestionTableTableFilterComposer
           }) => $$QuestionOptionTableTableFilterComposer(
             $db: $db,
             $table: $db.questionOptionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> questionStatusTableRefs(
+    Expression<bool> Function($$QuestionStatusTableTableFilterComposer f) f,
+  ) {
+    final $$QuestionStatusTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.questionStatusTable,
+      getReferencedColumn: (t) => t.questionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionStatusTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionStatusTable,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5502,6 +7062,32 @@ class $$QuestionTableTableAnnotationComposer
         );
     return f(composer);
   }
+
+  Expression<T> questionStatusTableRefs<T extends Object>(
+    Expression<T> Function($$QuestionStatusTableTableAnnotationComposer a) f,
+  ) {
+    final $$QuestionStatusTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.questionStatusTable,
+          getReferencedColumn: (t) => t.questionId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionStatusTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionStatusTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$QuestionTableTableTableManager
@@ -5521,6 +7107,7 @@ class $$QuestionTableTableTableManager
             bool categoryId,
             bool licenseQuestionTableRefs,
             bool questionOptionTableRefs,
+            bool questionStatusTableRefs,
           })
         > {
   $$QuestionTableTableTableManager(_$AppDatabase db, $QuestionTableTable table)
@@ -5579,12 +7166,14 @@ class $$QuestionTableTableTableManager
                 categoryId = false,
                 licenseQuestionTableRefs = false,
                 questionOptionTableRefs = false,
+                questionStatusTableRefs = false,
               }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
                     if (licenseQuestionTableRefs) db.licenseQuestionTable,
                     if (questionOptionTableRefs) db.questionOptionTable,
+                    if (questionStatusTableRefs) db.questionStatusTable,
                   ],
                   addJoins:
                       <
@@ -5664,6 +7253,27 @@ class $$QuestionTableTableTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (questionStatusTableRefs)
+                        await $_getPrefetchedData<
+                          QuestionTableData,
+                          $QuestionTableTable,
+                          QuestionStatusTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$QuestionTableTableReferences
+                              ._questionStatusTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$QuestionTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).questionStatusTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.questionId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                     ];
                   },
                 );
@@ -5688,6 +7298,7 @@ typedef $$QuestionTableTableProcessedTableManager =
         bool categoryId,
         bool licenseQuestionTableRefs,
         bool questionOptionTableRefs,
+        bool questionStatusTableRefs,
       })
     >;
 typedef $$LicenseQuestionTableTableCreateCompanionBuilder =
@@ -6116,6 +7727,33 @@ final class $$QuestionOptionTableTableReferences
       manager.$state.copyWith(prefetchedData: [item]),
     );
   }
+
+  static MultiTypedResultKey<
+    $QuestionStatusTableTable,
+    List<QuestionStatusTableData>
+  >
+  _questionStatusTableRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.questionStatusTable,
+        aliasName: $_aliasNameGenerator(
+          db.questionOptionTable.id,
+          db.questionStatusTable.optionId,
+        ),
+      );
+
+  $$QuestionStatusTableTableProcessedTableManager get questionStatusTableRefs {
+    final manager = $$QuestionStatusTableTableTableManager(
+      $_db,
+      $_db.questionStatusTable,
+    ).filter((f) => f.optionId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _questionStatusTableRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$QuestionOptionTableTableFilterComposer
@@ -6163,6 +7801,31 @@ class $$QuestionOptionTableTableFilterComposer
           ),
     );
     return composer;
+  }
+
+  Expression<bool> questionStatusTableRefs(
+    Expression<bool> Function($$QuestionStatusTableTableFilterComposer f) f,
+  ) {
+    final $$QuestionStatusTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.questionStatusTable,
+      getReferencedColumn: (t) => t.optionId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionStatusTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionStatusTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 }
 
@@ -6254,6 +7917,32 @@ class $$QuestionOptionTableTableAnnotationComposer
     );
     return composer;
   }
+
+  Expression<T> questionStatusTableRefs<T extends Object>(
+    Expression<T> Function($$QuestionStatusTableTableAnnotationComposer a) f,
+  ) {
+    final $$QuestionStatusTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.questionStatusTable,
+          getReferencedColumn: (t) => t.optionId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionStatusTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionStatusTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$QuestionOptionTableTableTableManager
@@ -6269,7 +7958,10 @@ class $$QuestionOptionTableTableTableManager
           $$QuestionOptionTableTableUpdateCompanionBuilder,
           (QuestionOptionTableData, $$QuestionOptionTableTableReferences),
           QuestionOptionTableData,
-          PrefetchHooks Function({bool questionId})
+          PrefetchHooks Function({
+            bool questionId,
+            bool questionStatusTableRefs,
+          })
         > {
   $$QuestionOptionTableTableTableManager(
     _$AppDatabase db,
@@ -6322,49 +8014,74 @@ class $$QuestionOptionTableTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({questionId = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (questionId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.questionId,
-                                referencedTable:
-                                    $$QuestionOptionTableTableReferences
-                                        ._questionIdTable(db),
-                                referencedColumn:
-                                    $$QuestionOptionTableTableReferences
-                                        ._questionIdTable(db)
-                                        .id,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({questionId = false, questionStatusTableRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (questionStatusTableRefs) db.questionStatusTable,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (questionId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.questionId,
+                                    referencedTable:
+                                        $$QuestionOptionTableTableReferences
+                                            ._questionIdTable(db),
+                                    referencedColumn:
+                                        $$QuestionOptionTableTableReferences
+                                            ._questionIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (questionStatusTableRefs)
+                        await $_getPrefetchedData<
+                          QuestionOptionTableData,
+                          $QuestionOptionTableTable,
+                          QuestionStatusTableData
+                        >(
+                          currentTable: table,
+                          referencedTable: $$QuestionOptionTableTableReferences
+                              ._questionStatusTableRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$QuestionOptionTableTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).questionStatusTableRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.optionId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
                   },
-              getPrefetchedDataCallback: (items) async {
-                return [];
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -6381,7 +8098,1190 @@ typedef $$QuestionOptionTableTableProcessedTableManager =
       $$QuestionOptionTableTableUpdateCompanionBuilder,
       (QuestionOptionTableData, $$QuestionOptionTableTableReferences),
       QuestionOptionTableData,
-      PrefetchHooks Function({bool questionId})
+      PrefetchHooks Function({bool questionId, bool questionStatusTableRefs})
+    >;
+typedef $$QuestionStatusTableTableCreateCompanionBuilder =
+    QuestionStatusTableCompanion Function({
+      Value<int> id,
+      required int userId,
+      required int questionId,
+      required int optionId,
+      required bool isCorrect,
+      Value<DateTime> updatedAt,
+    });
+typedef $$QuestionStatusTableTableUpdateCompanionBuilder =
+    QuestionStatusTableCompanion Function({
+      Value<int> id,
+      Value<int> userId,
+      Value<int> questionId,
+      Value<int> optionId,
+      Value<bool> isCorrect,
+      Value<DateTime> updatedAt,
+    });
+
+final class $$QuestionStatusTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $QuestionStatusTableTable,
+          QuestionStatusTableData
+        > {
+  $$QuestionStatusTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $UserTableTable _userIdTable(_$AppDatabase db) =>
+      db.userTable.createAlias(
+        $_aliasNameGenerator(db.questionStatusTable.userId, db.userTable.id),
+      );
+
+  $$UserTableTableProcessedTableManager get userId {
+    final $_column = $_itemColumn<int>('user_id')!;
+
+    final manager = $$UserTableTableTableManager(
+      $_db,
+      $_db.userTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_userIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $QuestionTableTable _questionIdTable(_$AppDatabase db) =>
+      db.questionTable.createAlias(
+        $_aliasNameGenerator(
+          db.questionStatusTable.questionId,
+          db.questionTable.id,
+        ),
+      );
+
+  $$QuestionTableTableProcessedTableManager get questionId {
+    final $_column = $_itemColumn<int>('question_id')!;
+
+    final manager = $$QuestionTableTableTableManager(
+      $_db,
+      $_db.questionTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_questionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $QuestionOptionTableTable _optionIdTable(_$AppDatabase db) =>
+      db.questionOptionTable.createAlias(
+        $_aliasNameGenerator(
+          db.questionStatusTable.optionId,
+          db.questionOptionTable.id,
+        ),
+      );
+
+  $$QuestionOptionTableTableProcessedTableManager get optionId {
+    final $_column = $_itemColumn<int>('option_id')!;
+
+    final manager = $$QuestionOptionTableTableTableManager(
+      $_db,
+      $_db.questionOptionTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_optionIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$QuestionStatusTableTableFilterComposer
+    extends Composer<_$AppDatabase, $QuestionStatusTableTable> {
+  $$QuestionStatusTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isCorrect => $composableBuilder(
+    column: $table.isCorrect,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$UserTableTableFilterComposer get userId {
+    final $$UserTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTableTableFilterComposer(
+            $db: $db,
+            $table: $db.userTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionTableTableFilterComposer get questionId {
+    final $$QuestionTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.questionId,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionOptionTableTableFilterComposer get optionId {
+    final $$QuestionOptionTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.optionId,
+      referencedTable: $db.questionOptionTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionOptionTableTableFilterComposer(
+            $db: $db,
+            $table: $db.questionOptionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$QuestionStatusTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $QuestionStatusTableTable> {
+  $$QuestionStatusTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isCorrect => $composableBuilder(
+    column: $table.isCorrect,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$UserTableTableOrderingComposer get userId {
+    final $$UserTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.userTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionTableTableOrderingComposer get questionId {
+    final $$QuestionTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.questionId,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionOptionTableTableOrderingComposer get optionId {
+    final $$QuestionOptionTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionId,
+          referencedTable: $db.questionOptionTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionOptionTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.questionOptionTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$QuestionStatusTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $QuestionStatusTableTable> {
+  $$QuestionStatusTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<bool> get isCorrect =>
+      $composableBuilder(column: $table.isCorrect, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$UserTableTableAnnotationComposer get userId {
+    final $$UserTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionTableTableAnnotationComposer get questionId {
+    final $$QuestionTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.questionId,
+      referencedTable: $db.questionTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$QuestionTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.questionTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionOptionTableTableAnnotationComposer get optionId {
+    final $$QuestionOptionTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.optionId,
+          referencedTable: $db.questionOptionTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionOptionTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionOptionTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$QuestionStatusTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $QuestionStatusTableTable,
+          QuestionStatusTableData,
+          $$QuestionStatusTableTableFilterComposer,
+          $$QuestionStatusTableTableOrderingComposer,
+          $$QuestionStatusTableTableAnnotationComposer,
+          $$QuestionStatusTableTableCreateCompanionBuilder,
+          $$QuestionStatusTableTableUpdateCompanionBuilder,
+          (QuestionStatusTableData, $$QuestionStatusTableTableReferences),
+          QuestionStatusTableData,
+          PrefetchHooks Function({bool userId, bool questionId, bool optionId})
+        > {
+  $$QuestionStatusTableTableTableManager(
+    _$AppDatabase db,
+    $QuestionStatusTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$QuestionStatusTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$QuestionStatusTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$QuestionStatusTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> userId = const Value.absent(),
+                Value<int> questionId = const Value.absent(),
+                Value<int> optionId = const Value.absent(),
+                Value<bool> isCorrect = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => QuestionStatusTableCompanion(
+                id: id,
+                userId: userId,
+                questionId: questionId,
+                optionId: optionId,
+                isCorrect: isCorrect,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int userId,
+                required int questionId,
+                required int optionId,
+                required bool isCorrect,
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => QuestionStatusTableCompanion.insert(
+                id: id,
+                userId: userId,
+                questionId: questionId,
+                optionId: optionId,
+                isCorrect: isCorrect,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$QuestionStatusTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({userId = false, questionId = false, optionId = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (userId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.userId,
+                                    referencedTable:
+                                        $$QuestionStatusTableTableReferences
+                                            ._userIdTable(db),
+                                    referencedColumn:
+                                        $$QuestionStatusTableTableReferences
+                                            ._userIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (questionId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.questionId,
+                                    referencedTable:
+                                        $$QuestionStatusTableTableReferences
+                                            ._questionIdTable(db),
+                                    referencedColumn:
+                                        $$QuestionStatusTableTableReferences
+                                            ._questionIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (optionId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.optionId,
+                                    referencedTable:
+                                        $$QuestionStatusTableTableReferences
+                                            ._optionIdTable(db),
+                                    referencedColumn:
+                                        $$QuestionStatusTableTableReferences
+                                            ._optionIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$QuestionStatusTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $QuestionStatusTableTable,
+      QuestionStatusTableData,
+      $$QuestionStatusTableTableFilterComposer,
+      $$QuestionStatusTableTableOrderingComposer,
+      $$QuestionStatusTableTableAnnotationComposer,
+      $$QuestionStatusTableTableCreateCompanionBuilder,
+      $$QuestionStatusTableTableUpdateCompanionBuilder,
+      (QuestionStatusTableData, $$QuestionStatusTableTableReferences),
+      QuestionStatusTableData,
+      PrefetchHooks Function({bool userId, bool questionId, bool optionId})
+    >;
+typedef $$LearningProgressTableTableCreateCompanionBuilder =
+    LearningProgressTableCompanion Function({
+      Value<int> id,
+      required int userId,
+      required int licenseId,
+      Value<int?> questionCategoryId,
+      Value<int> totalQuestions,
+      Value<int> answeredQuestions,
+      required int correctAnswers,
+      Value<int> totalAttempts,
+      Value<int> correctAttempts,
+      Value<DateTime> updatedAt,
+    });
+typedef $$LearningProgressTableTableUpdateCompanionBuilder =
+    LearningProgressTableCompanion Function({
+      Value<int> id,
+      Value<int> userId,
+      Value<int> licenseId,
+      Value<int?> questionCategoryId,
+      Value<int> totalQuestions,
+      Value<int> answeredQuestions,
+      Value<int> correctAnswers,
+      Value<int> totalAttempts,
+      Value<int> correctAttempts,
+      Value<DateTime> updatedAt,
+    });
+
+final class $$LearningProgressTableTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $LearningProgressTableTable,
+          LearningProgressTableData
+        > {
+  $$LearningProgressTableTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $UserTableTable _userIdTable(_$AppDatabase db) =>
+      db.userTable.createAlias(
+        $_aliasNameGenerator(db.learningProgressTable.userId, db.userTable.id),
+      );
+
+  $$UserTableTableProcessedTableManager get userId {
+    final $_column = $_itemColumn<int>('user_id')!;
+
+    final manager = $$UserTableTableTableManager(
+      $_db,
+      $_db.userTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_userIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $LicenseTableTable _licenseIdTable(_$AppDatabase db) =>
+      db.licenseTable.createAlias(
+        $_aliasNameGenerator(
+          db.learningProgressTable.licenseId,
+          db.licenseTable.id,
+        ),
+      );
+
+  $$LicenseTableTableProcessedTableManager get licenseId {
+    final $_column = $_itemColumn<int>('license_id')!;
+
+    final manager = $$LicenseTableTableTableManager(
+      $_db,
+      $_db.licenseTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_licenseIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $QuestionCategoryTableTable _questionCategoryIdTable(
+    _$AppDatabase db,
+  ) => db.questionCategoryTable.createAlias(
+    $_aliasNameGenerator(
+      db.learningProgressTable.questionCategoryId,
+      db.questionCategoryTable.id,
+    ),
+  );
+
+  $$QuestionCategoryTableTableProcessedTableManager? get questionCategoryId {
+    final $_column = $_itemColumn<int>('question_category_id');
+    if ($_column == null) return null;
+    final manager = $$QuestionCategoryTableTableTableManager(
+      $_db,
+      $_db.questionCategoryTable,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_questionCategoryIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$LearningProgressTableTableFilterComposer
+    extends Composer<_$AppDatabase, $LearningProgressTableTable> {
+  $$LearningProgressTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalQuestions => $composableBuilder(
+    column: $table.totalQuestions,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get answeredQuestions => $composableBuilder(
+    column: $table.answeredQuestions,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctAnswers => $composableBuilder(
+    column: $table.correctAnswers,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get totalAttempts => $composableBuilder(
+    column: $table.totalAttempts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get correctAttempts => $composableBuilder(
+    column: $table.correctAttempts,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$UserTableTableFilterComposer get userId {
+    final $$UserTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTableTableFilterComposer(
+            $db: $db,
+            $table: $db.userTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$LicenseTableTableFilterComposer get licenseId {
+    final $$LicenseTableTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.licenseId,
+      referencedTable: $db.licenseTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LicenseTableTableFilterComposer(
+            $db: $db,
+            $table: $db.licenseTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionCategoryTableTableFilterComposer get questionCategoryId {
+    final $$QuestionCategoryTableTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.questionCategoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionCategoryTableTableFilterComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$LearningProgressTableTableOrderingComposer
+    extends Composer<_$AppDatabase, $LearningProgressTableTable> {
+  $$LearningProgressTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalQuestions => $composableBuilder(
+    column: $table.totalQuestions,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get answeredQuestions => $composableBuilder(
+    column: $table.answeredQuestions,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctAnswers => $composableBuilder(
+    column: $table.correctAnswers,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get totalAttempts => $composableBuilder(
+    column: $table.totalAttempts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get correctAttempts => $composableBuilder(
+    column: $table.correctAttempts,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$UserTableTableOrderingComposer get userId {
+    final $$UserTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.userTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$LicenseTableTableOrderingComposer get licenseId {
+    final $$LicenseTableTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.licenseId,
+      referencedTable: $db.licenseTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LicenseTableTableOrderingComposer(
+            $db: $db,
+            $table: $db.licenseTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionCategoryTableTableOrderingComposer get questionCategoryId {
+    final $$QuestionCategoryTableTableOrderingComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.questionCategoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionCategoryTableTableOrderingComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$LearningProgressTableTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LearningProgressTableTable> {
+  $$LearningProgressTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get totalQuestions => $composableBuilder(
+    column: $table.totalQuestions,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get answeredQuestions => $composableBuilder(
+    column: $table.answeredQuestions,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctAnswers => $composableBuilder(
+    column: $table.correctAnswers,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get totalAttempts => $composableBuilder(
+    column: $table.totalAttempts,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get correctAttempts => $composableBuilder(
+    column: $table.correctAttempts,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$UserTableTableAnnotationComposer get userId {
+    final $$UserTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.userId,
+      referencedTable: $db.userTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$UserTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.userTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$LicenseTableTableAnnotationComposer get licenseId {
+    final $$LicenseTableTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.licenseId,
+      referencedTable: $db.licenseTable,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$LicenseTableTableAnnotationComposer(
+            $db: $db,
+            $table: $db.licenseTable,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$QuestionCategoryTableTableAnnotationComposer get questionCategoryId {
+    final $$QuestionCategoryTableTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.questionCategoryId,
+          referencedTable: $db.questionCategoryTable,
+          getReferencedColumn: (t) => t.id,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$QuestionCategoryTableTableAnnotationComposer(
+                $db: $db,
+                $table: $db.questionCategoryTable,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return composer;
+  }
+}
+
+class $$LearningProgressTableTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $LearningProgressTableTable,
+          LearningProgressTableData,
+          $$LearningProgressTableTableFilterComposer,
+          $$LearningProgressTableTableOrderingComposer,
+          $$LearningProgressTableTableAnnotationComposer,
+          $$LearningProgressTableTableCreateCompanionBuilder,
+          $$LearningProgressTableTableUpdateCompanionBuilder,
+          (LearningProgressTableData, $$LearningProgressTableTableReferences),
+          LearningProgressTableData,
+          PrefetchHooks Function({
+            bool userId,
+            bool licenseId,
+            bool questionCategoryId,
+          })
+        > {
+  $$LearningProgressTableTableTableManager(
+    _$AppDatabase db,
+    $LearningProgressTableTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LearningProgressTableTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$LearningProgressTableTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$LearningProgressTableTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<int> userId = const Value.absent(),
+                Value<int> licenseId = const Value.absent(),
+                Value<int?> questionCategoryId = const Value.absent(),
+                Value<int> totalQuestions = const Value.absent(),
+                Value<int> answeredQuestions = const Value.absent(),
+                Value<int> correctAnswers = const Value.absent(),
+                Value<int> totalAttempts = const Value.absent(),
+                Value<int> correctAttempts = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => LearningProgressTableCompanion(
+                id: id,
+                userId: userId,
+                licenseId: licenseId,
+                questionCategoryId: questionCategoryId,
+                totalQuestions: totalQuestions,
+                answeredQuestions: answeredQuestions,
+                correctAnswers: correctAnswers,
+                totalAttempts: totalAttempts,
+                correctAttempts: correctAttempts,
+                updatedAt: updatedAt,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required int userId,
+                required int licenseId,
+                Value<int?> questionCategoryId = const Value.absent(),
+                Value<int> totalQuestions = const Value.absent(),
+                Value<int> answeredQuestions = const Value.absent(),
+                required int correctAnswers,
+                Value<int> totalAttempts = const Value.absent(),
+                Value<int> correctAttempts = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+              }) => LearningProgressTableCompanion.insert(
+                id: id,
+                userId: userId,
+                licenseId: licenseId,
+                questionCategoryId: questionCategoryId,
+                totalQuestions: totalQuestions,
+                answeredQuestions: answeredQuestions,
+                correctAnswers: correctAnswers,
+                totalAttempts: totalAttempts,
+                correctAttempts: correctAttempts,
+                updatedAt: updatedAt,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$LearningProgressTableTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                userId = false,
+                licenseId = false,
+                questionCategoryId = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (userId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.userId,
+                                    referencedTable:
+                                        $$LearningProgressTableTableReferences
+                                            ._userIdTable(db),
+                                    referencedColumn:
+                                        $$LearningProgressTableTableReferences
+                                            ._userIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (licenseId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.licenseId,
+                                    referencedTable:
+                                        $$LearningProgressTableTableReferences
+                                            ._licenseIdTable(db),
+                                    referencedColumn:
+                                        $$LearningProgressTableTableReferences
+                                            ._licenseIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (questionCategoryId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.questionCategoryId,
+                                    referencedTable:
+                                        $$LearningProgressTableTableReferences
+                                            ._questionCategoryIdTable(db),
+                                    referencedColumn:
+                                        $$LearningProgressTableTableReferences
+                                            ._questionCategoryIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$LearningProgressTableTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $LearningProgressTableTable,
+      LearningProgressTableData,
+      $$LearningProgressTableTableFilterComposer,
+      $$LearningProgressTableTableOrderingComposer,
+      $$LearningProgressTableTableAnnotationComposer,
+      $$LearningProgressTableTableCreateCompanionBuilder,
+      $$LearningProgressTableTableUpdateCompanionBuilder,
+      (LearningProgressTableData, $$LearningProgressTableTableReferences),
+      LearningProgressTableData,
+      PrefetchHooks Function({
+        bool userId,
+        bool licenseId,
+        bool questionCategoryId,
+      })
     >;
 
 class $AppDatabaseManager {
@@ -6403,4 +9303,8 @@ class $AppDatabaseManager {
       $$LicenseQuestionTableTableTableManager(_db, _db.licenseQuestionTable);
   $$QuestionOptionTableTableTableManager get questionOptionTable =>
       $$QuestionOptionTableTableTableManager(_db, _db.questionOptionTable);
+  $$QuestionStatusTableTableTableManager get questionStatusTable =>
+      $$QuestionStatusTableTableTableManager(_db, _db.questionStatusTable);
+  $$LearningProgressTableTableTableManager get learningProgressTable =>
+      $$LearningProgressTableTableTableManager(_db, _db.learningProgressTable);
 }

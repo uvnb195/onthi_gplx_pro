@@ -29,9 +29,24 @@ class LearningDashBoardPage extends StatelessWidget {
     };
     if (licenseId == null) return;
 
-    context.read<LearningBloc>().add(
+    final learningBloc = context.read<LearningBloc>();
+
+    learningBloc.add(
       LoadExamQuestions(licenseId: licenseId, examType: examType.index),
     );
+
+    if (learningBloc.state.loading) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
+        ),
+      );
+    }
+
+    final totalQuestions = learningBloc.state.questions.length;
+
     Navigator.pushNamed(
       context,
       RouteNames.learningInfo,
@@ -43,19 +58,19 @@ class LearningDashBoardPage extends StatelessWidget {
         'isLearning': false,
         'stats': [
           {
-            'iconData': BootstrapIcons.book,
-            'title': 'Title1',
-            'description': 'Description',
+            'iconData': BootstrapIcons.file_earmark_text,
+            'title': '40',
+            'description': 'Câu hỏi',
           },
           {
-            'iconData': BootstrapIcons.book,
-            'title': 'Title1',
-            'description': 'Description',
+            'iconData': BootstrapIcons.alarm,
+            'title': '24',
+            'description': 'phút',
           },
           {
-            'iconData': BootstrapIcons.book,
-            'title': 'Title1',
-            'description': 'Description',
+            'iconData': BootstrapIcons.clipboard_check,
+            'title': '36/40',
+            'description': 'tối thiểu',
           },
         ],
       },
