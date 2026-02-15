@@ -10,7 +10,7 @@ import 'package:onthi_gplx_pro/features/learning/domain/repositories/question_ca
 
 @LazySingleton(as: QuestionCategoryRepository)
 class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
-  final QuestionCategoryDao questionCategoryDao;
+  final CategoryDao questionCategoryDao;
 
   QuestionCategoryRepositoryImpl({required this.questionCategoryDao});
 

@@ -3,10 +3,9 @@ import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/database/models/question_category_with_rules.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
-import 'package:onthi_gplx_pro/core/database/table/rule_table.dart';
 import 'package:onthi_gplx_pro/core/extension/exam_type.dart';
 
-part 'question_category_dao.g.dart';
+part 'category_dao.g.dart';
 
 @DriftAccessor(
   tables: [
@@ -17,9 +16,11 @@ part 'question_category_dao.g.dart';
   ],
 )
 @lazySingleton
-class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
-    with _$QuestionCategoryDaoMixin {
-  QuestionCategoryDao(super.attachedDatabase);
+class CategoryDao extends DatabaseAccessor<AppDatabase>
+    with _$CategoryDaoMixin {
+  CategoryDao(super.attachedDatabase);
+
+  // S E E D - D A T A
 
   Future<void> createCategoriesSeedData(List<dynamic> categoriesJson) async {
     await batch(
@@ -27,16 +28,11 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
         questionCategoryTable,
         categoriesJson
             .map(
-              (e) => (e['id'] as int) == 0
-                  ? QuestionCategoryTableCompanion.insert(
-                      id: const Value(0),
-                      label: e['label'],
-                      description: Value(e['description']),
-                    )
-                  : QuestionCategoryTableCompanion.insert(
-                      label: e['label'],
-                      description: Value(e['description']),
-                    ),
+              (e) => QuestionCategoryTableCompanion.insert(
+                id: Value(e['id'] as int),
+                label: e['label'],
+                description: Value(e['description']),
+              ),
             )
             .toList(),
         mode: .insertOrReplace,
@@ -83,7 +79,7 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
                 : const Value.absent(),
 
             examType: e['examType'] != null
-                ? Value(ExamType.values[e['examType'] as int])
+                ? Value((e['examType'] as int?).toExamType)
                 : const Value.absent(),
 
             title: e['title'] != null
@@ -101,6 +97,7 @@ class QuestionCategoryDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
+  // - - - - - - - - - - - - -
   Future<List<QuestionCategoryWithRules>> getAllCategories() async {
     final query = select(questionCategoryTable).join([
       leftOuterJoin(

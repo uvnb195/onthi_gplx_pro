@@ -2,8 +2,8 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:onthi_gplx_pro/core/constants/exam_type.dart';
 import 'package:onthi_gplx_pro/core/di/injection.dart';
-import 'package:onthi_gplx_pro/core/extension/exam_type.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
@@ -24,7 +24,7 @@ class LearningDashBoardPage extends StatelessWidget {
   }) {
     final authBloc = context.read<AuthBloc>();
     final licenseId = switch (authBloc.state) {
-      Authenticated(user: var u) => u.license.id,
+      Authenticated(user: var u) => u.license.value.id,
       _ => null,
     };
     if (licenseId == null) return;
@@ -32,7 +32,7 @@ class LearningDashBoardPage extends StatelessWidget {
     final learningBloc = context.read<LearningBloc>();
 
     learningBloc.add(
-      LoadExamQuestions(licenseId: licenseId, examType: examType.index),
+      LoadExamQuestions(licenseId: licenseId, examType: examType.id),
     );
 
     if (learningBloc.state.loading) {
@@ -97,7 +97,7 @@ class LearningDashBoardPage extends StatelessWidget {
                   ..addAll(colors.sublist(0, startIndex));
               }
 
-              final theoryIconDatas = authState.user.license.id <= 2
+              final theoryIconDatas = authState.user.license.value.id <= 2
                   ? [
                       BootstrapIcons.bookmarks,
                       BootstrapIcons.shield_lock,

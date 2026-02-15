@@ -1,16 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:onthi_gplx_pro/core/constants/index.dart';
 
 class LicenseEntity extends Equatable {
-  final int id;
-  final String code;
+  final LicenseType value;
   final String description;
 
-  const LicenseEntity({
-    required this.id,
-    required this.code,
-    required this.description,
-  });
+  const LicenseEntity({required this.value, required this.description});
 
   @override
-  List<Object?> get props => [id, code, description];
+  List<Object?> get props => [value, description];
 }

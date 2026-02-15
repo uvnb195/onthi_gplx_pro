@@ -1,10 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
-import 'package:onthi_gplx_pro/core/database/models/question_with_choices.dart';
-import 'package:onthi_gplx_pro/core/database/table/license_question_table.dart';
-import 'package:onthi_gplx_pro/core/database/table/question_option_table.dart';
-import 'package:onthi_gplx_pro/core/database/table/question_table.dart';
+import 'package:onthi_gplx_pro/core/database/models/question_with_options.dart';
+import 'package:onthi_gplx_pro/core/database/table/index.dart';
 
 part 'question_dao.g.dart';
 
@@ -16,7 +14,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
     with _$QuestionDaoMixin {
   QuestionDao(super.attachedDatabase);
 
-  // create seed data
+  // S E E D - D A T A
   Future<void> createQuestionsSeedData({
     required List<dynamic> questionsJson,
     required List<dynamic> optionsJson,
@@ -75,8 +73,8 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
-  // get questions by category
-  Future<List<QuestionWithChoices>> getQuestionsByCategory({
+  // - - - - - - - - - - - - -
+  Future<List<QuestionWithOptions>> getQuestionsByCategory({
     required int categoryId,
     required int licenseId,
   }) async {
@@ -100,7 +98,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
 
     return questions
         .map(
-          (q) => QuestionWithChoices(
+          (q) => QuestionWithOptions(
             question: q,
             options: allOptions.where((o) => o.questionId == q.id).toList(),
           ),

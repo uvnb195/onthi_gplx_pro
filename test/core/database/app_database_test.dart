@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
-import 'package:onthi_gplx_pro/core/database/dao/license/license_dao.dart';
 import 'package:onthi_gplx_pro/core/database/dao/user/user_dao.dart';
 
 import '../../helpers/db_helper.dart';
@@ -9,12 +8,10 @@ void main() {
   group('LicenseDao testing', () {
     late AppDatabase mockDb;
     late UserDao mockUserDao;
-    late LicenseDao mockLicenseDao;
 
     setUp(() async {
       mockDb = setUpTestDb();
       mockUserDao = mockDb.userDao;
-      mockLicenseDao = mockDb.licenseDao;
     });
 
     tearDown(() async {
@@ -23,17 +20,17 @@ void main() {
     test(
       'should return license.length > 0 because seed data was loading in migration onCreate',
       () async {
-        final licenses = await mockLicenseDao.getLicenseList();
+        final licenses = await mockUserDao.getAllLicenses();
 
         expect(licenses.length, greaterThan(0));
       },
     );
 
     test('should return license when get by id', () async {
-      final licenses = await mockLicenseDao.getLicenseList();
+      final licenses = await mockUserDao.getAllLicenses();
       final int targetId = 1;
       final targetLicense = licenses[targetId - 1];
-      final license = await mockLicenseDao.getLicenseById(targetId);
+      final license = await mockUserDao.getLicenseById(targetId);
 
       expect(license!.code, targetLicense.code);
     });

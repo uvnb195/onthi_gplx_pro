@@ -83,7 +83,7 @@ class _AchievementPageState extends State<AchievementPage>
                             children: [
                               TextSpan(
                                 text:
-                                    '\nGPLX Hạng ${state.user.license.code.toUpperCase()}',
+                                    '\nGPLX ${state.user.license.value.label}',
                                 style: TextStyle(
                                   fontWeight: .bold,
                                   fontSize: 18,

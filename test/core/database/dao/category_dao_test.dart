@@ -1,19 +1,19 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:onthi_gplx_pro/core/constants/exam_type.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/database/dao/index.dart';
-import 'package:onthi_gplx_pro/core/extension/exam_type.dart';
 
 import '../../../helpers/db_helper.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late AppDatabase db;
-  late QuestionCategoryDao questionCategoryDao;
+  late CategoryDao questionCategoryDao;
 
   setUp(() async {
     db = setUpTestDb();
-    questionCategoryDao = db.questionCategoryDao;
+    questionCategoryDao = db.categoryDao;
   });
 
   tearDown(() async {

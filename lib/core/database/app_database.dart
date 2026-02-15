@@ -4,11 +4,9 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/services.dart';
+import 'package:onthi_gplx_pro/core/constants/index.dart';
 import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
-import 'package:onthi_gplx_pro/core/database/table/rule_table.dart';
-import 'package:onthi_gplx_pro/core/extension/exam_type.dart';
-import 'package:onthi_gplx_pro/features/user_management/domain/value_objects/license.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
@@ -36,7 +34,7 @@ LazyDatabase _openConnection() {
     QuestionStatusTable,
     LearningProgressTable,
   ],
-  daos: [UserDao, LicenseDao, QuestionCategoryDao, QuestionDao],
+  daos: [UserDao, CategoryDao, QuestionDao],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
@@ -69,8 +67,8 @@ class AppDatabase extends _$AppDatabase {
           final List<dynamic> licenseCategoriesJson = json.decode(seedDatas[5]);
           final rulesJson = json.decode(seedDatas[6]);
 
-          await licenseDao.createLicensesSeedData(licensesJson);
-          await questionCategoryDao.createCategoriesSeedData(categoriesJson);
+          await userDao.createLicensesSeedData(licensesJson);
+          await categoryDao.createCategoriesSeedData(categoriesJson);
           await questionDao.createQuestionsSeedData(
             optionsJson: optionsJson,
             questionsJson: questionsJson,
@@ -78,12 +76,12 @@ class AppDatabase extends _$AppDatabase {
           await questionDao.createLicenseQuestionsSeedData(
             licenseQuestionsJson,
           );
-          await questionCategoryDao.createLicenseCategoriesSeedData(
+          await categoryDao.createLicenseCategoriesSeedData(
             licenseCategoriesJson,
           );
-          await questionCategoryDao.createCategoryRulesSeedData(rulesJson);
+          await categoryDao.createCategoryRulesSeedData(rulesJson);
         } catch (e) {
-          print("LỖI ĐÂY RỒI: $e");
+          print("Error: $e");
         }
       },
       beforeOpen: (details) async {

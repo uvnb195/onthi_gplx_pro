@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/error/exceptions.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/data/models/index.dart';
+import 'package:onthi_gplx_pro/features/user_management/data/mappers/license_mapper.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/license_repository.dart';
 
@@ -20,7 +20,7 @@ class LicenseRepositoryImpl implements LicenseRepository {
       if (result.isEmpty) {
         return Left(CacheFailure('Không thể truy xuất dữ liệu GPLX'));
       }
-      return Right(result.map((e) => LicenseModel.fromDrift(e)).toList());
+      return Right(result.map((e) => e.toEntity()).toList());
     } on CacheException catch (e) {
       return Left(CacheFailure('Lỗi truy xuất dữ liệu $e'));
     }
@@ -33,7 +33,7 @@ class LicenseRepositoryImpl implements LicenseRepository {
       if (result == null) {
         return Left(CacheFailure('Không thể truy xuất dữ liệu GPLX'));
       }
-      return Right(LicenseModel.fromDrift(result));
+      return Right(result.toEntity());
     } on CacheException catch (e) {
       return Left(CacheFailure('Lỗi truy xuất dữ liệu $e'));
     }

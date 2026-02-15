@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
+import 'package:onthi_gplx_pro/core/constants/index.dart';
 import 'package:onthi_gplx_pro/core/database/table/license_table.dart';
 import 'package:onthi_gplx_pro/core/database/table/question_category_table.dart';
-import 'package:onthi_gplx_pro/core/extension/exam_type.dart';
 
 class RuleTable extends Table {
   IntColumn get id => integer().autoIncrement()();

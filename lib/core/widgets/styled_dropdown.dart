@@ -4,8 +4,8 @@ import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 class StyledDropdown extends StatefulWidget {
   final String? customLabel, hintText, internalLabel, errorText;
   final Widget? prefix, suffix;
-  final List<String> options;
-  final ValueChanged<String?>? onChanged;
+  final List<Map<String, dynamic>> options;
+  final ValueChanged<int?>? onChanged;
   const StyledDropdown({
     super.key,
     this.customLabel,
@@ -23,12 +23,12 @@ class StyledDropdown extends StatefulWidget {
 }
 
 class _StyledDropdownState extends State<StyledDropdown> {
-  late String selected;
+  late int selected;
 
   @override
   void initState() {
     super.initState();
-    selected = widget.options.first;
+    selected = widget.options.first['id'];
   }
 
   @override
@@ -97,8 +97,13 @@ class _StyledDropdownState extends State<StyledDropdown> {
                   ? Text(widget.internalLabel!)
                   : null,
               initialSelection: selected,
-              dropdownMenuEntries: widget.options.map((String value) {
-                return DropdownMenuEntry<String>(value: value, label: value);
+              dropdownMenuEntries: widget.options.map((
+                Map<String, dynamic> option,
+              ) {
+                return DropdownMenuEntry<int>(
+                  value: option['id'],
+                  label: option['label'],
+                );
               }).toList(),
             ),
           ],

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
-import 'package:onthi_gplx_pro/core/extension/index.dart';
+import 'package:onthi_gplx_pro/core/constants/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/usecases/create_user.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/usecases/delete_user.dart';
@@ -75,18 +75,7 @@ class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
     GenderChanged event,
     Emitter<UserFormSubmissionState> emit,
   ) {
-    final result = Gender.validate(event.gender);
-
-    result.fold(
-      ifLeft: (failure) {
-        emit(
-          state.copyWith(gender: event.gender, genderError: failure.message),
-        );
-      },
-      ifRight: (value) {
-        emit(state.copyWith(gender: event.gender, genderError: null));
-      },
-    );
+    emit(state.copyWith(gender: event.gender));
   }
 
   void _onPhoneChanged(
@@ -109,20 +98,7 @@ class UserBloc extends Bloc<UserEvent, UserFormSubmissionState> {
     LicenseChanged event,
     Emitter<UserFormSubmissionState> emit,
   ) {
-    final result = License.validate(
-      LicenseTypeExt.fromString(event.license.code),
-    );
-
-    result.fold(
-      ifLeft: (failure) {
-        emit(
-          state.copyWith(license: event.license, licenseError: failure.message),
-        );
-      },
-      ifRight: (value) {
-        emit(state.copyWith(license: event.license, licenseError: null));
-      },
-    );
+    emit(state.copyWith(license: event.license));
   }
 
   void _onCreateUser(

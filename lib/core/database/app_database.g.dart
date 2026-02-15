@@ -327,16 +327,16 @@ class $UserTableTable extends UserTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _genderMeta = const VerificationMeta('gender');
   @override
-  late final GeneratedColumn<int> gender = GeneratedColumn<int>(
-    'gender',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultValue: const Constant(0),
-  );
+  late final GeneratedColumnWithTypeConverter<GenderType, int> gender =
+      GeneratedColumn<int>(
+        'gender',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: false,
+        defaultValue: const Constant(0),
+      ).withConverter<GenderType>($UserTableTable.$convertergender);
   static const VerificationMeta _avatarPathMeta = const VerificationMeta(
     'avatarPath',
   );
@@ -434,12 +434,6 @@ class $UserTableTable extends UserTable
     } else if (isInserting) {
       context.missing(_ageMeta);
     }
-    if (data.containsKey('gender')) {
-      context.handle(
-        _genderMeta,
-        gender.isAcceptableOrUnknown(data['gender']!, _genderMeta),
-      );
-    }
     if (data.containsKey('avatar_path')) {
       context.handle(
         _avatarPathMeta,
@@ -492,10 +486,12 @@ class $UserTableTable extends UserTable
         DriftSqlType.int,
         data['${effectivePrefix}age'],
       )!,
-      gender: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}gender'],
-      )!,
+      gender: $UserTableTable.$convertergender.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}gender'],
+        )!,
+      ),
       avatarPath: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}avatar_path'],
@@ -519,6 +515,9 @@ class $UserTableTable extends UserTable
   $UserTableTable createAlias(String alias) {
     return $UserTableTable(attachedDatabase, alias);
   }
+
+  static JsonTypeConverter2<GenderType, int, int> $convertergender =
+      const EnumIndexConverter<GenderType>(GenderType.values);
 }
 
 class UserTableData extends DataClass implements Insertable<UserTableData> {
@@ -526,7 +525,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
   final int licenseId;
   final String name;
   final int age;
-  final int gender;
+  final GenderType gender;
   final String? avatarPath;
   final String? phoneNumber;
   final DateTime createdAt;
@@ -549,7 +548,11 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
     map['license_id'] = Variable<int>(licenseId);
     map['name'] = Variable<String>(name);
     map['age'] = Variable<int>(age);
-    map['gender'] = Variable<int>(gender);
+    {
+      map['gender'] = Variable<int>(
+        $UserTableTable.$convertergender.toSql(gender),
+      );
+    }
     if (!nullToAbsent || avatarPath != null) {
       map['avatar_path'] = Variable<String>(avatarPath);
     }
@@ -589,7 +592,9 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
       licenseId: serializer.fromJson<int>(json['licenseId']),
       name: serializer.fromJson<String>(json['name']),
       age: serializer.fromJson<int>(json['age']),
-      gender: serializer.fromJson<int>(json['gender']),
+      gender: $UserTableTable.$convertergender.fromJson(
+        serializer.fromJson<int>(json['gender']),
+      ),
       avatarPath: serializer.fromJson<String?>(json['avatarPath']),
       phoneNumber: serializer.fromJson<String?>(json['phoneNumber']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
@@ -604,7 +609,9 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
       'licenseId': serializer.toJson<int>(licenseId),
       'name': serializer.toJson<String>(name),
       'age': serializer.toJson<int>(age),
-      'gender': serializer.toJson<int>(gender),
+      'gender': serializer.toJson<int>(
+        $UserTableTable.$convertergender.toJson(gender),
+      ),
       'avatarPath': serializer.toJson<String?>(avatarPath),
       'phoneNumber': serializer.toJson<String?>(phoneNumber),
       'createdAt': serializer.toJson<DateTime>(createdAt),
@@ -617,7 +624,7 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
     int? licenseId,
     String? name,
     int? age,
-    int? gender,
+    GenderType? gender,
     Value<String?> avatarPath = const Value.absent(),
     Value<String?> phoneNumber = const Value.absent(),
     DateTime? createdAt,
@@ -699,7 +706,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
   final Value<int> licenseId;
   final Value<String> name;
   final Value<int> age;
-  final Value<int> gender;
+  final Value<GenderType> gender;
   final Value<String?> avatarPath;
   final Value<String?> phoneNumber;
   final Value<DateTime> createdAt;
@@ -757,7 +764,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
     Value<int>? licenseId,
     Value<String>? name,
     Value<int>? age,
-    Value<int>? gender,
+    Value<GenderType>? gender,
     Value<String?>? avatarPath,
     Value<String?>? phoneNumber,
     Value<DateTime>? createdAt,
@@ -792,7 +799,9 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
       map['age'] = Variable<int>(age.value);
     }
     if (gender.present) {
-      map['gender'] = Variable<int>(gender.value);
+      map['gender'] = Variable<int>(
+        $UserTableTable.$convertergender.toSql(gender.value),
+      );
     }
     if (avatarPath.present) {
       map['avatar_path'] = Variable<String>(avatarPath.value);
@@ -3827,10 +3836,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $LearningProgressTableTable learningProgressTable =
       $LearningProgressTableTable(this);
   late final UserDao userDao = UserDao(this as AppDatabase);
-  late final LicenseDao licenseDao = LicenseDao(this as AppDatabase);
-  late final QuestionCategoryDao questionCategoryDao = QuestionCategoryDao(
-    this as AppDatabase,
-  );
+  late final CategoryDao categoryDao = CategoryDao(this as AppDatabase);
   late final QuestionDao questionDao = QuestionDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
@@ -4593,7 +4599,7 @@ typedef $$UserTableTableCreateCompanionBuilder =
       required int licenseId,
       required String name,
       required int age,
-      Value<int> gender,
+      Value<GenderType> gender,
       Value<String?> avatarPath,
       Value<String?> phoneNumber,
       Value<DateTime> createdAt,
@@ -4605,7 +4611,7 @@ typedef $$UserTableTableUpdateCompanionBuilder =
       Value<int> licenseId,
       Value<String> name,
       Value<int> age,
-      Value<int> gender,
+      Value<GenderType> gender,
       Value<String?> avatarPath,
       Value<String?> phoneNumber,
       Value<DateTime> createdAt,
@@ -4715,10 +4721,11 @@ class $$UserTableTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<int> get gender => $composableBuilder(
-    column: $table.gender,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<GenderType, GenderType, int> get gender =>
+      $composableBuilder(
+        column: $table.gender,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<String> get avatarPath => $composableBuilder(
     column: $table.avatarPath,
@@ -4906,7 +4913,7 @@ class $$UserTableTableAnnotationComposer
   GeneratedColumn<int> get age =>
       $composableBuilder(column: $table.age, builder: (column) => column);
 
-  GeneratedColumn<int> get gender =>
+  GeneratedColumnWithTypeConverter<GenderType, int> get gender =>
       $composableBuilder(column: $table.gender, builder: (column) => column);
 
   GeneratedColumn<String> get avatarPath => $composableBuilder(
@@ -5037,7 +5044,7 @@ class $$UserTableTableTableManager
                 Value<int> licenseId = const Value.absent(),
                 Value<String> name = const Value.absent(),
                 Value<int> age = const Value.absent(),
-                Value<int> gender = const Value.absent(),
+                Value<GenderType> gender = const Value.absent(),
                 Value<String?> avatarPath = const Value.absent(),
                 Value<String?> phoneNumber = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
@@ -5059,7 +5066,7 @@ class $$UserTableTableTableManager
                 required int licenseId,
                 required String name,
                 required int age,
-                Value<int> gender = const Value.absent(),
+                Value<GenderType> gender = const Value.absent(),
                 Value<String?> avatarPath = const Value.absent(),
                 Value<String?> phoneNumber = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),

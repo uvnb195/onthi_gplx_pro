@@ -3,9 +3,8 @@ import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
-import 'package:onthi_gplx_pro/core/extension/gender_type.dart';
 import 'package:onthi_gplx_pro/features/user_management/data/data_sources/local/index.dart';
-import 'package:onthi_gplx_pro/features/user_management/data/data_sources/mappers/user_mapper.dart';
+import 'package:onthi_gplx_pro/features/user_management/data/mappers/user_mapper.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/user_management/domain/repositories/index.dart';
 
@@ -21,10 +20,12 @@ class UserRepositoryImpl implements UserRepository {
       final companion = UserTableCompanion(
         name: Value(user.name.value),
         age: Value(user.age.value!),
-        gender: Value(user.gender.value.intValue),
+        gender: Value(user.gender),
         avatarPath: Value(user.avatarPath?.value),
         phoneNumber: Value(user.phoneNumber?.value),
-        licenseId: Value(user.license.id),
+        licenseId: Value(user.license.value.id),
+        createdAt: Value(DateTime.now()),
+        updatedAt: Value(DateTime.now()),
       );
 
       final userId = await _localUserDataSource.createUser(companion);

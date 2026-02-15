@@ -54,7 +54,7 @@ class _CollapseMenuState extends State<CollapseMenu> {
     QuestionCategoryEntity selectedCategory,
   ) {
     final licenseId = switch (context.read<AuthBloc>().state) {
-      Authenticated(user: var u) => u.license.id,
+      Authenticated(user: var u) => u.license.value.id,
       _ => null,
     };
 

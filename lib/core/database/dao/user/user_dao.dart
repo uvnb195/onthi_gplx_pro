@@ -1,6 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
+import 'package:onthi_gplx_pro/core/constants/license_type.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
+import 'package:onthi_gplx_pro/core/database/models/user_with_license.dart';
 import 'package:onthi_gplx_pro/core/database/table/license_table.dart';
 import 'package:onthi_gplx_pro/core/database/table/user_table.dart';
 
@@ -11,6 +13,25 @@ part 'user_dao.g.dart';
 class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
   UserDao(super.attachedDatabase);
 
+  // S E E D - D A T A
+  Future<void> createLicensesSeedData(List<dynamic> licensesJson) async {
+    final licenseCompanions = licensesJson.map((e) {
+      return LicenseTableCompanion.insert(
+        code: LicenseType.fromInt(e['id'] as int),
+        description: e['description'] as String,
+      );
+    }).toList();
+
+    await batch(
+      (batch) => batch.insertAll(
+        licenseTable,
+        licenseCompanions,
+        mode: .insertOrReplace,
+      ),
+    );
+  }
+
+  // U S E R
   Stream<UserWithLicense?> currentUserStream() {
     final userId = 1;
     final query = select(userTable).join([
@@ -37,11 +58,14 @@ class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
   Future<int> deleteAllUsers() {
     return delete(userTable).go();
   }
-}
 
-class UserWithLicense {
-  final UserTableData user;
-  final LicenseTableData license;
+  // L I C E N S E
+  Future<List<LicenseTableData>> getAllLicenses() => select(licenseTable).get();
 
-  const UserWithLicense({required this.user, required this.license});
+  Future<LicenseTableData?> getLicenseById(int id) async {
+    final returnedData = await (select(
+      licenseTable,
+    )..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+    return returnedData;
+  }
 }

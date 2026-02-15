@@ -37,7 +37,7 @@ class _HomeRouterState extends State<HomeRouter> {
 
     final authState = context.read<AuthBloc>().state;
     final int? licenseId = authState is Authenticated
-        ? authState.user.license.id
+        ? authState.user.license.value.id
         : null;
 
     if (licenseId == null) return const SizedBox.shrink();

@@ -15,7 +15,7 @@ class LocalLicenseDataSourceImpl implements LocalLicenseDataSource {
   @override
   Future<LicenseTableData?> getLicenseById(int id) async {
     try {
-      return await _db.licenseDao.getLicenseById(id);
+      return await _db.userDao.getLicenseById(id);
     } catch (e) {
       throw CacheException();
     }
@@ -24,7 +24,7 @@ class LocalLicenseDataSourceImpl implements LocalLicenseDataSource {
   @override
   Future<List<LicenseTableData>> getLicenses() async {
     try {
-      return await _db.licenseDao.getLicenseList();
+      return await _db.userDao.getAllLicenses();
     } catch (e) {
       throw CacheException();
     }

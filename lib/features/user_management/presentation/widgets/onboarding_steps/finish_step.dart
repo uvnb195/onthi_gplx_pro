@@ -64,7 +64,9 @@ class _FinishStepState extends State<FinishStep> {
               ),
               LicenseLoadFail() => Expanded(
                 child: Center(
-                  child: Text("Đã xảy ra lỗi, vui lòng thử lại sau..."),
+                  child: Text(
+                    "Đã xảy ra lỗi: ${state.message}.\nVui lòng thử lại sau...",
+                  ),
                 ),
               ),
               LicenseLoaded() => Expanded(
@@ -83,10 +85,9 @@ class _FinishStepState extends State<FinishStep> {
                       child: RadioItem(
                         themeColor: AppColors.primaryColor,
                         selected:
-                            state.selectedLicense?.id ==
-                            state.licenses[index].id,
-                        title:
-                            "Hạng ${state.licenses[index].code.toUpperCase()}",
+                            state.selectedLicense?.value.id ==
+                            state.licenses[index].value.id,
+                        title: state.licenses[index].value.label,
                         description: state.licenses[index].description,
                         onTap: () {
                           context.read<LicenseBloc>().add(

@@ -63,10 +63,9 @@ import '../../features/user_management/presentation/bloc/license_bloc/license_bl
 import '../../features/user_management/presentation/bloc/user/user_bloc.dart'
     as _i172;
 import '../database/app_database.dart' as _i982;
+import '../database/dao/category/category_dao.dart' as _i354;
 import '../database/dao/index.dart' as _i250;
-import '../database/dao/license/license_dao.dart' as _i957;
 import '../database/dao/question/question_dao.dart' as _i742;
-import '../database/dao/question_category/question_category_dao.dart' as _i792;
 import '../database/dao/user/user_dao.dart' as _i391;
 import 'register_module.dart' as _i291;
 
@@ -79,17 +78,19 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.singleton<_i982.AppDatabase>(() => registerModule.database);
+    gh.lazySingleton<_i354.CategoryDao>(
+      () => _i354.CategoryDao(gh<_i982.AppDatabase>()),
+    );
     gh.lazySingleton<_i742.QuestionDao>(
       () => _i742.QuestionDao(gh<_i982.AppDatabase>()),
-    );
-    gh.lazySingleton<_i792.QuestionCategoryDao>(
-      () => _i792.QuestionCategoryDao(gh<_i982.AppDatabase>()),
     );
     gh.lazySingleton<_i391.UserDao>(
       () => _i391.UserDao(gh<_i982.AppDatabase>()),
     );
-    gh.lazySingleton<_i957.LicenseDao>(
-      () => _i957.LicenseDao(gh<_i982.AppDatabase>()),
+    gh.lazySingleton<_i764.QuestionCategoryRepository>(
+      () => _i121.QuestionCategoryRepositoryImpl(
+        questionCategoryDao: gh<_i250.CategoryDao>(),
+      ),
     );
     gh.lazySingleton<_i359.QuestionRepository>(
       () => _i969.QuestionRepositoryImpl(gh<_i250.QuestionDao>()),
@@ -99,26 +100,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i193.LocalLicenseDataSource>(
       () => _i193.LocalLicenseDataSourceImpl(gh<_i982.AppDatabase>()),
-    );
-    gh.lazySingleton<_i764.QuestionCategoryRepository>(
-      () => _i121.QuestionCategoryRepositoryImpl(
-        questionCategoryDao: gh<_i250.QuestionCategoryDao>(),
-      ),
-    );
-    gh.lazySingleton<_i655.GetQuestionsByCategoryUseCase>(
-      () => _i655.GetQuestionsByCategoryUseCase(gh<_i359.QuestionRepository>()),
-    );
-    gh.lazySingleton<_i245.UserRepository>(
-      () => _i362.UserRepositoryImpl(gh<_i937.LocalUserDataSource>()),
-    );
-    gh.lazySingleton<_i182.LicenseRepository>(
-      () => _i197.LicenseRepositoryImpl(gh<_i937.LocalLicenseDataSource>()),
-    );
-    gh.lazySingleton<_i591.DeleteUserUseCase>(
-      () => _i591.DeleteUserUseCase(gh<_i462.UserRepository>()),
-    );
-    gh.lazySingleton<_i315.CreateUserUseCase>(
-      () => _i315.CreateUserUseCase(gh<_i462.UserRepository>()),
     );
     gh.lazySingleton<_i307.GetRandomQuestionsUseCase>(
       () => _i307.GetRandomQuestionsUseCase(
@@ -139,6 +120,34 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i1050.GetQuestionCategoriesByIdUseCase>(
       () => _i1050.GetQuestionCategoriesByIdUseCase(
         gh<_i764.QuestionCategoryRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i655.GetQuestionsByCategoryUseCase>(
+      () => _i655.GetQuestionsByCategoryUseCase(gh<_i359.QuestionRepository>()),
+    );
+    gh.lazySingleton<_i245.UserRepository>(
+      () => _i362.UserRepositoryImpl(gh<_i937.LocalUserDataSource>()),
+    );
+    gh.lazySingleton<_i182.LicenseRepository>(
+      () => _i197.LicenseRepositoryImpl(gh<_i937.LocalLicenseDataSource>()),
+    );
+    gh.lazySingleton<_i591.DeleteUserUseCase>(
+      () => _i591.DeleteUserUseCase(gh<_i462.UserRepository>()),
+    );
+    gh.lazySingleton<_i315.CreateUserUseCase>(
+      () => _i315.CreateUserUseCase(gh<_i462.UserRepository>()),
+    );
+    gh.lazySingleton<_i591.LearningBloc>(
+      () => _i591.LearningBloc(
+        getAllQuestionCategoriesUseCase:
+            gh<_i214.GetAllQuestionCategoriesUseCase>(),
+        getQuestionCategoriesByIdUseCase:
+            gh<_i1050.GetQuestionCategoriesByIdUseCase>(),
+        getQuestionCategoriesByLicenseUseCase:
+            gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
+        getRandomQuestionsUseCase: gh<_i307.GetRandomQuestionsUseCase>(),
+        getQuestionsByCategoryUseCase:
+            gh<_i655.GetQuestionsByCategoryUseCase>(),
       ),
     );
     gh.factory<_i172.UserBloc>(
@@ -163,19 +172,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i797.AuthBloc(
         watchCurrentUserUseCase: gh<_i743.WatchCurrentUserUseCase>(),
         deleteUserUseCase: gh<_i743.DeleteUserUseCase>(),
-      ),
-    );
-    gh.lazySingleton<_i591.LearningBloc>(
-      () => _i591.LearningBloc(
-        getAllQuestionCategoriesUseCase:
-            gh<_i214.GetAllQuestionCategoriesUseCase>(),
-        getQuestionCategoriesByIdUseCase:
-            gh<_i1050.GetQuestionCategoriesByIdUseCase>(),
-        getQuestionCategoriesByLicenseUseCase:
-            gh<_i246.GetQuestionCategoriesByLicenseUseCase>(),
-        getRandomQuestionsUseCase: gh<_i307.GetRandomQuestionsUseCase>(),
-        getQuestionsByCategoryUseCase:
-            gh<_i655.GetQuestionsByCategoryUseCase>(),
       ),
     );
     return this;
