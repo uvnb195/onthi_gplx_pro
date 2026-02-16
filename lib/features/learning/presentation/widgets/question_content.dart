@@ -1,7 +1,11 @@
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
+import 'package:onthi_gplx_pro/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:onthi_gplx_pro/features/learning/domain/usecases/update_question_status.dart';
+import 'package:onthi_gplx_pro/features/learning/presentation/bloc/learning_bloc.dart';
 import 'package:onthi_gplx_pro/features/learning/presentation/widgets/styled_radio_item.dart';
 
 class OptionObject {
@@ -21,6 +25,7 @@ class QuestionArgs {
   final String? imagePath;
   final String description, explanation;
   final bool isCritical;
+  final bool isSaved;
   final List<OptionObject> options;
 
   const QuestionArgs({
@@ -30,6 +35,7 @@ class QuestionArgs {
     required this.explanation,
     required this.options,
     required this.isCritical,
+    required this.isSaved,
   });
 }
 
@@ -67,6 +73,8 @@ class _QuestionContentState extends State<QuestionContent> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
+    final learningBloc = context.read<LearningBloc>();
+
     return CustomScrollView(
       controller: _controller,
       physics: const AlwaysScrollableScrollPhysics(
@@ -87,7 +95,32 @@ class _QuestionContentState extends State<QuestionContent> {
               mainAxisSize: .min,
               crossAxisAlignment: .start,
               children: [
-                _buildHeader(),
+                _buildHeader(
+                  widget.content.isSaved,
+                  onSaveToggle: () {
+                    final authState = context.read<AuthBloc>().state;
+
+                    if (authState is Authenticated) {
+                      final uid = authState.user.id;
+
+                      context.read<LearningBloc>().add(
+                        UpdateQuestionStatus(
+                          UpdateQuestionStatusParams(
+                            userId: uid,
+                            questionId: widget.content.id,
+                            isSaved: !widget.content.isSaved,
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Vui lòng đăng nhập để lưu câu hỏi'),
+                        ),
+                      );
+                    }
+                  },
+                ),
                 SizedBox(height: 8),
                 _buildQuestion(),
                 SizedBox(height: 24),
@@ -103,7 +136,7 @@ class _QuestionContentState extends State<QuestionContent> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(bool isSaved, {required Function() onSaveToggle}) {
     return Row(
       mainAxisSize: .min,
       children: [
@@ -138,8 +171,16 @@ class _QuestionContentState extends State<QuestionContent> {
         ),
         Expanded(child: SizedBox.shrink()),
         IconButton(
-          onPressed: () {},
-          icon: Icon(BootstrapIcons.bookmark, size: 20),
+          onPressed: onSaveToggle,
+          icon: Icon(
+            isSaved
+                ? BootstrapIcons.bookmark_check_fill
+                : BootstrapIcons.bookmark_plus,
+            size: 20,
+            color: isSaved
+                ? AppColors.primaryColor.withAlpha(200)
+                : AppColors.textSecondaryColor,
+          ),
         ),
       ],
     );

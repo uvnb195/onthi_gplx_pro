@@ -41,11 +41,11 @@ class UserRepositoryImpl implements UserRepository {
   Stream<Either<Failure, UserEntity>> watchCurrentUser() {
     return _localUserDataSource
         .currentUserStream()
-        .map<Either<Failure, UserEntity>>((user) {
-          if (user == null) {
+        .map<Either<Failure, UserEntity>>((result) {
+          if (result == null) {
             return Left(CacheFailure('Không tìm thấy User.'));
           } else {
-            return Right(user.toEntity());
+            return Right(result.toEntity());
           }
         })
         .handleError(

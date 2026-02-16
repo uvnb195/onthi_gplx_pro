@@ -93,15 +93,29 @@ void main() {
       expect(b1Questions.length, 300, reason: 'B1 should have 300 questions');
     });
 
-    test('make sure getQuestionByCategory work right way', () async {
+    test('make sure watchQuestionsByCategory work right way', () async {
       final licenseId = 1;
       final categoryId = 4;
-      final results = await db.questionDao.getQuestionsByCategory(
+      final userId = 1;
+
+      final stream = db.questionDao.watchQuestionsByCategory(
         categoryId: categoryId,
         licenseId: licenseId,
+        userId: userId,
       );
 
+      final results = await stream.first;
+
       expect(results.length, 10);
+    });
+
+    test('check question_status', () async {
+      final questionId = 1;
+      final userId = 1;
+
+      final statuses = await db.select(db.questionStatusTable).get();
+
+      expect(statuses.length, greaterThan(0));
     });
   });
 }

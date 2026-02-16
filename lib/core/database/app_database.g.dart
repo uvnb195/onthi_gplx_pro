@@ -2818,9 +2818,9 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   late final GeneratedColumn<int> optionId = GeneratedColumn<int>(
     'option_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES question_option_table (id) ON DELETE NO ACTION',
     ),
@@ -2832,12 +2832,36 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   late final GeneratedColumn<bool> isCorrect = GeneratedColumn<bool>(
     'is_correct',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.bool,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'CHECK ("is_correct" IN (0, 1))',
     ),
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isSavedMeta = const VerificationMeta(
+    'isSaved',
+  );
+  @override
+  late final GeneratedColumn<bool> isSaved = GeneratedColumn<bool>(
+    'is_saved',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_saved" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
   );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
@@ -2858,6 +2882,8 @@ class $QuestionStatusTableTable extends QuestionStatusTable
     questionId,
     optionId,
     isCorrect,
+    note,
+    isSaved,
     updatedAt,
   ];
   @override
@@ -2896,16 +2922,24 @@ class $QuestionStatusTableTable extends QuestionStatusTable
         _optionIdMeta,
         optionId.isAcceptableOrUnknown(data['option_id']!, _optionIdMeta),
       );
-    } else if (isInserting) {
-      context.missing(_optionIdMeta);
     }
     if (data.containsKey('is_correct')) {
       context.handle(
         _isCorrectMeta,
         isCorrect.isAcceptableOrUnknown(data['is_correct']!, _isCorrectMeta),
       );
-    } else if (isInserting) {
-      context.missing(_isCorrectMeta);
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('is_saved')) {
+      context.handle(
+        _isSavedMeta,
+        isSaved.isAcceptableOrUnknown(data['is_saved']!, _isSavedMeta),
+      );
     }
     if (data.containsKey('updated_at')) {
       context.handle(
@@ -2940,10 +2974,18 @@ class $QuestionStatusTableTable extends QuestionStatusTable
       optionId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}option_id'],
-      )!,
+      ),
       isCorrect: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_correct'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      isSaved: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_saved'],
       )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
@@ -2963,15 +3005,19 @@ class QuestionStatusTableData extends DataClass
   final int id;
   final int userId;
   final int questionId;
-  final int optionId;
-  final bool isCorrect;
+  final int? optionId;
+  final bool? isCorrect;
+  final String? note;
+  final bool isSaved;
   final DateTime updatedAt;
   const QuestionStatusTableData({
     required this.id,
     required this.userId,
     required this.questionId,
-    required this.optionId,
-    required this.isCorrect,
+    this.optionId,
+    this.isCorrect,
+    this.note,
+    required this.isSaved,
     required this.updatedAt,
   });
   @override
@@ -2980,8 +3026,16 @@ class QuestionStatusTableData extends DataClass
     map['id'] = Variable<int>(id);
     map['user_id'] = Variable<int>(userId);
     map['question_id'] = Variable<int>(questionId);
-    map['option_id'] = Variable<int>(optionId);
-    map['is_correct'] = Variable<bool>(isCorrect);
+    if (!nullToAbsent || optionId != null) {
+      map['option_id'] = Variable<int>(optionId);
+    }
+    if (!nullToAbsent || isCorrect != null) {
+      map['is_correct'] = Variable<bool>(isCorrect);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['is_saved'] = Variable<bool>(isSaved);
     map['updated_at'] = Variable<DateTime>(updatedAt);
     return map;
   }
@@ -2991,8 +3045,14 @@ class QuestionStatusTableData extends DataClass
       id: Value(id),
       userId: Value(userId),
       questionId: Value(questionId),
-      optionId: Value(optionId),
-      isCorrect: Value(isCorrect),
+      optionId: optionId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(optionId),
+      isCorrect: isCorrect == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isCorrect),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      isSaved: Value(isSaved),
       updatedAt: Value(updatedAt),
     );
   }
@@ -3006,8 +3066,10 @@ class QuestionStatusTableData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       userId: serializer.fromJson<int>(json['userId']),
       questionId: serializer.fromJson<int>(json['questionId']),
-      optionId: serializer.fromJson<int>(json['optionId']),
-      isCorrect: serializer.fromJson<bool>(json['isCorrect']),
+      optionId: serializer.fromJson<int?>(json['optionId']),
+      isCorrect: serializer.fromJson<bool?>(json['isCorrect']),
+      note: serializer.fromJson<String?>(json['note']),
+      isSaved: serializer.fromJson<bool>(json['isSaved']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
     );
   }
@@ -3018,8 +3080,10 @@ class QuestionStatusTableData extends DataClass
       'id': serializer.toJson<int>(id),
       'userId': serializer.toJson<int>(userId),
       'questionId': serializer.toJson<int>(questionId),
-      'optionId': serializer.toJson<int>(optionId),
-      'isCorrect': serializer.toJson<bool>(isCorrect),
+      'optionId': serializer.toJson<int?>(optionId),
+      'isCorrect': serializer.toJson<bool?>(isCorrect),
+      'note': serializer.toJson<String?>(note),
+      'isSaved': serializer.toJson<bool>(isSaved),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
     };
   }
@@ -3028,15 +3092,19 @@ class QuestionStatusTableData extends DataClass
     int? id,
     int? userId,
     int? questionId,
-    int? optionId,
-    bool? isCorrect,
+    Value<int?> optionId = const Value.absent(),
+    Value<bool?> isCorrect = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+    bool? isSaved,
     DateTime? updatedAt,
   }) => QuestionStatusTableData(
     id: id ?? this.id,
     userId: userId ?? this.userId,
     questionId: questionId ?? this.questionId,
-    optionId: optionId ?? this.optionId,
-    isCorrect: isCorrect ?? this.isCorrect,
+    optionId: optionId.present ? optionId.value : this.optionId,
+    isCorrect: isCorrect.present ? isCorrect.value : this.isCorrect,
+    note: note.present ? note.value : this.note,
+    isSaved: isSaved ?? this.isSaved,
     updatedAt: updatedAt ?? this.updatedAt,
   );
   QuestionStatusTableData copyWithCompanion(QuestionStatusTableCompanion data) {
@@ -3048,6 +3116,8 @@ class QuestionStatusTableData extends DataClass
           : this.questionId,
       optionId: data.optionId.present ? data.optionId.value : this.optionId,
       isCorrect: data.isCorrect.present ? data.isCorrect.value : this.isCorrect,
+      note: data.note.present ? data.note.value : this.note,
+      isSaved: data.isSaved.present ? data.isSaved.value : this.isSaved,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
@@ -3060,14 +3130,24 @@ class QuestionStatusTableData extends DataClass
           ..write('questionId: $questionId, ')
           ..write('optionId: $optionId, ')
           ..write('isCorrect: $isCorrect, ')
+          ..write('note: $note, ')
+          ..write('isSaved: $isSaved, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, userId, questionId, optionId, isCorrect, updatedAt);
+  int get hashCode => Object.hash(
+    id,
+    userId,
+    questionId,
+    optionId,
+    isCorrect,
+    note,
+    isSaved,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3077,6 +3157,8 @@ class QuestionStatusTableData extends DataClass
           other.questionId == this.questionId &&
           other.optionId == this.optionId &&
           other.isCorrect == this.isCorrect &&
+          other.note == this.note &&
+          other.isSaved == this.isSaved &&
           other.updatedAt == this.updatedAt);
 }
 
@@ -3085,8 +3167,10 @@ class QuestionStatusTableCompanion
   final Value<int> id;
   final Value<int> userId;
   final Value<int> questionId;
-  final Value<int> optionId;
-  final Value<bool> isCorrect;
+  final Value<int?> optionId;
+  final Value<bool?> isCorrect;
+  final Value<String?> note;
+  final Value<bool> isSaved;
   final Value<DateTime> updatedAt;
   const QuestionStatusTableCompanion({
     this.id = const Value.absent(),
@@ -3094,25 +3178,29 @@ class QuestionStatusTableCompanion
     this.questionId = const Value.absent(),
     this.optionId = const Value.absent(),
     this.isCorrect = const Value.absent(),
+    this.note = const Value.absent(),
+    this.isSaved = const Value.absent(),
     this.updatedAt = const Value.absent(),
   });
   QuestionStatusTableCompanion.insert({
     this.id = const Value.absent(),
     required int userId,
     required int questionId,
-    required int optionId,
-    required bool isCorrect,
+    this.optionId = const Value.absent(),
+    this.isCorrect = const Value.absent(),
+    this.note = const Value.absent(),
+    this.isSaved = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : userId = Value(userId),
-       questionId = Value(questionId),
-       optionId = Value(optionId),
-       isCorrect = Value(isCorrect);
+       questionId = Value(questionId);
   static Insertable<QuestionStatusTableData> custom({
     Expression<int>? id,
     Expression<int>? userId,
     Expression<int>? questionId,
     Expression<int>? optionId,
     Expression<bool>? isCorrect,
+    Expression<String>? note,
+    Expression<bool>? isSaved,
     Expression<DateTime>? updatedAt,
   }) {
     return RawValuesInsertable({
@@ -3121,6 +3209,8 @@ class QuestionStatusTableCompanion
       if (questionId != null) 'question_id': questionId,
       if (optionId != null) 'option_id': optionId,
       if (isCorrect != null) 'is_correct': isCorrect,
+      if (note != null) 'note': note,
+      if (isSaved != null) 'is_saved': isSaved,
       if (updatedAt != null) 'updated_at': updatedAt,
     });
   }
@@ -3129,8 +3219,10 @@ class QuestionStatusTableCompanion
     Value<int>? id,
     Value<int>? userId,
     Value<int>? questionId,
-    Value<int>? optionId,
-    Value<bool>? isCorrect,
+    Value<int?>? optionId,
+    Value<bool?>? isCorrect,
+    Value<String?>? note,
+    Value<bool>? isSaved,
     Value<DateTime>? updatedAt,
   }) {
     return QuestionStatusTableCompanion(
@@ -3139,6 +3231,8 @@ class QuestionStatusTableCompanion
       questionId: questionId ?? this.questionId,
       optionId: optionId ?? this.optionId,
       isCorrect: isCorrect ?? this.isCorrect,
+      note: note ?? this.note,
+      isSaved: isSaved ?? this.isSaved,
       updatedAt: updatedAt ?? this.updatedAt,
     );
   }
@@ -3161,6 +3255,12 @@ class QuestionStatusTableCompanion
     if (isCorrect.present) {
       map['is_correct'] = Variable<bool>(isCorrect.value);
     }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (isSaved.present) {
+      map['is_saved'] = Variable<bool>(isSaved.value);
+    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
@@ -3175,6 +3275,8 @@ class QuestionStatusTableCompanion
           ..write('questionId: $questionId, ')
           ..write('optionId: $optionId, ')
           ..write('isCorrect: $isCorrect, ')
+          ..write('note: $note, ')
+          ..write('isSaved: $isSaved, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
@@ -8112,8 +8214,10 @@ typedef $$QuestionStatusTableTableCreateCompanionBuilder =
       Value<int> id,
       required int userId,
       required int questionId,
-      required int optionId,
-      required bool isCorrect,
+      Value<int?> optionId,
+      Value<bool?> isCorrect,
+      Value<String?> note,
+      Value<bool> isSaved,
       Value<DateTime> updatedAt,
     });
 typedef $$QuestionStatusTableTableUpdateCompanionBuilder =
@@ -8121,8 +8225,10 @@ typedef $$QuestionStatusTableTableUpdateCompanionBuilder =
       Value<int> id,
       Value<int> userId,
       Value<int> questionId,
-      Value<int> optionId,
-      Value<bool> isCorrect,
+      Value<int?> optionId,
+      Value<bool?> isCorrect,
+      Value<String?> note,
+      Value<bool> isSaved,
       Value<DateTime> updatedAt,
     });
 
@@ -8188,9 +8294,9 @@ final class $$QuestionStatusTableTableReferences
         ),
       );
 
-  $$QuestionOptionTableTableProcessedTableManager get optionId {
-    final $_column = $_itemColumn<int>('option_id')!;
-
+  $$QuestionOptionTableTableProcessedTableManager? get optionId {
+    final $_column = $_itemColumn<int>('option_id');
+    if ($_column == null) return null;
     final manager = $$QuestionOptionTableTableTableManager(
       $_db,
       $_db.questionOptionTable,
@@ -8219,6 +8325,16 @@ class $$QuestionStatusTableTableFilterComposer
 
   ColumnFilters<bool> get isCorrect => $composableBuilder(
     column: $table.isCorrect,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isSaved => $composableBuilder(
+    column: $table.isSaved,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8316,6 +8432,16 @@ class $$QuestionStatusTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isSaved => $composableBuilder(
+    column: $table.isSaved,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -8406,6 +8532,12 @@ class $$QuestionStatusTableTableAnnotationComposer
 
   GeneratedColumn<bool> get isCorrect =>
       $composableBuilder(column: $table.isCorrect, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSaved =>
+      $composableBuilder(column: $table.isSaved, builder: (column) => column);
 
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
@@ -8520,8 +8652,10 @@ class $$QuestionStatusTableTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> userId = const Value.absent(),
                 Value<int> questionId = const Value.absent(),
-                Value<int> optionId = const Value.absent(),
-                Value<bool> isCorrect = const Value.absent(),
+                Value<int?> optionId = const Value.absent(),
+                Value<bool?> isCorrect = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<bool> isSaved = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => QuestionStatusTableCompanion(
                 id: id,
@@ -8529,6 +8663,8 @@ class $$QuestionStatusTableTableTableManager
                 questionId: questionId,
                 optionId: optionId,
                 isCorrect: isCorrect,
+                note: note,
+                isSaved: isSaved,
                 updatedAt: updatedAt,
               ),
           createCompanionCallback:
@@ -8536,8 +8672,10 @@ class $$QuestionStatusTableTableTableManager
                 Value<int> id = const Value.absent(),
                 required int userId,
                 required int questionId,
-                required int optionId,
-                required bool isCorrect,
+                Value<int?> optionId = const Value.absent(),
+                Value<bool?> isCorrect = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<bool> isSaved = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
               }) => QuestionStatusTableCompanion.insert(
                 id: id,
@@ -8545,6 +8683,8 @@ class $$QuestionStatusTableTableTableManager
                 questionId: questionId,
                 optionId: optionId,
                 isCorrect: isCorrect,
+                note: note,
+                isSaved: isSaved,
                 updatedAt: updatedAt,
               ),
           withReferenceMapper: (p0) => p0

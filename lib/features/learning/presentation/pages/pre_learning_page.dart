@@ -30,7 +30,7 @@ class PreLearningPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final learningBloc = context.watch<LearningBloc>();
+    final state = context.watch<LearningBloc>().state;
     return PageWrapper(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -63,8 +63,8 @@ class PreLearningPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: _buildExplanation(
                     isLearning == false
-                        ? learningBloc.state.examRules
-                        : learningBloc.state.selectedCategory?.rules,
+                        ? state.examRules
+                        : state.selectedCategory?.rules,
                   ),
                 ),
 
@@ -88,7 +88,7 @@ class PreLearningPage extends StatelessWidget {
                   arguments: {
                     'title': title,
                     'isStudy': true,
-                    'categoryId': learningBloc.state.selectedCategory?.id,
+                    'categoryId': state.selectedCategory?.id,
                   },
                 );
 

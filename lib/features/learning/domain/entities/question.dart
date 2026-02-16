@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/question_option.dart';
+import 'package:onthi_gplx_pro/features/learning/domain/entities/question_status.dart';
 
 class QuestionEntity extends Equatable {
   final int id;
@@ -9,6 +10,7 @@ class QuestionEntity extends Equatable {
   final bool isCritical;
   final int categoryId;
   final List<QuestionOptionEntity> options;
+  final QuestionStatusEntity? status;
 
   const QuestionEntity({
     required this.id,
@@ -18,6 +20,7 @@ class QuestionEntity extends Equatable {
     required this.isCritical,
     required this.categoryId,
     required this.options,
+    this.status,
   });
 
   @override
@@ -29,5 +32,6 @@ class QuestionEntity extends Equatable {
     isCritical,
     categoryId,
     options,
+    status,
   ];
 }

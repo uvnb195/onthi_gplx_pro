@@ -1,14 +1,19 @@
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
-import 'package:onthi_gplx_pro/core/database/models/question_with_options.dart';
+import 'package:onthi_gplx_pro/core/database/models/question_with_details.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
 
 part 'question_dao.g.dart';
 
 @lazySingleton
 @DriftAccessor(
-  tables: [LicenseQuestionTable, QuestionTable, QuestionOptionTable],
+  tables: [
+    LicenseQuestionTable,
+    QuestionTable,
+    QuestionOptionTable,
+    QuestionStatusTable,
+  ],
 )
 class QuestionDao extends DatabaseAccessor<AppDatabase>
     with _$QuestionDaoMixin {
@@ -74,36 +79,84 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
   }
 
   // - - - - - - - - - - - - -
-  Future<List<QuestionWithOptions>> getQuestionsByCategory({
+  Stream<List<QuestionWithDetails>> watchQuestionsByCategory({
     required int categoryId,
     required int licenseId,
-  }) async {
+    required int userId,
+  }) {
     final query =
         select(questionTable).join([
           innerJoin(
             licenseQuestionTable,
             licenseQuestionTable.questionId.equalsExp(questionTable.id),
           ),
+          innerJoin(
+            questionOptionTable,
+            questionOptionTable.questionId.equalsExp(questionTable.id),
+          ),
+          leftOuterJoin(
+            questionStatusTable,
+            questionStatusTable.questionId.equalsExp(questionTable.id) &
+                questionStatusTable.userId.equals(userId),
+          ),
         ])..where(
           licenseQuestionTable.licenseId.equals(licenseId) &
               questionTable.categoryId.equals(categoryId),
         );
-    final rows = await query.get();
-    final questions = rows.map((r) => r.readTable(questionTable)).toList();
-    final questionIds = questions.map((q) => q.id).toList();
 
-    final allOptions = await (select(
-      questionOptionTable,
-    )..where((tbl) => tbl.questionId.isIn(questionIds))).get();
+    return query.watch().map((rows) {
+      final uniqueQuestions = <int, TypedResult>{};
 
-    return questions
-        .map(
-          (q) => QuestionWithOptions(
-            question: q,
-            options: allOptions.where((o) => o.questionId == q.id).toList(),
-          ),
-        )
-        .toList();
+      final groupedData = <int, List<QuestionOptionTableData>>{};
+      for (final row in rows) {
+        final question = row.readTable(questionTable);
+        final option = row.readTable(questionOptionTable);
+        groupedData.putIfAbsent(question.id, () => []).add(option);
+        uniqueQuestions.putIfAbsent(question.id, () => row);
+      }
+
+      return uniqueQuestions.values.map((r) {
+        final question = r.readTable(questionTable);
+        final options = groupedData[question.id] ?? [];
+        final status = r.readTableOrNull(questionStatusTable);
+        return QuestionWithDetails(
+          question: question,
+          options: options,
+          status: status,
+        );
+      }).toList();
+    });
+  }
+
+  Future<void> updateQuestionStatus({
+    required int userId,
+    required int questionId,
+    int? optionId,
+    bool? isSaved,
+    bool? isCorrect,
+    String? note,
+  }) async {
+    await into(questionStatusTable).insert(
+      QuestionStatusTableCompanion.insert(
+        userId: userId,
+        questionId: questionId,
+        optionId: Value(optionId),
+        isSaved: Value(isSaved ?? false),
+        isCorrect: Value(isCorrect),
+        note: Value(note),
+        updatedAt: Value(DateTime.now()),
+      ),
+      onConflict: DoUpdate(
+        (old) => QuestionStatusTableCompanion(
+          optionId: optionId != null ? Value(optionId) : Value.absent(),
+          isSaved: isSaved != null ? Value(isSaved) : Value.absent(),
+          isCorrect: isCorrect != null ? Value(isCorrect) : Value.absent(),
+          note: note != null ? Value(note) : Value.absent(),
+          updatedAt: Value(DateTime.now()),
+        ),
+        target: [questionStatusTable.userId, questionStatusTable.questionId],
+      ),
+    );
   }
 
   // get questions by id list

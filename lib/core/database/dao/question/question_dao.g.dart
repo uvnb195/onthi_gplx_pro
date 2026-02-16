@@ -12,4 +12,7 @@ mixin _$QuestionDaoMixin on DatabaseAccessor<AppDatabase> {
       attachedDatabase.licenseQuestionTable;
   $QuestionOptionTableTable get questionOptionTable =>
       attachedDatabase.questionOptionTable;
+  $UserTableTable get userTable => attachedDatabase.userTable;
+  $QuestionStatusTableTable get questionStatusTable =>
+      attachedDatabase.questionStatusTable;
 }

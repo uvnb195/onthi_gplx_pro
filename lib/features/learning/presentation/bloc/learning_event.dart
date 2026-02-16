@@ -38,10 +38,10 @@ final class LoadExamQuestions extends LearningEvent {
   List<Object?> get props => [licenseId, examType];
 }
 
-final class ToggleSaveQuestion extends LearningEvent {
-  final bool isSaving;
-  const ToggleSaveQuestion(this.isSaving);
+final class UpdateQuestionStatus extends LearningEvent {
+  final UpdateQuestionStatusParams params;
+  const UpdateQuestionStatus(this.params);
 
   @override
-  List<Object> get props => [isSaving];
+  List<Object> get props => [params];
 }

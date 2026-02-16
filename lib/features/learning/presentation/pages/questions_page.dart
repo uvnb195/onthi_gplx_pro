@@ -78,6 +78,7 @@ class _QuestionsPageState extends State<QuestionsPage> {
       child: QuestionContent(
         total: 32,
         content: QuestionArgs(
+          isSaved: question.status?.isSaved ?? false,
           id: question.id,
           imagePath: question.imageId,
           description: question.content,

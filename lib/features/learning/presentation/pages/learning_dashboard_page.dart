@@ -21,7 +21,15 @@ class LearningDashBoardPage extends StatelessWidget {
     required Color themeColor,
     String? description,
     required ExamType examType,
-  }) {
+  }) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColor),
+      ),
+    );
+
     final authBloc = context.read<AuthBloc>();
     final licenseId = switch (authBloc.state) {
       Authenticated(user: var u) => u.license.value.id,
@@ -34,16 +42,13 @@ class LearningDashBoardPage extends StatelessWidget {
     learningBloc.add(
       LoadExamQuestions(licenseId: licenseId, examType: examType.id),
     );
+    await Future.wait([
+      learningBloc.stream.firstWhere((state) => !state.loading),
+      // Future.delayed(const Duration(milliseconds: 300)),
+    ]);
 
-    if (learningBloc.state.loading) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => Center(
-          child: CircularProgressIndicator(color: AppColors.primaryColor),
-        ),
-      );
-    }
+    // Close Loading Dialog
+    if (context.mounted) Navigator.pop(context);
 
     final totalQuestions = learningBloc.state.questions.length;
 
