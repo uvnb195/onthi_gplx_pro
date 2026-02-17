@@ -10,6 +10,7 @@ extension QuestionMapper on QuestionTableData {
   }) {
     return QuestionEntity(
       id: id,
+      imageId: imageId,
       content: content,
       explanation: explanation ?? "",
       isCritical: isCritical,

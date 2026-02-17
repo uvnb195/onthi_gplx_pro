@@ -117,5 +117,17 @@ void main() {
 
       expect(statuses.length, greaterThan(0));
     });
+
+    test('check image questions', () async {
+      final imageQuestions = await (db.select(
+        db.questionTable,
+      )..where((tbl) => (tbl.imageId.isNotNull()))).get();
+
+      expect(imageQuestions.length, greaterThan(0));
+      print("Found ${imageQuestions.length} image questions");
+      print(
+        "Sample image question: ${imageQuestions.first.content}, image ID: ${imageQuestions.first.imageId}",
+      );
+    });
   });
 }

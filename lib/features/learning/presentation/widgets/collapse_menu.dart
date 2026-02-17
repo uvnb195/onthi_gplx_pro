@@ -74,20 +74,19 @@ class _CollapseMenuState extends State<CollapseMenu> {
       );
     }
 
-    // Đợi cả 2 việc: Data về và ít nhất 500ms để Dialog kịp hiện ra ổn định
     await Future.wait([
       learningBloc.stream.firstWhere((state) => !state.loading),
-      // Future.delayed(const Duration(milliseconds: 300)),
+      Future.delayed(const Duration(milliseconds: 300)),
     ]);
 
     // Close Loading Dialog
-    if (context.mounted) {
+    if (mounted) {
       Navigator.of(context, rootNavigator: true).pop();
     }
 
     final totalQuestions = learningBloc.state.questions.length;
 
-    if (context.mounted) {
+    if (mounted) {
       Navigator.pushNamed(
         context,
         RouteNames.learningInfo,

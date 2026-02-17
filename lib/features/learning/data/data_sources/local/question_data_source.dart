@@ -17,6 +17,8 @@ abstract class LocalQuestionDataSource {
     String? note,
     bool? isSaved,
   });
+
+  Future<int> getTotalQuestionCount(int licenseId);
 }
 
 @LazySingleton(as: LocalQuestionDataSource)
@@ -36,6 +38,11 @@ class LocalQuestionDataSourceImpl implements LocalQuestionDataSource {
       licenseId: licenseId,
       userId: userId,
     );
+  }
+
+  @override
+  Future<int> getTotalQuestionCount(int licenseId) {
+    return _questionDao.getTotalQuestionCount(licenseId);
   }
 
   @override

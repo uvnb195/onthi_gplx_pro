@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:onthi_gplx_pro/core/constants/exam_type.dart';
-import 'package:onthi_gplx_pro/core/di/injection.dart';
 import 'package:onthi_gplx_pro/core/router/route_names.dart';
 import 'package:onthi_gplx_pro/core/theme/app_colors.dart';
 import 'package:onthi_gplx_pro/core/widgets/index.dart';
@@ -44,42 +43,42 @@ class LearningDashBoardPage extends StatelessWidget {
     );
     await Future.wait([
       learningBloc.stream.firstWhere((state) => !state.loading),
-      // Future.delayed(const Duration(milliseconds: 300)),
+      Future.delayed(const Duration(milliseconds: 300)),
     ]);
 
     // Close Loading Dialog
     if (context.mounted) Navigator.pop(context);
 
-    final totalQuestions = learningBloc.state.questions.length;
-
-    Navigator.pushNamed(
-      context,
-      RouteNames.learningInfo,
-      arguments: {
-        'title': title,
-        'iconData': iconData,
-        'themeColor': themeColor,
-        'description': description,
-        'isLearning': false,
-        'stats': [
-          {
-            'iconData': BootstrapIcons.file_earmark_text,
-            'title': '40',
-            'description': 'Câu hỏi',
-          },
-          {
-            'iconData': BootstrapIcons.alarm,
-            'title': '24',
-            'description': 'phút',
-          },
-          {
-            'iconData': BootstrapIcons.clipboard_check,
-            'title': '36/40',
-            'description': 'tối thiểu',
-          },
-        ],
-      },
-    );
+    if (context.mounted) {
+      Navigator.pushNamed(
+        context,
+        RouteNames.learningInfo,
+        arguments: {
+          'title': title,
+          'iconData': iconData,
+          'themeColor': themeColor,
+          'description': description,
+          'isLearning': false,
+          'stats': [
+            {
+              'iconData': BootstrapIcons.file_earmark_text,
+              'title': '40',
+              'description': 'Câu hỏi',
+            },
+            {
+              'iconData': BootstrapIcons.alarm,
+              'title': '24',
+              'description': 'phút',
+            },
+            {
+              'iconData': BootstrapIcons.clipboard_check,
+              'title': '36/40',
+              'description': 'tối thiểu',
+            },
+          ],
+        },
+      );
+    }
   }
 
   @override
@@ -190,7 +189,6 @@ class LearningDashBoardPage extends StatelessWidget {
     required List<CollapseMenuItem> videoCategories,
   }) {
     final List<Color> colors = AppColors.rainbowColors;
-    final learningBloc = sl<LearningBloc>();
 
     return SafeArea(
       child: CustomScrollView(
@@ -229,18 +227,23 @@ class LearningDashBoardPage extends StatelessWidget {
             ),
           ),
 
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-            ).copyWith(top: 16),
-            sliver: SliverToBoxAdapter(
-              child: CollapseMenu(
-                items: theoryCategories,
-                iconData: BootstrapIcons.list_check,
-                title: 'Học lý thuyết',
-                subTitle: '600 câu • 7 chủ đề',
-              ),
-            ),
+          BlocBuilder<LearningBloc, LearningState>(
+            builder: (context, state) {
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                ).copyWith(top: 16),
+                sliver: SliverToBoxAdapter(
+                  child: CollapseMenu(
+                    items: theoryCategories,
+                    iconData: BootstrapIcons.list_check,
+                    title: 'Học lý thuyết',
+                    subTitle:
+                        '${state.totalQuestions} câu • ${state.categories.length - 2} chủ đề',
+                  ),
+                ),
+              );
+            },
           ),
 
           SliverPadding(

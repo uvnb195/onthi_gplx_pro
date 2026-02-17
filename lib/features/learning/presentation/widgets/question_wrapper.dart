@@ -11,7 +11,6 @@ class QuestionWrapper extends StatefulWidget {
   final double countdownSeconds;
   final String title;
   final int totalQuestion, currentIndex;
-  final int? categoryId;
   final Widget child;
   final ValueChanged<int>? onQuestionChanged;
 
@@ -20,7 +19,6 @@ class QuestionWrapper extends StatefulWidget {
     this.countdownSeconds = 0,
     this.showCategoryButton = false,
     required this.title,
-    this.categoryId,
     required this.child,
     required this.totalQuestion,
     required this.currentIndex,

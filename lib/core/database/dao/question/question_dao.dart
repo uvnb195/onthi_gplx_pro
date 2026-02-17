@@ -78,9 +78,93 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
     });
   }
 
+  // M A P P I N G
+  List<QuestionWithDetails> _getGroupedData(List<TypedResult> rows) {
+    final uniqueQuestions = <int, TypedResult>{};
+    final groupedData = <int, List<QuestionOptionTableData>>{};
+
+    for (final row in rows) {
+      final question = row.readTable(questionTable);
+      final option = row.readTable(questionOptionTable);
+      groupedData.putIfAbsent(question.id, () => []).add(option);
+      uniqueQuestions.putIfAbsent(question.id, () => row);
+    }
+
+    return uniqueQuestions.values.map((r) {
+      final question = r.readTable(questionTable);
+      final options = groupedData[question.id] ?? [];
+      final status = r.readTableOrNull(questionStatusTable);
+      return QuestionWithDetails(
+        question: question,
+        options: options,
+        status: status,
+      );
+    }).toList();
+  }
+
   // - - - - - - - - - - - - -
   Stream<List<QuestionWithDetails>> watchQuestionsByCategory({
     required int categoryId,
+    required int licenseId,
+    required int userId,
+  }) {
+    switch (categoryId) {
+      case 1:
+        return watchSavedQuestions(licenseId: licenseId, userId: userId);
+      case 2:
+        return watchCriticalQuestions(licenseId: licenseId, userId: userId);
+      default:
+        final query =
+            select(questionTable).join([
+              innerJoin(
+                licenseQuestionTable,
+                licenseQuestionTable.questionId.equalsExp(questionTable.id),
+              ),
+              innerJoin(
+                questionOptionTable,
+                questionOptionTable.questionId.equalsExp(questionTable.id),
+              ),
+              leftOuterJoin(
+                questionStatusTable,
+                questionStatusTable.questionId.equalsExp(questionTable.id) &
+                    questionStatusTable.userId.equals(userId),
+              ),
+            ])..where(
+              licenseQuestionTable.licenseId.equals(licenseId) &
+                  questionTable.categoryId.equals(categoryId),
+            );
+
+        return query.watch().map((rows) {
+          return _getGroupedData(rows);
+        });
+    }
+  }
+
+  Stream<List<QuestionWithDetails>> watchSavedQuestions({
+    required int licenseId,
+    required int userId,
+  }) {
+    final query = select(questionTable).join([
+      innerJoin(
+        licenseQuestionTable,
+        licenseQuestionTable.questionId.equalsExp(questionTable.id),
+      ),
+      innerJoin(
+        questionOptionTable,
+        questionOptionTable.questionId.equalsExp(questionTable.id),
+      ),
+      innerJoin(
+        questionStatusTable,
+        questionStatusTable.questionId.equalsExp(questionTable.id) &
+            questionStatusTable.userId.equals(userId) &
+            questionStatusTable.isSaved.equals(true),
+      ),
+    ])..where(licenseQuestionTable.licenseId.equals(licenseId));
+
+    return query.watch().map((rows) => _getGroupedData(rows));
+  }
+
+  Stream<List<QuestionWithDetails>> watchCriticalQuestions({
     required int licenseId,
     required int userId,
   }) {
@@ -101,31 +185,10 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
           ),
         ])..where(
           licenseQuestionTable.licenseId.equals(licenseId) &
-              questionTable.categoryId.equals(categoryId),
+              questionTable.isCritical.equals(true),
         );
 
-    return query.watch().map((rows) {
-      final uniqueQuestions = <int, TypedResult>{};
-
-      final groupedData = <int, List<QuestionOptionTableData>>{};
-      for (final row in rows) {
-        final question = row.readTable(questionTable);
-        final option = row.readTable(questionOptionTable);
-        groupedData.putIfAbsent(question.id, () => []).add(option);
-        uniqueQuestions.putIfAbsent(question.id, () => row);
-      }
-
-      return uniqueQuestions.values.map((r) {
-        final question = r.readTable(questionTable);
-        final options = groupedData[question.id] ?? [];
-        final status = r.readTableOrNull(questionStatusTable);
-        return QuestionWithDetails(
-          question: question,
-          options: options,
-          status: status,
-        );
-      }).toList();
-    });
+    return query.watch().map((rows) => _getGroupedData(rows));
   }
 
   Future<void> updateQuestionStatus({
@@ -141,7 +204,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
         userId: userId,
         questionId: questionId,
         optionId: Value(optionId),
-        isSaved: Value(isSaved ?? false),
+        isSaved: isSaved != null ? Value(isSaved) : Value.absent(),
         isCorrect: Value(isCorrect),
         note: Value(note),
         updatedAt: Value(DateTime.now()),
@@ -157,6 +220,17 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
         target: [questionStatusTable.userId, questionStatusTable.questionId],
       ),
     );
+  }
+
+  Future<int> getTotalQuestionCount(int licenseId) async {
+    final countQuery = licenseQuestionTable.questionId.count();
+
+    final query = selectOnly(licenseQuestionTable)
+      ..addColumns([countQuery])
+      ..where(licenseQuestionTable.licenseId.equals(licenseId));
+    final row = await query.getSingle();
+
+    return row.read(countQuery) ?? 0;
   }
 
   // get questions by id list

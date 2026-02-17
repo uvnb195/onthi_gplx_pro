@@ -30,83 +30,85 @@ class PreLearningPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final state = context.watch<LearningBloc>().state;
-    return PageWrapper(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          automaticallyImplyActions: false,
-          shape: Border(
-            bottom: BorderSide(
-              color: AppColors.textSecondaryColor.withAlpha(50),
-              width: 1,
-            ),
-          ),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(
-              parent: BouncingScrollPhysics(),
-            ),
-            child: Column(
-              children: [
-                _buildHeader(),
-                SizedBox(height: 16),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _buildMode(screenWidth),
+    return BlocBuilder<LearningBloc, LearningState>(
+      builder: (context, state) {
+        return PageWrapper(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              automaticallyImplyActions: false,
+              shape: Border(
+                bottom: BorderSide(
+                  color: AppColors.textSecondaryColor.withAlpha(50),
+                  width: 1,
                 ),
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _buildExplanation(
-                    isLearning == false
-                        ? state.examRules
-                        : state.selectedCategory?.rules,
-                  ),
+              ),
+            ),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
                 ),
+                child: Column(
+                  children: [
+                    _buildHeader(state.questions.length),
+                    SizedBox(height: 16),
 
-                SizedBox(height: 40),
-              ],
+                    if (state.questions.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: _buildMode(screenWidth),
+                      ),
+                    SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: _buildExplanation(
+                        isLearning == false
+                            ? state.examRules
+                            : state.selectedCategory?.rules,
+                      ),
+                    ),
+
+                    SizedBox(height: 40),
+                  ],
+                ),
+              ),
+            ),
+            bottomNavigationBar: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: StyledQuestionPageBottom(
+                  nextText: 'Bắt đầu',
+                  prevText: '',
+                  showDone: false,
+                  showPrev: false,
+                  onNext: state.questions.isEmpty
+                      ? null
+                      : () {
+                          Navigator.pushNamed(
+                            context,
+                            RouteNames.learning,
+                            arguments: {'title': title, 'isStudy': true},
+                          );
+
+                          // Navigator.pushNamed(
+                          //   context,
+                          //   RouteNames.videoLearning,
+                          //   arguments: screenWidth > 600,
+                          // );
+                        },
+                  onPrev: () {},
+                ),
+              ),
             ),
           ),
-        ),
-        bottomNavigationBar: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: StyledQuestionPageBottom(
-              nextText: 'Bắt đầu',
-              prevText: '',
-              showDone: false,
-              showPrev: false,
-              onNext: () {
-                Navigator.pushNamed(
-                  context,
-                  RouteNames.learning,
-                  arguments: {
-                    'title': title,
-                    'isStudy': true,
-                    'categoryId': state.selectedCategory?.id,
-                  },
-                );
-
-                // Navigator.pushNamed(
-                //   context,
-                //   RouteNames.videoLearning,
-                //   arguments: screenWidth > 600,
-                // );
-              },
-              onPrev: () {},
-            ),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(int totalQuestions) {
     Color getIconColor() {
       final Brightness brightness = ThemeData.estimateBrightnessForColor(
         themeColor,
@@ -148,37 +150,76 @@ class PreLearningPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
-              children: List.generate(
-                stats.length,
-                (index) => Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 8,
-                    ),
-                    child: InfoCard(
-                      backgroundColor: Color.lerp(
-                        themeColor,
-                        Colors.black,
-                        0.8,
-                      )!,
-                      iconData: stats[index]['iconData'],
-                      title: stats[index]['title'],
-                      description: stats[index]['description'],
-                      descriptionStyle: const TextStyle(
-                        color: AppColors.textSecondaryColor,
-                        fontSize: 12,
-                        fontWeight: .w400,
-                      ),
-                      themeColor: themeColor,
-                    ),
+              children: List.generate(stats.length, (index) {
+                final displayDescription = stats[index]['description'];
+                final displayTitle =
+                    displayDescription.toString().toUpperCase() == 'CÂU HỎI'
+                    ? totalQuestions.toString()
+                    : "=.=";
+
+                return Expanded(
+                  child: _buildHeaderItem(
+                    title: displayTitle,
+                    description: displayDescription,
+                    iconData: stats[index]['iconData'],
+                    isLocked: totalQuestions == 0,
                   ),
-                ),
-              ),
+                );
+              }),
             ),
           ),
         ],
       ],
+    );
+  }
+
+  Widget _buildHeaderItem({
+    required String title,
+    required String description,
+    required IconData iconData,
+    bool isLocked = false,
+  }) {
+    if (isLocked) {
+      return Padding(
+        padding: const .all(8),
+        child: InfoCard(
+          backgroundColor: Color.lerp(
+            AppColors.textDisableColor,
+            Colors.black,
+            0.6,
+          )!,
+          iconData: iconData,
+          title: title,
+          titleStyle: TextStyle(
+            color: AppColors.textDisableColor,
+            fontSize: 24,
+            fontWeight: .w700,
+          ),
+          description: description,
+          descriptionStyle: const TextStyle(
+            color: AppColors.textSecondaryColor,
+            fontSize: 12,
+            fontWeight: .w400,
+          ),
+          themeColor: AppColors.textDisableColor,
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const .all(8),
+      child: InfoCard(
+        backgroundColor: Color.lerp(themeColor, Colors.black, 0.8)!,
+        iconData: iconData,
+        title: title,
+        description: description,
+        descriptionStyle: const TextStyle(
+          color: AppColors.textSecondaryColor,
+          fontSize: 12,
+          fontWeight: .w400,
+        ),
+        themeColor: themeColor,
+      ),
     );
   }
 

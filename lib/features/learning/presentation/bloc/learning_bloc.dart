@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:dart_either/dart_either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
@@ -12,8 +13,7 @@ part 'learning_state.dart';
 @lazySingleton
 class LearningBloc extends Bloc<LearningEvent, LearningState> {
   final GetAllQuestionCategoriesUseCase getAllQuestionCategoriesUseCase;
-  final GetQuestionCategoriesByLicenseUseCase
-  getQuestionCategoriesByLicenseUseCase;
+  final GetLicenseInfoUseCase getLicenseInfoUseCase;
   final GetQuestionCategoriesByIdUseCase getQuestionCategoriesByIdUseCase;
 
   final GetRandomQuestionsUseCase getRandomQuestionsUseCase;
@@ -24,13 +24,16 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
   LearningBloc({
     required this.getAllQuestionCategoriesUseCase,
     required this.getQuestionCategoriesByIdUseCase,
-    required this.getQuestionCategoriesByLicenseUseCase,
+    required this.getLicenseInfoUseCase,
     required this.getRandomQuestionsUseCase,
     required this.getQuestionsByCategoryUseCase,
     required this.updateQuestionStatusUseCase,
   }) : super(LearningState(selectedCategory: null, categories: [])) {
     on<LoadCategories>(_onLoadCategories);
-    on<LoadLearningQuestions>(_onLoadLearningQuestions);
+    on<LoadLearningQuestions>(
+      _onLoadLearningQuestions,
+      transformer: restartable(),
+    );
     on<LoadExamQuestions>(_onLoadExamQuestions);
 
     on<UpdateQuestionStatus>(_onUpdateQuestionStatus);
@@ -41,16 +44,20 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
     Emitter<LearningState> emit,
   ) async {
     emit(state.copyWith(loading: true));
-    final result = await getQuestionCategoriesByLicenseUseCase.call(
-      event.licenseId,
-    );
+    final result = await getLicenseInfoUseCase.call(event.licenseId);
 
     result.fold(
       ifLeft: (error) {
-        emit(state.copyWith(errorMessage: error.message));
+        emit(state.copyWith(errorMessage: error.message, loading: false));
       },
       ifRight: (success) {
-        emit(state.copyWith(categories: success));
+        emit(
+          state.copyWith(
+            categories: success.categories,
+            totalQuestions: success.totalQuestions,
+            loading: false,
+          ),
+        );
       },
     );
   }
@@ -76,16 +83,15 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
       ),
       onData: (result) {
         return result.fold(
-          ifLeft: (error) => state.copyWith(errorMessage: error.message),
+          ifLeft: (error) =>
+              state.copyWith(errorMessage: error.message, loading: false),
           ifRight: (success) {
-            print(
-              "Dữ liệu về: ${success.length} câu hỏi cho category ${event.category.label}",
-            );
-            return state.copyWith(questions: success);
+            return state.copyWith(questions: success, loading: false);
           },
         );
       },
-      onError: (err, _) => state.copyWith(errorMessage: err.toString()),
+      onError: (err, _) =>
+          state.copyWith(errorMessage: err.toString(), loading: false),
     );
   }
 
@@ -103,8 +109,10 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
     );
 
     result.fold(
-      ifLeft: (error) => emit(state.copyWith(errorMessage: error.message)),
-      ifRight: (success) => emit(state.copyWith(examRules: (success.rules))),
+      ifLeft: (error) =>
+          emit(state.copyWith(errorMessage: error.message, loading: false)),
+      ifRight: (success) =>
+          emit(state.copyWith(examRules: (success.rules), loading: false)),
     );
   }
 
@@ -115,11 +123,11 @@ class LearningBloc extends Bloc<LearningEvent, LearningState> {
     final result = await updateQuestionStatusUseCase(event.params);
 
     result.fold(
-      ifLeft: (error) {
-        emit(state.copyWith(errorMessage: error.message));
+      ifLeft: (failure) {
+        emit(state.copyWith(errorMessage: failure.message, loading: false));
       },
-      ifRight: (success) {
-        null;
+      ifRight: (_) {
+        emit(state.copyWith(errorMessage: null, loading: false));
       },
     );
   }

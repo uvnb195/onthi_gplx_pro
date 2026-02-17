@@ -5,6 +5,7 @@ class StyledTextField extends StatelessWidget {
   final bool autoFocus;
   final Widget? prefix, suffix;
   final String? customLabel, hintText, internalLabel, errorText;
+  final int? maxLines, minLines;
   final ValueChanged<String>? onChanged;
   final TextInputType keyboardType;
 
@@ -19,6 +20,8 @@ class StyledTextField extends StatelessWidget {
     this.onChanged,
     this.keyboardType = .name,
     this.autoFocus = false,
+    this.maxLines = 1,
+    this.minLines,
   });
 
   @override
@@ -32,7 +35,6 @@ class StyledTextField extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
                 customLabel!,
-                maxLines: 1,
                 overflow: .ellipsis,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                 textAlign: TextAlign.left,
@@ -45,6 +47,8 @@ class StyledTextField extends StatelessWidget {
           autofocus: autoFocus,
           key: Key('welcomeTextField'),
           keyboardType: keyboardType,
+          maxLines: maxLines,
+          minLines: minLines,
           cursorColor: AppColors.primaryColor,
           decoration: InputDecoration(
             prefixIcon: prefix,

@@ -27,8 +27,7 @@ import '../../features/learning/domain/repositories/question_repository.dart'
     as _i359;
 import '../../features/learning/domain/usecases/get_all_question_categories.dart'
     as _i214;
-import '../../features/learning/domain/usecases/get_question_categories_by_license.dart'
-    as _i246;
+import '../../features/learning/domain/usecases/get_license_info.dart' as _i29;
 import '../../features/learning/domain/usecases/get_question_category_by_id.dart'
     as _i1050;
 import '../../features/learning/domain/usecases/get_random_questions.dart'
@@ -115,11 +114,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i764.QuestionCategoryRepository>(),
       ),
     );
-    gh.lazySingleton<_i246.GetQuestionCategoriesByLicenseUseCase>(
-      () => _i246.GetQuestionCategoriesByLicenseUseCase(
-        gh<_i764.QuestionCategoryRepository>(),
-      ),
-    );
     gh.lazySingleton<_i1050.GetQuestionCategoriesByIdUseCase>(
       () => _i1050.GetQuestionCategoriesByIdUseCase(
         gh<_i764.QuestionCategoryRepository>(),
@@ -153,18 +147,10 @@ extension GetItInjectableX on _i174.GetIt {
         questionCategoryRepository: gh<_i764.QuestionCategoryRepository>(),
       ),
     );
-    gh.lazySingleton<_i591.LearningBloc>(
-      () => _i591.LearningBloc(
-        getAllQuestionCategoriesUseCase:
-            gh<_i106.GetAllQuestionCategoriesUseCase>(),
-        getQuestionCategoriesByIdUseCase:
-            gh<_i106.GetQuestionCategoriesByIdUseCase>(),
-        getQuestionCategoriesByLicenseUseCase:
-            gh<_i106.GetQuestionCategoriesByLicenseUseCase>(),
-        getRandomQuestionsUseCase: gh<_i106.GetRandomQuestionsUseCase>(),
-        getQuestionsByCategoryUseCase:
-            gh<_i106.WatchQuestionsByCategoryUseCase>(),
-        updateQuestionStatusUseCase: gh<_i106.UpdateQuestionStatusUseCase>(),
+    gh.lazySingleton<_i29.GetLicenseInfoUseCase>(
+      () => _i29.GetLicenseInfoUseCase(
+        categoryRepository: gh<_i764.QuestionCategoryRepository>(),
+        questionRepository: gh<_i359.QuestionRepository>(),
       ),
     );
     gh.factory<_i172.UserBloc>(
@@ -184,6 +170,19 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i704.LicenseBloc>(
       () => _i704.LicenseBloc(gh<_i743.GetLicensesUseCase>()),
+    );
+    gh.lazySingleton<_i591.LearningBloc>(
+      () => _i591.LearningBloc(
+        getAllQuestionCategoriesUseCase:
+            gh<_i106.GetAllQuestionCategoriesUseCase>(),
+        getQuestionCategoriesByIdUseCase:
+            gh<_i106.GetQuestionCategoriesByIdUseCase>(),
+        getLicenseInfoUseCase: gh<_i106.GetLicenseInfoUseCase>(),
+        getRandomQuestionsUseCase: gh<_i106.GetRandomQuestionsUseCase>(),
+        getQuestionsByCategoryUseCase:
+            gh<_i106.WatchQuestionsByCategoryUseCase>(),
+        updateQuestionStatusUseCase: gh<_i106.UpdateQuestionStatusUseCase>(),
+      ),
     );
     gh.lazySingleton<_i797.AuthBloc>(
       () => _i797.AuthBloc(

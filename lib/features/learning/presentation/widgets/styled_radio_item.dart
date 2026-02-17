@@ -18,43 +18,51 @@ class StyledRadioItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isActive = themeColor != null;
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: .circular(12),
+        borderRadius: .circular(isActive ? 24 : 12),
         splashColor: AppColors.infoColor.withAlpha(30),
-        child: Ink(
-          width: double.maxFinite,
-          padding: .all(12),
-          decoration: BoxDecoration(
-            color: themeColor?.withAlpha(30),
-            border: .all(
-              width: themeColor != null ? 2 : 1,
-              color: themeColor != null
-                  ? themeColor!
-                  : AppColors.textSecondaryColor.withAlpha(100),
+        child: AnimatedScale(
+          scale: (isActive) ? 1.02 : 1,
+          curve: Curves.easeOutBack,
+          duration: const Duration(milliseconds: 300),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeOutBack,
+            width: double.maxFinite,
+            padding: .all(16),
+            decoration: BoxDecoration(
+              color: themeColor?.withAlpha(30),
+              border: .all(
+                width: themeColor != null ? 2 : 1,
+                color: themeColor != null
+                    ? themeColor!
+                    : AppColors.textSecondaryColor.withAlpha(100),
+              ),
+              borderRadius: .circular(isActive ? 24 : 12),
             ),
-            borderRadius: .circular(12),
-          ),
-          child: Align(
-            alignment: .centerLeft,
-            child: RichText(
-              text: TextSpan(
-                text: '${String.fromCharCode(index + 65)}.  ',
-                style: TextStyle(fontSize: 18, fontWeight: .w500),
-                children: [
-                  TextSpan(
-                    text: content,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: .w400,
-                      letterSpacing: 0.8,
-                      wordSpacing: 2,
-                      height: 1.2,
+            child: Align(
+              alignment: .centerLeft,
+              child: RichText(
+                text: TextSpan(
+                  text: '${String.fromCharCode(index + 65)}.  ',
+                  style: TextStyle(fontSize: 18, fontWeight: .w500),
+                  children: [
+                    TextSpan(
+                      text: content,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: .w400,
+                        letterSpacing: 0.8,
+                        wordSpacing: 2,
+                        height: 1.2,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

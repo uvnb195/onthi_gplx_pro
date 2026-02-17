@@ -15,12 +15,6 @@ class QuestionRepositoryImpl implements QuestionRepository {
   QuestionRepositoryImpl(this._localQuestionDataSource);
 
   @override
-  Future<Either<Failure, List<QuestionEntity>>> getCriticalQuestions() {
-    // TODO: implement getCriticalQuestions
-    throw UnimplementedError();
-  }
-
-  @override
   Stream<Either<Failure, List<QuestionEntity>>> watchQuestionsByCategory({
     required int categoryId,
     required int licenseId,
@@ -109,6 +103,22 @@ class QuestionRepositoryImpl implements QuestionRepository {
     } catch (e) {
       return Left(
         DatabaseFailure("Lỗi cập nhật trạng thái câu hỏi: ${e.toString()}"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> getTotalQuestionCount(int licenseId) async {
+    try {
+      final count = await _localQuestionDataSource.getTotalQuestionCount(
+        licenseId,
+      );
+      return Right(count);
+    } catch (e) {
+      return Left(
+        DatabaseFailure(
+          "Error while getting total question count: ${e.toString()}",
+        ),
       );
     }
   }
