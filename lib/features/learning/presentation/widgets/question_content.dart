@@ -33,15 +33,13 @@ class QuestionContent extends StatefulWidget {
 class _QuestionContentState extends State<QuestionContent> {
   int? selectedId;
   bool noteEditing = false;
-  String? noted;
+  String? newNote;
   late final ScrollController _controller;
 
   @override
   void initState() {
     _controller = ScrollController();
     selectedId = widget.selectedOptionId;
-    noted = widget.question.status?.note;
-    noteEditing = noted == null;
     super.initState();
   }
 
@@ -54,17 +52,21 @@ class _QuestionContentState extends State<QuestionContent> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final bool isSaved = context.select((LearningBloc bloc) {
+    final (isSaved, noted) = context.select((LearningBloc bloc) {
       try {
-        return bloc.state.questions
-                .firstWhere((q) => q.id == widget.question.id)
-                .status
-                ?.isSaved ??
-            false;
+        final status = bloc.state.questions
+            .firstWhere((q) => q.id == widget.question.id)
+            .status;
+        newNote = status?.note != null && status!.note!.isNotEmpty
+            ? status.note
+            : null;
+
+        return (status?.isSaved ?? false, status?.note);
       } catch (_) {
-        return false;
+        return (false, null);
       }
     });
+
     return CustomScrollView(
       controller: _controller,
       physics: const AlwaysScrollableScrollPhysics(
@@ -72,6 +74,7 @@ class _QuestionContentState extends State<QuestionContent> {
       ),
       slivers: [
         SliverToBoxAdapter(child: SizedBox(height: 16)),
+
         SliverToBoxAdapter(
           child: Container(
             decoration: BoxDecoration(
@@ -140,27 +143,36 @@ class _QuestionContentState extends State<QuestionContent> {
             ),
           ),
         ),
-        if (selectedId != null || noted != null)
-          SliverPadding(
-            padding: .symmetric(vertical: 16),
-            sliver: SliverToBoxAdapter(
-              child: StyledSlideEntrance(
-                from: .TOP,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.neutralColor,
-                    borderRadius: .circular(8),
-                    border: .all(color: AppColors.secondaryColor.withAlpha(50)),
-                  ),
 
-                  padding: const .symmetric(vertical: 12, horizontal: 4),
-                  child: _buildNote(),
-                ),
+        if (noted != null || selectedId != null)
+          SliverPadding(
+            padding: .symmetric(vertical: 8),
+            sliver: SliverToBoxAdapter(
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                child: (noted != null || selectedId != null)
+                    ? StyledSlideEntrance(
+                        from: .TOP,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+
+                          // decoration: BoxDecoration(
+                          //   color: AppColors.neutralColor,
+                          //   borderRadius: .circular(8),
+                          //   border: .all(
+                          //     color: AppColors.secondaryColor.withAlpha(50),
+                          //   ),
+                          // ),
+                          padding: .symmetric(vertical: 4, horizontal: 4),
+                          child: _buildNote(noted),
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ),
             ),
-          ),
-
-        SliverToBoxAdapter(child: SizedBox(height: 16)),
+          )
+        else
+          SliverToBoxAdapter(child: SizedBox(height: 16)),
       ],
     );
   }
@@ -412,7 +424,8 @@ class _QuestionContentState extends State<QuestionContent> {
     );
   }
 
-  Widget _buildNote() {
+  Widget _buildNote(String? noted) {
+    final authState = context.read<AuthBloc>().state;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       switchInCurve: Curves.easeOut,
@@ -433,63 +446,107 @@ class _QuestionContentState extends State<QuestionContent> {
         );
       },
       child: !noteEditing
-          ? Row(
-              key: ValueKey('show'),
-              crossAxisAlignment: .start,
-              children: [
-                Icon(BootstrapIcons.quote),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    "ádfkalsjfas;dfklasjflasjflasdljládfkalsjfas;dfklasjflasjflasdljládfkalsjfas;dfklasjflasjflasdljládfkalsjfas;dfklasjflasjflasdljládfkalsjfas;dfklasjflasjflasdljl",
-                  ),
-                ),
-                PopupMenuButton<String>(
-                  elevation: 4,
-                  color: Color.lerp(
-                    AppColors.backgroundColor,
-                    Colors.black,
-                    0.4,
-                  ),
-                  padding: .all(4),
-                  constraints: BoxConstraints(maxWidth: 120),
-                  tooltip: "Chỉnh sửa ghi chú",
-                  iconColor: AppColors.textColor,
-                  onSelected: (value) {
-                    if (value == 'edit') {
-                      setState(() {
-                        noteEditing = !noteEditing;
-                      });
-                    }
-                  },
-                  itemBuilder: (BuildContext context) => [
-                    PopupMenuItem(
-                      height: 40,
-                      value: 'edit',
-                      child: Row(
-                        children: [
-                          Icon(BootstrapIcons.pen, size: 20),
-                          SizedBox(width: 8),
-                          Text('Chỉnh sửa'),
+          ? noted == null
+                ? Row(
+                    children: [
+                      Expanded(child: SizedBox.shrink()),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            noteEditing = true;
+                          });
+                        },
+                        color: AppColors.textColor,
+                        icon: Row(
+                          children: [
+                            Icon(BootstrapIcons.pencil, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              "Thêm ghi chú",
+                              style: TextStyle(fontSize: 16, fontWeight: .bold),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Expanded(child: SizedBox.shrink()),
+                    ],
+                  )
+                : Row(
+                    key: ValueKey('show'),
+                    crossAxisAlignment: .center,
+                    children: [
+                      Icon(BootstrapIcons.chat_right_text),
+                      SizedBox(width: 8),
+                      Expanded(child: Text(noted)),
+                      PopupMenuButton<String>(
+                        elevation: 4,
+                        color: Color.lerp(
+                          AppColors.backgroundColor,
+                          Colors.black,
+                          0.4,
+                        ),
+                        padding: .all(4),
+                        constraints: BoxConstraints(maxWidth: 120),
+                        tooltip: "Chỉnh sửa ghi chú",
+                        iconColor: AppColors.textColor,
+                        onSelected: (value) {
+                          switch (value) {
+                            case 'edit':
+                              setState(() {
+                                noteEditing = !noteEditing;
+                              });
+                              return;
+                            default:
+                              if (authState is Authenticated) {
+                                final uid = authState.user.id;
+
+                                setState(() {
+                                  newNote = null;
+                                });
+
+                                context.read<LearningBloc>().add(
+                                  UpdateQuestionStatus(
+                                    UpdateQuestionStatusParams(
+                                      userId: uid,
+                                      questionId: widget.question.id,
+                                      note: '/ --delete',
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return;
+                          }
+                        },
+                        itemBuilder: (BuildContext context) => [
+                          PopupMenuItem(
+                            height: 40,
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                Icon(BootstrapIcons.pen, size: 20),
+                                SizedBox(width: 8),
+                                Text('Chỉnh sửa'),
+                              ],
+                            ),
+                          ),
+                          PopupMenuDivider(color: AppColors.neutralColor),
+                          PopupMenuItem(
+                            height: 40,
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(BootstrapIcons.trash3, size: 20),
+                                SizedBox(width: 8),
+                                Text('Xoá'),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    PopupMenuDivider(color: AppColors.neutralColor),
-                    PopupMenuItem(
-                      height: 40,
-                      value: 'delete',
-                      child: Row(
-                        children: [
-                          Icon(BootstrapIcons.trash3, size: 20),
-                          SizedBox(width: 8),
-                          Text('Xoá'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            )
+                    ],
+                  )
           : Padding(
               key: ValueKey('edit'),
               padding: const EdgeInsets.only(left: 12.0, right: 4),
@@ -498,6 +555,8 @@ class _QuestionContentState extends State<QuestionContent> {
                 children: [
                   Expanded(
                     child: StyledTextField(
+                      initialValue: noted,
+                      onChanged: (value) => newNote = value,
                       hintText: "Ghi chú...",
                       prefix: Icon(BootstrapIcons.quote),
                       maxLines: null,
@@ -510,8 +569,26 @@ class _QuestionContentState extends State<QuestionContent> {
                     width: 50,
                     padding: .symmetric(vertical: 4),
                     child: IconButton(
+                      style: IconButton.styleFrom(
+                        backgroundColor: AppColors.secondaryColor.withAlpha(20),
+                      ),
                       color: AppColors.textColor,
                       onPressed: () {
+                        if (newNote != noted) {
+                          if (authState is Authenticated) {
+                            final uid = authState.user.id;
+
+                            context.read<LearningBloc>().add(
+                              UpdateQuestionStatus(
+                                UpdateQuestionStatusParams(
+                                  userId: uid,
+                                  questionId: widget.question.id,
+                                  note: newNote,
+                                ),
+                              ),
+                            );
+                          }
+                        }
                         setState(() {
                           noteEditing = !noteEditing;
                         });

@@ -9,7 +9,7 @@ abstract class LocalQuestionDataSource {
     required int userId,
   });
 
-  Future<void> updateQuestionStatus({
+  Future<int> updateQuestionStatus({
     required int questionId,
     required int userId,
     int? optionId,
@@ -46,7 +46,7 @@ class LocalQuestionDataSourceImpl implements LocalQuestionDataSource {
   }
 
   @override
-  Future<void> updateQuestionStatus({
+  Future<int> updateQuestionStatus({
     required int questionId,
     required int userId,
     int? optionId,

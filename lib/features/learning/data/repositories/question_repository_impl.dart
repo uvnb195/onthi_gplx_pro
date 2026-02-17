@@ -81,7 +81,7 @@ class QuestionRepositoryImpl implements QuestionRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateQuestionStatus({
+  Future<Either<Failure, int>> updateQuestionStatus({
     required int questionId,
     required int userId,
     int? optionId,
@@ -90,16 +90,16 @@ class QuestionRepositoryImpl implements QuestionRepository {
     bool? isSaved,
   }) async {
     try {
-      return Right(
-        await _localQuestionDataSource.updateQuestionStatus(
-          questionId: questionId,
-          userId: userId,
-          optionId: optionId,
-          isCorrect: isCorrect,
-          note: note,
-          isSaved: isSaved,
-        ),
+      final result = await _localQuestionDataSource.updateQuestionStatus(
+        questionId: questionId,
+        userId: userId,
+        optionId: optionId,
+        isCorrect: isCorrect,
+        note: note,
+        isSaved: isSaved,
       );
+
+      return Right(result);
     } catch (e) {
       return Left(
         DatabaseFailure("Lỗi cập nhật trạng thái câu hỏi: ${e.toString()}"),

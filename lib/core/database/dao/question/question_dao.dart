@@ -191,7 +191,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
     return query.watch().map((rows) => _getGroupedData(rows));
   }
 
-  Future<void> updateQuestionStatus({
+  Future<int> updateQuestionStatus({
     required int userId,
     required int questionId,
     int? optionId,
@@ -199,14 +199,18 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
     bool? isCorrect,
     String? note,
   }) async {
-    await into(questionStatusTable).insert(
+    final id = await into(questionStatusTable).insert(
       QuestionStatusTableCompanion.insert(
         userId: userId,
         questionId: questionId,
         optionId: Value(optionId),
         isSaved: isSaved != null ? Value(isSaved) : Value.absent(),
         isCorrect: Value(isCorrect),
-        note: Value(note),
+        note: note != null
+            ? note == '/ --delete'
+                  ? Value(null)
+                  : Value(note)
+            : Value.absent(),
         updatedAt: Value(DateTime.now()),
       ),
       onConflict: DoUpdate(
@@ -214,12 +218,18 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
           optionId: optionId != null ? Value(optionId) : Value.absent(),
           isSaved: isSaved != null ? Value(isSaved) : Value.absent(),
           isCorrect: isCorrect != null ? Value(isCorrect) : Value.absent(),
-          note: note != null ? Value(note) : Value.absent(),
+          note: note != null
+              ? note == '/ --delete'
+                    ? Value(null)
+                    : Value(note)
+              : Value.absent(),
           updatedAt: Value(DateTime.now()),
         ),
         target: [questionStatusTable.userId, questionStatusTable.questionId],
       ),
     );
+
+    return id;
   }
 
   Future<int> getTotalQuestionCount(int licenseId) async {

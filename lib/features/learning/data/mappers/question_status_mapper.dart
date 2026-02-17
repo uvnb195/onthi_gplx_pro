@@ -11,6 +11,7 @@ extension QuestionStatusMapper on QuestionStatusTableData {
       optionId: optionId,
       isSaved: isSaved,
       updatedAt: updatedAt,
+      note: note,
     );
   }
 }
