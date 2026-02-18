@@ -50,7 +50,7 @@ class AppRouter {
             child: QuestionsPage(
               title: args['title'],
               isStudy: args['isStudy'],
-              categoryId: args['categoryId'],
+              isLearnWrongQuestions: args['isLearnWrongQuestions'],
             ),
           ),
         );

@@ -8,13 +8,13 @@ import 'package:onthi_gplx_pro/features/learning/presentation/widgets/question_w
 class QuestionsPage extends StatefulWidget {
   final bool isStudy; // study or do practice test
   final String title;
-  final int? categoryId;
+  final bool? isLearnWrongQuestions;
 
   const QuestionsPage({
     super.key,
     this.isStudy = true,
     required this.title,
-    this.categoryId,
+    this.isLearnWrongQuestions,
   });
 
   @override
@@ -24,6 +24,8 @@ class QuestionsPage extends StatefulWidget {
 class _QuestionsPageState extends State<QuestionsPage> {
   final ValueNotifier<int> _currentIndexNotifier = ValueNotifier(0);
   late final PageController _pageController;
+  List<QuestionEntity> _cachedQuestions = [];
+  List<Map<String, dynamic>> _answers = [];
 
   void _onPageChanged(int index) {
     _currentIndexNotifier.value = index;
@@ -37,7 +39,24 @@ class _QuestionsPageState extends State<QuestionsPage> {
   @override
   void initState() {
     _pageController = PageController();
+    final currentState = context.read<LearningBloc>().state;
+    if (currentState.questions.isNotEmpty) {
+      print(
+        "toggle status in question_page: ${widget.isLearnWrongQuestions} && list question: ${List.from(currentState.questions.where((q) => q.status != null && q.status!.isCorrect == false)).length}",
+      );
 
+      _cachedQuestions = widget.isLearnWrongQuestions == true
+          ? List.from(
+              currentState.questions.where(
+                (q) => q.status != null && q.status!.isCorrect == false,
+              ),
+            )
+          : List.from(currentState.questions);
+      _answers = List.generate(
+        _cachedQuestions.length,
+        (index) => ({'selectedOptionId': null, 'isCorrect': null}),
+      );
+    }
     super.initState();
   }
 
@@ -50,41 +69,76 @@ class _QuestionsPageState extends State<QuestionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final learningBloc = context.watch<LearningBloc>();
-    final questions = learningBloc.state.questions;
-    return ValueListenableBuilder(
-      valueListenable: _currentIndexNotifier,
-      builder: (context, value, child) {
-        return QuestionWrapper(
-          title: widget.title,
-          categoryId: widget.categoryId,
-          currentIndex: _currentIndexNotifier.value,
-          onQuestionChanged: _onPageChanged,
-          totalQuestion: questions.length,
-          child: PageView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: _pageController,
-            itemCount: questions.length,
-            itemBuilder: (context, index) => _buildQuestion(questions[index]),
-          ),
+    return BlocBuilder<LearningBloc, LearningState>(
+      buildWhen: (previous, current) => previous.loading != current.loading,
+      builder: (context, state) {
+        if (_cachedQuestions.isEmpty && state.questions.isNotEmpty) {
+          _cachedQuestions = List.from(state.questions);
+        }
+        if (_cachedQuestions.isEmpty && state.loading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (_cachedQuestions.isEmpty) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: Center(child: Text("Không có dữ liệu")),
+          );
+        }
+        return ValueListenableBuilder(
+          valueListenable: _currentIndexNotifier,
+          builder: (context, value, child) {
+            return QuestionWrapper(
+              title: widget.title,
+              currentIndex: _currentIndexNotifier.value,
+              onQuestionChanged: _onPageChanged,
+              totalQuestion: _cachedQuestions.length,
+              child: PageView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: _pageController,
+                itemCount: _cachedQuestions.length,
+                itemBuilder: (context, index) {
+                  final question = _cachedQuestions[index];
+                  return _buildQuestion(
+                    question,
+                    answer: _answers.length > index ? _answers[index] : null,
+                  );
+                },
+              ),
+            );
+          },
         );
       },
     );
   }
 
-  Widget _buildQuestion(QuestionEntity question) {
+  Widget _buildQuestion(
+    QuestionEntity question, {
+    Map<String, dynamic>? answer,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: QuestionContent(
-        total: 32,
-        content: QuestionArgs(
+        total: _cachedQuestions.length,
+        index: _currentIndexNotifier.value + 1,
+        onSelectedAnswer: (answer) {
+          setState(() {
+            _answers[_currentIndexNotifier.value] = {
+              'selectedOptionId': answer['selectedOptionId'],
+              'isCorrect': answer['isCorrect'],
+            };
+          });
+        },
+        question: QuestionEntity(
           id: question.id,
-          imagePath: question.imageId,
-          description: question.content,
+          imageId: question.imageId,
+          content: question.content,
           explanation: question.explanation,
           options: question.options
               .map(
-                (opt) => OptionObject(
+                (opt) => QuestionOptionEntity(
                   id: opt.id,
                   content: opt.content,
                   isCorrect: opt.isCorrect,
@@ -92,7 +146,9 @@ class _QuestionsPageState extends State<QuestionsPage> {
               )
               .toList(),
           isCritical: question.isCritical,
+          categoryId: question.categoryId,
         ),
+        selectedOptionId: answer != null ? answer['selectedOptionId'] : null,
       ),
     );
   }

@@ -53,6 +53,7 @@ dependencies:
 
   # boostrap icons
   bootstrap_icons: ^1.13.1
+  bloc_concurrency: ^0.3.0
 
 dev_dependencies:
   flutter_test:

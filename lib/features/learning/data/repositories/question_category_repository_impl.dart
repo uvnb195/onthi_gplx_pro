@@ -1,7 +1,7 @@
 import 'package:dart_either/dart_either.dart';
 import 'package:injectable/injectable.dart';
-import 'package:onthi_gplx_pro/core/database/dao/index.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
+import 'package:onthi_gplx_pro/features/learning/data/data_sources/local/category_data_source.dart';
 import 'package:onthi_gplx_pro/features/learning/data/mappers/question_category_mapper.dart';
 import 'package:onthi_gplx_pro/features/learning/data/mappers/rule.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/category_rule.dart';
@@ -10,15 +10,15 @@ import 'package:onthi_gplx_pro/features/learning/domain/repositories/question_ca
 
 @LazySingleton(as: QuestionCategoryRepository)
 class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
-  final CategoryDao questionCategoryDao;
+  final LocalCategoryDataSource localCategoryDataSource;
 
-  QuestionCategoryRepositoryImpl({required this.questionCategoryDao});
+  QuestionCategoryRepositoryImpl({required this.localCategoryDataSource});
 
   @override
   Future<Either<Failure, List<QuestionCategoryEntity>>>
   getQuestionCategories() async {
     try {
-      final result = await questionCategoryDao.getAllCategories();
+      final result = await localCategoryDataSource.getAllCategories();
       return Right(result.map((e) => e.toEntity()).toList());
     } catch (e) {
       return Left(
@@ -34,7 +34,7 @@ class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
     int id,
   ) async {
     try {
-      final result = await questionCategoryDao.getCategoryById(id);
+      final result = await localCategoryDataSource.getCategoryById(id);
       if (result == null) {
         return Left(DatabaseFailure('Not found Question Category (id: $id)'));
       }
@@ -52,9 +52,8 @@ class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
   Future<Either<Failure, List<QuestionCategoryEntity>>>
   getQuestionCategoriesByLicense(int licenseId) async {
     try {
-      final result = await questionCategoryDao.getQuestionCategoriesByLicense(
-        licenseId,
-      );
+      final result = await localCategoryDataSource
+          .getQuestionCategoriesByLicense(licenseId);
       return Right(result.map((e) => e.toEntity()).toList());
     } catch (e) {
       return Left(
@@ -71,7 +70,7 @@ class QuestionCategoryRepositoryImpl implements QuestionCategoryRepository {
     int licenseId,
   ) async {
     try {
-      final result = await questionCategoryDao.getExamRules(
+      final result = await localCategoryDataSource.getExamRules(
         examType,
         licenseId,
       );

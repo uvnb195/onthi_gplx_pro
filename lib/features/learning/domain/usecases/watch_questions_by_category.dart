@@ -1,31 +1,32 @@
-import 'package:dart_either/src/dart_either.dart';
+import 'package:dart_either/dart_either.dart';
 import 'package:injectable/injectable.dart';
 import 'package:onthi_gplx_pro/core/error/failures.dart';
 import 'package:onthi_gplx_pro/core/usecase/usecase.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/entities/index.dart';
 import 'package:onthi_gplx_pro/features/learning/domain/repositories/question_repository.dart';
 
-class GetQuestionsByCategoryParams {
-  final licenseId, categoryId;
+class WatchQuestionsByCategoryParams {
+  final int licenseId, categoryId;
 
-  const GetQuestionsByCategoryParams({
+  const WatchQuestionsByCategoryParams({
     required this.licenseId,
     required this.categoryId,
   });
 }
 
 @lazySingleton
-class GetQuestionsByCategoryUseCase
-    extends UseCase<List<QuestionEntity>, GetQuestionsByCategoryParams> {
+class WatchQuestionsByCategoryUseCase
+    extends
+        StreamUseCase<List<QuestionEntity>, WatchQuestionsByCategoryParams> {
   final QuestionRepository _questionRepository;
 
-  GetQuestionsByCategoryUseCase(this._questionRepository);
+  WatchQuestionsByCategoryUseCase(this._questionRepository);
 
   @override
-  Future<Either<Failure, List<QuestionEntity>>> call(
-    GetQuestionsByCategoryParams params,
+  Stream<Either<Failure, List<QuestionEntity>>> call(
+    WatchQuestionsByCategoryParams params,
   ) {
-    return _questionRepository.getQuestionsByCategory(
+    return _questionRepository.watchQuestionsByCategory(
       licenseId: params.licenseId,
       categoryId: params.categoryId,
     );

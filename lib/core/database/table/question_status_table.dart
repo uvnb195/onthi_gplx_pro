@@ -8,9 +8,18 @@ class QuestionStatusTable extends Table {
 
   IntColumn get questionId =>
       integer().references(QuestionTable, #id, onDelete: .noAction)();
-  IntColumn get optionId =>
-      integer().references(QuestionOptionTable, #id, onDelete: .noAction)();
-  BoolColumn get isCorrect => boolean()();
+  IntColumn get optionId => integer().nullable().references(
+    QuestionOptionTable,
+    #id,
+    onDelete: .noAction,
+  )();
+
+  BoolColumn get isCorrect => boolean().nullable()();
+  TextColumn get note => text().nullable()();
+  BoolColumn get isSaved => boolean().withDefault(const Constant(false))();
 
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  List<String> get customConstraints => ['UNIQUE(user_id, question_id)'];
 }

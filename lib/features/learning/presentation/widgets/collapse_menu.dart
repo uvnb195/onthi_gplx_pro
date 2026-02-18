@@ -52,7 +52,15 @@ class _CollapseMenuState extends State<CollapseMenu> {
   void _navigateToLearningInfoPage(
     int index,
     QuestionCategoryEntity selectedCategory,
-  ) {
+  ) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColor),
+      ),
+    );
+
     final licenseId = switch (context.read<AuthBloc>().state) {
       Authenticated(user: var u) => u.license.value.id,
       _ => null,
@@ -66,44 +74,46 @@ class _CollapseMenuState extends State<CollapseMenu> {
       );
     }
 
-    if (learningBloc.state.loading) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => Center(
-          child: CircularProgressIndicator(color: AppColors.primaryColor),
-        ),
-      );
+    await Future.wait([
+      learningBloc.stream.firstWhere((state) => !state.loading),
+      Future.delayed(const Duration(milliseconds: 300)),
+    ]);
+
+    // Close Loading Dialog
+    if (mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
     }
 
     final totalQuestions = learningBloc.state.questions.length;
 
-    Navigator.pushNamed(
-      context,
-      RouteNames.learningInfo,
-      arguments: {
-        'title': widget.items[index].title,
-        'iconData': widget.items[index].iconData,
-        'themeColor': widget.items[index].themeColor,
-        'stats': [
-          {
-            'iconData': BootstrapIcons.file_earmark_text,
-            'title': '$totalQuestions',
-            'description': 'Câu hỏi',
-          },
-          {
-            'iconData': BootstrapIcons.ui_checks,
-            'title': '19',
-            'description': 'Đã học',
-          },
-          {
-            'iconData': BootstrapIcons.percent,
-            'title': '85',
-            'description': 'Tỉ lệ đúng',
-          },
-        ],
-      },
-    );
+    if (mounted) {
+      Navigator.pushNamed(
+        context,
+        RouteNames.learningInfo,
+        arguments: {
+          'title': widget.items[index].title,
+          'iconData': widget.items[index].iconData,
+          'themeColor': widget.items[index].themeColor,
+          'stats': [
+            {
+              'iconData': BootstrapIcons.file_earmark_text,
+              'title': '$totalQuestions',
+              'description': 'Câu hỏi',
+            },
+            {
+              'iconData': BootstrapIcons.ui_checks,
+              'title': '19',
+              'description': 'Đã học',
+            },
+            {
+              'iconData': BootstrapIcons.percent,
+              'title': '85',
+              'description': 'Tỉ lệ đúng',
+            },
+          ],
+        },
+      );
+    }
   }
 
   @override
