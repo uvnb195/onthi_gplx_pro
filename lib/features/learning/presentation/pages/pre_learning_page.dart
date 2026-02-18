@@ -29,6 +29,8 @@ class PreLearningPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLearnWrongQuestions = true;
+
     final screenWidth = MediaQuery.sizeOf(context).width;
     return BlocBuilder<LearningBloc, LearningState>(
       builder: (context, state) {
@@ -58,7 +60,11 @@ class PreLearningPage extends StatelessWidget {
                     if (state.questions.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: _buildMode(screenWidth),
+                        child: _buildMode(
+                          screenWidth,
+                          onToggleChanged: (value) =>
+                              isLearnWrongQuestions = value,
+                        ),
                       ),
                     SizedBox(height: 16),
                     Padding(
@@ -89,7 +95,11 @@ class PreLearningPage extends StatelessWidget {
                           Navigator.pushNamed(
                             context,
                             RouteNames.learning,
-                            arguments: {'title': title, 'isStudy': true},
+                            arguments: {
+                              'title': title,
+                              'isStudy': true,
+                              'isLearnWrongQuestions': isLearnWrongQuestions,
+                            },
                           );
 
                           // Navigator.pushNamed(
@@ -223,10 +233,11 @@ class PreLearningPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMode(double screenWidth) {
+  Widget _buildMode(double screenWidth, {Function(bool)? onToggleChanged}) {
     return StyledToggleButton(
       themeColor: Color.lerp(themeColor, Colors.black, 0.2)!,
       size: screenWidth > 600 ? Size(400, 50) : Size(double.maxFinite, 50),
+      onToggleChanged: onToggleChanged,
     );
   }
 

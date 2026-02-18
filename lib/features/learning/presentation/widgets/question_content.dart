@@ -49,6 +49,32 @@ class _QuestionContentState extends State<QuestionContent> {
     super.dispose();
   }
 
+  void _updateQuestionStatus({
+    int? optionId,
+    bool? isCorrect,
+    String? note,
+    bool? isSaving,
+  }) {
+    final authState = context.read<AuthBloc>().state;
+
+    if (authState is Authenticated) {
+      final uid = authState.user.id;
+
+      context.read<LearningBloc>().add(
+        UpdateQuestionStatus(
+          UpdateQuestionStatusParams(
+            userId: uid,
+            questionId: widget.question.id,
+            isSaved: isSaving,
+            isCorrect: isCorrect,
+            optionId: optionId,
+            note: note,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
@@ -91,43 +117,23 @@ class _QuestionContentState extends State<QuestionContent> {
                 _buildHeader(
                   isSaved,
                   onSaveToggle: () {
-                    final authState = context.read<AuthBloc>().state;
-
-                    if (authState is Authenticated) {
-                      final uid = authState.user.id;
-
-                      context.read<LearningBloc>().add(
-                        UpdateQuestionStatus(
-                          UpdateQuestionStatusParams(
-                            userId: uid,
-                            questionId: widget.question.id,
-                            isSaved: !isSaved,
-                          ),
-                        ),
-                      );
-                      if (!isSaved) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Đã lưu câu hỏi này!',
-                              style: TextStyle(color: AppColors.textColor),
-                            ),
-                            backgroundColor: Color.lerp(
-                              AppColors.primarySwatch.shade900,
-                              Colors.black,
-                              0.2,
-                            ),
-                            behavior: .floating,
-                            duration: Duration(seconds: 2),
-                            showCloseIcon: true,
-                            closeIconColor: AppColors.textColor,
-                          ),
-                        );
-                      }
-                    } else {
+                    _updateQuestionStatus(isSaving: !isSaved);
+                    if (!isSaved) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Vui lòng đăng nhập để lưu câu hỏi'),
+                        SnackBar(
+                          content: Text(
+                            'Đã lưu câu hỏi này!',
+                            style: TextStyle(color: AppColors.textColor),
+                          ),
+                          backgroundColor: Color.lerp(
+                            AppColors.primarySwatch.shade900,
+                            Colors.black,
+                            0.2,
+                          ),
+                          behavior: .floating,
+                          duration: Duration(seconds: 2),
+                          showCloseIcon: true,
+                          closeIconColor: AppColors.textColor,
                         ),
                       );
                     }
@@ -310,12 +316,20 @@ class _QuestionContentState extends State<QuestionContent> {
         onTap: selectedId != null
             ? null
             : () {
+                final selectedOptionId = widget.question.options[index].id;
+                final isCorrect = widget.question.options[index].isCorrect;
+
+                _updateQuestionStatus(
+                  optionId: selectedOptionId,
+                  isCorrect: isCorrect,
+                );
                 setState(() => selectedId = widget.question.options[index].id);
                 _scrollToBottom();
+
                 if (widget.onSelectedAnswer != null) {
                   widget.onSelectedAnswer!({
-                    'selectedOptionId': widget.question.options[index].id,
-                    'isCorrect': widget.question.options[index].isCorrect,
+                    'selectedOptionId': selectedOptionId,
+                    'isCorrect': isCorrect,
                   });
                 }
               },
@@ -425,7 +439,6 @@ class _QuestionContentState extends State<QuestionContent> {
   }
 
   Widget _buildNote(String? noted) {
-    final authState = context.read<AuthBloc>().state;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       switchInCurve: Curves.easeOut,
@@ -494,28 +507,11 @@ class _QuestionContentState extends State<QuestionContent> {
                           switch (value) {
                             case 'edit':
                               setState(() {
-                                noteEditing = !noteEditing;
+                                noteEditing = true;
                               });
                               return;
                             default:
-                              if (authState is Authenticated) {
-                                final uid = authState.user.id;
-
-                                setState(() {
-                                  newNote = null;
-                                });
-
-                                context.read<LearningBloc>().add(
-                                  UpdateQuestionStatus(
-                                    UpdateQuestionStatusParams(
-                                      userId: uid,
-                                      questionId: widget.question.id,
-                                      note: '/ --delete',
-                                    ),
-                                  ),
-                                );
-                              }
-
+                              _updateQuestionStatus(note: '/ --delete');
                               return;
                           }
                         },
@@ -575,22 +571,10 @@ class _QuestionContentState extends State<QuestionContent> {
                       color: AppColors.textColor,
                       onPressed: () {
                         if (newNote != noted) {
-                          if (authState is Authenticated) {
-                            final uid = authState.user.id;
-
-                            context.read<LearningBloc>().add(
-                              UpdateQuestionStatus(
-                                UpdateQuestionStatusParams(
-                                  userId: uid,
-                                  questionId: widget.question.id,
-                                  note: newNote,
-                                ),
-                              ),
-                            );
-                          }
+                          _updateQuestionStatus(note: newNote);
                         }
                         setState(() {
-                          noteEditing = !noteEditing;
+                          noteEditing = false;
                         });
                       },
                       icon: Icon(BootstrapIcons.check_lg, size: 28),

@@ -8,8 +8,14 @@ import 'package:onthi_gplx_pro/features/learning/presentation/widgets/question_w
 class QuestionsPage extends StatefulWidget {
   final bool isStudy; // study or do practice test
   final String title;
+  final bool? isLearnWrongQuestions;
 
-  const QuestionsPage({super.key, this.isStudy = true, required this.title});
+  const QuestionsPage({
+    super.key,
+    this.isStudy = true,
+    required this.title,
+    this.isLearnWrongQuestions,
+  });
 
   @override
   State<QuestionsPage> createState() => _QuestionsPageState();
@@ -35,7 +41,17 @@ class _QuestionsPageState extends State<QuestionsPage> {
     _pageController = PageController();
     final currentState = context.read<LearningBloc>().state;
     if (currentState.questions.isNotEmpty) {
-      _cachedQuestions = List.from(currentState.questions);
+      print(
+        "toggle status in question_page: ${widget.isLearnWrongQuestions} && list question: ${List.from(currentState.questions.where((q) => q.status != null && q.status!.isCorrect == false)).length}",
+      );
+
+      _cachedQuestions = widget.isLearnWrongQuestions == true
+          ? List.from(
+              currentState.questions.where(
+                (q) => q.status != null && q.status!.isCorrect == false,
+              ),
+            )
+          : List.from(currentState.questions);
       _answers = List.generate(
         _cachedQuestions.length,
         (index) => ({'selectedOptionId': null, 'isCorrect': null}),
