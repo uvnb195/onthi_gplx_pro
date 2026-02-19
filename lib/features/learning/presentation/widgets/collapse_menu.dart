@@ -94,23 +94,6 @@ class _CollapseMenuState extends State<CollapseMenu> {
           'title': widget.items[index].title,
           'iconData': widget.items[index].iconData,
           'themeColor': widget.items[index].themeColor,
-          'stats': [
-            {
-              'iconData': BootstrapIcons.file_earmark_text,
-              'title': '$totalQuestions',
-              'description': 'Câu hỏi',
-            },
-            {
-              'iconData': BootstrapIcons.ui_checks,
-              'title': '19',
-              'description': 'Đã học',
-            },
-            {
-              'iconData': BootstrapIcons.percent,
-              'title': '85',
-              'description': 'Tỉ lệ đúng',
-            },
-          ],
         },
       );
     }

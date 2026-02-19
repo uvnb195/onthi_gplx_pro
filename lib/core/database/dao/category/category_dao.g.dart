@@ -10,4 +10,24 @@ mixin _$CategoryDaoMixin on DatabaseAccessor<AppDatabase> {
   $LicenseCategoryTableTable get licenseCategoryTable =>
       attachedDatabase.licenseCategoryTable;
   $RuleTableTable get ruleTable => attachedDatabase.ruleTable;
+  CategoryDaoManager get managers => CategoryDaoManager(this);
+}
+
+class CategoryDaoManager {
+  final _$CategoryDaoMixin _db;
+  CategoryDaoManager(this._db);
+  $$LicenseTableTableTableManager get licenseTable =>
+      $$LicenseTableTableTableManager(_db.attachedDatabase, _db.licenseTable);
+  $$QuestionCategoryTableTableTableManager get questionCategoryTable =>
+      $$QuestionCategoryTableTableTableManager(
+        _db.attachedDatabase,
+        _db.questionCategoryTable,
+      );
+  $$LicenseCategoryTableTableTableManager get licenseCategoryTable =>
+      $$LicenseCategoryTableTableTableManager(
+        _db.attachedDatabase,
+        _db.licenseCategoryTable,
+      );
+  $$RuleTableTableTableManager get ruleTable =>
+      $$RuleTableTableTableManager(_db.attachedDatabase, _db.ruleTable);
 }

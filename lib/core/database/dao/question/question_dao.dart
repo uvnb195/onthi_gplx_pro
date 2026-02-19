@@ -13,6 +13,7 @@ part 'question_dao.g.dart';
     QuestionTable,
     QuestionOptionTable,
     QuestionStatusTable,
+    LearningProgressTable,
   ],
 )
 class QuestionDao extends DatabaseAccessor<AppDatabase>
@@ -50,7 +51,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
               ),
             )
             .toList(),
-        mode: .insertOrReplace,
+        mode: .insertOrIgnore,
       );
     });
   }
@@ -197,8 +198,27 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
     int? optionId,
     bool? isSaved,
     bool? isCorrect,
+    bool? isNew,
     String? note,
   }) async {
+    final existingStatus =
+        await (select(questionStatusTable)..where(
+              (t) => t.userId.equals(userId) & t.questionId.equals(questionId),
+            ))
+            .getSingleOrNull();
+
+    bool? calculatedIsNew;
+
+    if (existingStatus == null || existingStatus.isNew == null) {
+      if (isCorrect != null) {
+        calculatedIsNew = true;
+      } else {
+        calculatedIsNew = null;
+      }
+    } else {
+      calculatedIsNew = false;
+    }
+
     final id = await into(questionStatusTable).insert(
       QuestionStatusTableCompanion.insert(
         userId: userId,
@@ -211,6 +231,7 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
                   ? Value(null)
                   : Value(note)
             : Value.absent(),
+        isNew: Value(calculatedIsNew),
         updatedAt: Value(DateTime.now()),
       ),
       onConflict: DoUpdate(
@@ -223,6 +244,8 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
                     ? Value(null)
                     : Value(note)
               : Value.absent(),
+
+          isNew: Value(calculatedIsNew),
           updatedAt: Value(DateTime.now()),
         ),
         target: [questionStatusTable.userId, questionStatusTable.questionId],

@@ -16,14 +16,12 @@ class PreLearningPage extends StatelessWidget {
   final Color themeColor;
   final String? description;
   final bool isLearning;
-  final List<Map<String, dynamic>> stats;
   const PreLearningPage({
     super.key,
     required this.title,
     required this.iconData,
     required this.themeColor,
     this.description,
-    this.stats = const [],
     this.isLearning = true,
   });
 
@@ -34,6 +32,53 @@ class PreLearningPage extends StatelessWidget {
     final screenWidth = MediaQuery.sizeOf(context).width;
     return BlocBuilder<LearningBloc, LearningState>(
       builder: (context, state) {
+        List<Map<String, dynamic>> getStats() {
+          final stats = List<Map<String, dynamic>?>.generate(3, (_) => null);
+
+          final totalQuestions = state.questions.length;
+
+          stats[0] = ({
+            'content': totalQuestions.toString(),
+            'description': 'Câu hỏi',
+            'iconData': BootstrapIcons.file_earmark_text,
+          });
+          if (isLearning) {
+            final totalLearned = state.questions
+                .where((q) => q.status != null && q.status!.optionId != null)
+                .length;
+            final incorrectCount = state.questions
+                .where((q) => q.status != null && q.status!.isCorrect == true)
+                .length;
+            final accuracyRate = totalLearned == 0
+                ? 0
+                : incorrectCount / totalLearned * 100;
+
+            stats[1] = ({
+              'content': totalLearned.toString(),
+              'description': 'Đã học',
+              'iconData': BootstrapIcons.ui_checks,
+            });
+            stats[2] = ({
+              'content': accuracyRate.floor().toString(),
+              'description': 'Tỉ lệ đúng',
+              'iconData': BootstrapIcons.percent,
+            });
+          } else {
+            stats[1] = ({
+              'content': 19.toString(),
+              'description': 'Phút',
+              'iconData': BootstrapIcons.alarm,
+            });
+            stats[2] = ({
+              'content': "21/24",
+              'description': 'Tối thiểu',
+              'iconData': BootstrapIcons.clipboard_check,
+            });
+          }
+
+          return List.from(stats);
+        }
+
         return PageWrapper(
           child: Scaffold(
             backgroundColor: Colors.transparent,
@@ -54,7 +99,7 @@ class PreLearningPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    _buildHeader(state.questions.length),
+                    _buildHeader(stats: getStats()),
                     SizedBox(height: 16),
 
                     if (state.questions.isNotEmpty)
@@ -118,7 +163,7 @@ class PreLearningPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(int totalQuestions) {
+  Widget _buildHeader({required List<Map<String, dynamic>> stats}) {
     Color getIconColor() {
       final Brightness brightness = ThemeData.estimateBrightnessForColor(
         themeColor,
@@ -162,17 +207,14 @@ class PreLearningPage extends StatelessWidget {
             child: Row(
               children: List.generate(stats.length, (index) {
                 final displayDescription = stats[index]['description'];
-                final displayTitle =
-                    displayDescription.toString().toUpperCase() == 'CÂU HỎI'
-                    ? totalQuestions.toString()
-                    : "=.=";
+                final displayTitle = stats[index]['content'];
 
                 return Expanded(
                   child: _buildHeaderItem(
-                    title: displayTitle,
+                    content: displayTitle,
                     description: displayDescription,
-                    iconData: stats[index]['iconData'],
-                    isLocked: totalQuestions == 0,
+                    iconData: stats[index]['iconData'] as IconData,
+                    isLocked: int.tryParse(stats[index]['content']) == 0,
                   ),
                 );
               }),
@@ -184,7 +226,7 @@ class PreLearningPage extends StatelessWidget {
   }
 
   Widget _buildHeaderItem({
-    required String title,
+    required String content,
     required String description,
     required IconData iconData,
     bool isLocked = false,
@@ -199,7 +241,7 @@ class PreLearningPage extends StatelessWidget {
             0.6,
           )!,
           iconData: iconData,
-          title: title,
+          title: content,
           titleStyle: TextStyle(
             color: AppColors.textDisableColor,
             fontSize: 24,
@@ -221,7 +263,7 @@ class PreLearningPage extends StatelessWidget {
       child: InfoCard(
         backgroundColor: Color.lerp(themeColor, Colors.black, 0.8)!,
         iconData: iconData,
-        title: title,
+        title: content,
         description: description,
         descriptionStyle: const TextStyle(
           color: AppColors.textSecondaryColor,

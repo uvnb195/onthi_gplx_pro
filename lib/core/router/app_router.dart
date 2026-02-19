@@ -34,7 +34,6 @@ class AppRouter {
             child: PreLearningPage(
               title: args['title'],
               description: args['description'],
-              stats: args['stats'],
               iconData: args['iconData'],
               themeColor: args['themeColor'],
               isLearning: args['isLearning'] ?? true,

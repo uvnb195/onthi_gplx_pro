@@ -1,3 +1,5 @@
+export 'exam_attempt_table.dart';
+export 'learning_history_table.dart';
 export 'learning_progress_table.dart';
 export 'license_category_table.dart';
 export 'license_question_table.dart';

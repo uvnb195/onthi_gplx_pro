@@ -18,8 +18,11 @@ class QuestionStatusTable extends Table {
   TextColumn get note => text().nullable()();
   BoolColumn get isSaved => boolean().withDefault(const Constant(false))();
 
+  BoolColumn get isNew => boolean().nullable()();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
-  List<String> get customConstraints => ['UNIQUE(user_id, question_id)'];
+  List<Set<Column<Object>>>? get uniqueKeys => [
+    {userId, questionId},
+  ];
 }

@@ -24,7 +24,7 @@ class LearningState extends Equatable {
   LearningState copyWith({
     QuestionCategoryEntity? selectedCategory,
     List<QuestionCategoryEntity>? categories,
-    int? totalQuestions,
+    int? totalQuestions, // count by user-license (all questions)
     List<QuestionEntity>? questions,
     List<CategoryRuleEntity>? examRules,
     bool? loading,

@@ -26,4 +26,10 @@ class LearningProgressTable extends Table {
   IntColumn get correctAttempts => integer().withDefault(const Constant(0))();
 
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  List<Set<Column<Object>>>? get uniqueKeys => [
+    {userId, licenseId}, // progress by license (total)
+    {userId, licenseId, questionCategoryId}, // progress by special category
+  ];
 }

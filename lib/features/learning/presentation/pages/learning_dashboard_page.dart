@@ -59,23 +59,6 @@ class LearningDashBoardPage extends StatelessWidget {
           'themeColor': themeColor,
           'description': description,
           'isLearning': false,
-          'stats': [
-            {
-              'iconData': BootstrapIcons.file_earmark_text,
-              'title': '40',
-              'description': 'Câu hỏi',
-            },
-            {
-              'iconData': BootstrapIcons.alarm,
-              'title': '24',
-              'description': 'phút',
-            },
-            {
-              'iconData': BootstrapIcons.clipboard_check,
-              'title': '36/40',
-              'description': 'tối thiểu',
-            },
-          ],
         },
       );
     }
