@@ -219,40 +219,41 @@ class QuestionDao extends DatabaseAccessor<AppDatabase>
       calculatedIsNew = false;
     }
 
-    final id = await into(questionStatusTable).insert(
-      QuestionStatusTableCompanion.insert(
-        userId: userId,
-        questionId: questionId,
-        optionId: Value(optionId),
-        isSaved: isSaved != null ? Value(isSaved) : Value.absent(),
-        isCorrect: Value(isCorrect),
-        note: note != null
-            ? note == '/ --delete'
-                  ? Value(null)
-                  : Value(note)
-            : Value.absent(),
-        isNew: Value(calculatedIsNew),
-        updatedAt: Value(DateTime.now()),
-      ),
-      onConflict: DoUpdate(
-        (old) => QuestionStatusTableCompanion(
-          optionId: optionId != null ? Value(optionId) : Value.absent(),
-          isSaved: isSaved != null ? Value(isSaved) : Value.absent(),
-          isCorrect: isCorrect != null ? Value(isCorrect) : Value.absent(),
-          note: note != null
-              ? note == '/ --delete'
-                    ? Value(null)
-                    : Value(note)
-              : Value.absent(),
-
+    if (existingStatus == null) {
+      // TRƯỜNG HỢP INSERT: Kích hoạt Trigger AFTER INSERT
+      return await into(questionStatusTable).insert(
+        QuestionStatusTableCompanion.insert(
+          userId: userId,
+          questionId: questionId,
+          optionId: Value(optionId),
+          isSaved: isSaved != null ? Value(isSaved) : const Value(false),
+          isCorrect: Value(isCorrect),
+          note: note != null ? Value(note) : Value.absent(),
           isNew: Value(calculatedIsNew),
           updatedAt: Value(DateTime.now()),
         ),
-        target: [questionStatusTable.userId, questionStatusTable.questionId],
-      ),
-    );
-
-    return id;
+      );
+    } else {
+      // TRƯỜNG HỢP UPDATE: Kích hoạt Trigger AFTER UPDATE
+      await (update(questionStatusTable)..where(
+            (t) => t.userId.equals(userId) & t.questionId.equals(questionId),
+          ))
+          .write(
+            QuestionStatusTableCompanion(
+              optionId: optionId != null
+                  ? Value(optionId)
+                  : const Value.absent(),
+              isSaved: isSaved != null ? Value(isSaved) : const Value.absent(),
+              isCorrect: isCorrect != null
+                  ? Value(isCorrect)
+                  : const Value.absent(),
+              note: note != null ? Value(note) : Value.absent(),
+              isNew: Value(calculatedIsNew),
+              updatedAt: Value(DateTime.now()),
+            ),
+          );
+      return 0;
+    }
   }
 
   Future<int> getTotalQuestionCount(int licenseId) async {

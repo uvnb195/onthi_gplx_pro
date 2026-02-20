@@ -12,8 +12,8 @@ import 'package:path_provider/path_provider.dart';
 
 part 'app_database.g.dart';
 
-const String _trgUpsertLearningProgressByCategoryOnInsert = """
-CREATE TRIGGER IF NOT EXISTS trg_upsert_learning_progress_by_category_on_insert
+const String _trgUpsertLPByCategory = """
+CREATE TRIGGER trg_upsert_lp_by_category
 after insert on question_status
 BEGIN
   insert into learning_progress(
@@ -29,11 +29,11 @@ BEGIN
   )
   select 
     new.user_id,
-    lq.license_id,
+    u.license_id,
     q.category_id,
     (SELECT COUNT(*) FROM question q_inner JOIN license_question lq_inner ON q_inner.id = lq_inner.question_id
       WHERE 
-        lq_inner.license_id = lq.license_id
+        lq_inner.license_id = u.license_id
         AND 
         q_inner.category_id = q.category_id
     ),
@@ -44,11 +44,12 @@ BEGIN
     STRFTIME('%Y-%m-%d %H:%M:%S', 'now')
     
   from 
-    question q
-  join license_question lq on lq.question_id = q.id
-  where q.id = NEW.question_id
+    user_table u
+  join question q on NEW.question_id = q.id
+  where u.id = NEW.user_id
   
   ON CONFLICT(user_id, license_id, question_category_id)
+  WHERE question_category_id IS NOT NULL
   DO UPDATE SET
     answered_questions = answered_questions + ifnull(NEW.is_new,0),
     correct_answers = correct_answers + 
@@ -62,8 +63,8 @@ BEGIN
   END;
 """;
 
-const String _trgUpsertLearningProgressByLicenseOnInsert = """
-CREATE TRIGGER IF NOT EXISTS trg_upsert_learning_progress_by_license_on_insert
+const String _trgUpsertLPTotal = """
+CREATE TRIGGER trg_upsert_lp_total
 after insert on question_status
 BEGIN
   insert into learning_progress(
@@ -79,12 +80,9 @@ BEGIN
   )
   select 
     new.user_id,
-    lq.license_id,
+    u.license_id,
     null,
-    (case when lq.license_id in (1,2) then 250
-      when lq.license_id = 3 then 300 
-      else 600
-    end),
+    (SELECT COUNT(*) FROM license_question WHERE license_id = u.license_id),
     1, -- init answered_questions
     ifnull(NEW.is_correct,0), -- init correct_answers
     1,
@@ -92,12 +90,11 @@ BEGIN
     STRFTIME('%Y-%m-%d %H:%M:%S', 'now')
     
   from 
-    question q
-  join license_question lq on lq.question_id = q.id
-  where q.id = NEW.question_id
+    user_table u
+  JOIN question q ON q.id = NEW.question_id 
+  WHERE u.id = NEW.user_id
   
-  ON CONFLICT(user_id, license_id)
-  DO UPDATE SET
+  ON CONFLICT(user_id, license_id) WHERE question_category_id IS NULL DO UPDATE SET
     answered_questions = answered_questions + ifnull(NEW.is_new,0),
     correct_answers = correct_answers + 
       (CASE WHEN NEW.is_new = 1 
@@ -158,6 +155,7 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     final dbLocation = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbLocation.path, 'app_database.sqlite'));
+    print('=== DB PATH: ${file.path} ===');
 
     return NativeDatabase(file);
   });
@@ -184,7 +182,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 6;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration {
@@ -195,13 +193,15 @@ class AppDatabase extends _$AppDatabase {
 
           // I N I T I A L - S E E D - D A T A
           final seedDatas = await Future.wait([
-            rootBundle.loadString('assets/data/question_categories.json'),
-            rootBundle.loadString('assets/data/question_options.json'),
-            rootBundle.loadString('assets/data/questions.json'),
-            rootBundle.loadString('assets/data/licenses.json'),
-            rootBundle.loadString('assets/data/license_questions.json'),
-            rootBundle.loadString('assets/data/license_categories.json'),
-            rootBundle.loadString('assets/data/question_category_rules.json'),
+            rootBundle.loadString('assets/database/question_categories.json'),
+            rootBundle.loadString('assets/database/question_options.json'),
+            rootBundle.loadString('assets/database/questions.json'),
+            rootBundle.loadString('assets/database/licenses.json'),
+            rootBundle.loadString('assets/database/license_questions.json'),
+            rootBundle.loadString('assets/database/license_categories.json'),
+            rootBundle.loadString(
+              'assets/database/question_category_rules.json',
+            ),
           ]);
 
           final List<dynamic> categoriesJson = json.decode(seedDatas[0]);
@@ -227,12 +227,19 @@ class AppDatabase extends _$AppDatabase {
           await categoryDao.createCategoryRulesSeedData(rulesJson);
 
           // C R E A T E - T R I G G E R
-          await Future.wait([
-            customStatement(_trgUpsertLearningProgressByCategoryOnInsert),
-            customStatement(_trgUpsertLearningProgressByLicenseOnInsert),
-            customStatement(_trgUpdateLearningProgressByCategoryOnUpdate),
-            customStatement(_trgUpdateLearningProgressByLicenseOnUpdate),
-          ]);
+
+          await transaction(() async {
+            final initTriggers = await rootBundle.loadString(
+              'assets/database/init_triggers.sql',
+            );
+            final statements = initTriggers.split('-- end');
+            for (var s in statements) {
+              final trimmed = s.trim();
+              if (trimmed.isNotEmpty) {
+                await customStatement(trimmed);
+              }
+            }
+          });
 
           // nên tạo trigger set is_new flag trong question_status về false khi update (insert bỏ qua)
         } catch (e) {
@@ -243,7 +250,11 @@ class AppDatabase extends _$AppDatabase {
         await customStatement('PRAGMA foreign_keys = ON');
       },
       onUpgrade: (m, from, to) async {
-        // migration db
+        if (from < 10) {
+          // Recreate question_status table với PRIMARY KEY mới
+          await m.deleteTable('question_status');
+          await m.createTable(questionStatusTable);
+        }
       },
     );
   }

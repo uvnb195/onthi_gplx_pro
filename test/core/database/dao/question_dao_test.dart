@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:onthi_gplx_pro/core/database/app_database.dart';
 
@@ -129,5 +130,50 @@ void main() {
         "Sample image question: ${imageQuestions.first.content}, image ID: ${imageQuestions.first.imageId}",
       );
     });
+  });
+
+  test('Trigger should update learning progress correctly', () async {
+    final userId = 1;
+    final questionId = 10; // Giả sử ID câu hỏi thuộc License 1, Category 5
+
+    // 1. Lần đầu trả lời ĐÚNG
+    await db.questionDao.updateQuestionStatus(
+      userId: userId,
+      questionId: questionId,
+      isCorrect: true,
+    );
+
+    final progress =
+        await (db.select(db.learningProgressTable)..where(
+              (t) =>
+                  t.userId.equals(userId) &
+                  t.licenseId.equals(1) &
+                  t.questionCategoryId.equals(5),
+            ))
+            .getSingle();
+
+    assert(progress.answeredQuestions == 1);
+    assert(progress.correctAnswers == 1);
+
+    // 2. Trả lời lại câu đó nhưng SAI
+    await db.questionDao.updateQuestionStatus(
+      userId: userId,
+      questionId: questionId,
+      isCorrect: false,
+    );
+
+    final updatedProgress =
+        await (db.select(db.learningProgressTable)..where(
+              (t) =>
+                  t.userId.equals(userId) &
+                  t.licenseId.equals(1) &
+                  t.questionCategoryId.equals(5),
+            ))
+            .getSingle();
+
+    // Answered vẫn là 1 vì câu này đã làm rồi
+    assert(updatedProgress.answeredQuestions == 1);
+    // Correct phải về 0 vì lần cuối cùng làm là Sai
+    assert(updatedProgress.correctAnswers == 0);
   });
 }

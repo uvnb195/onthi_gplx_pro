@@ -4,6 +4,9 @@ import 'package:onthi_gplx_pro/core/database/table/question_category_table.dart'
 import 'package:onthi_gplx_pro/core/database/table/user_table.dart';
 
 class LearningProgressTable extends Table {
+  @override
+  String get tableName => 'learning_progress';
+
   IntColumn get id => integer().autoIncrement()();
   IntColumn get userId =>
       integer().references(UserTable, #id, onDelete: .cascade)();
@@ -26,10 +29,4 @@ class LearningProgressTable extends Table {
   IntColumn get correctAttempts => integer().withDefault(const Constant(0))();
 
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
-
-  @override
-  List<Set<Column<Object>>>? get uniqueKeys => [
-    {userId, licenseId}, // progress by license (total)
-    {userId, licenseId, questionCategoryId}, // progress by special category
-  ];
 }

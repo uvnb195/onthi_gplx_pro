@@ -4,7 +4,6 @@ import 'package:onthi_gplx_pro/features/learning/domain/entities/question_status
 extension QuestionStatusMapper on QuestionStatusTableData {
   QuestionStatusEntity toEntity() {
     return QuestionStatusEntity(
-      id: id,
       questionId: questionId,
       isCorrect: isCorrect,
       userId: userId,

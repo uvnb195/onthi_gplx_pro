@@ -52,7 +52,7 @@ class $LicenseTableTable extends LicenseTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'license_table';
+  static const String $name = 'license';
   @override
   VerificationContext validateIntegrity(
     Insertable<LicenseTableData> instance, {
@@ -302,7 +302,7 @@ class $UserTableTable extends UserTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES license_table (id)',
+      'REFERENCES license (id)',
     ),
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
@@ -880,7 +880,7 @@ class $QuestionCategoryTableTable extends QuestionCategoryTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'question_category_table';
+  static const String $name = 'category';
   @override
   VerificationContext validateIntegrity(
     Insertable<QuestionCategoryTableData> instance, {
@@ -1117,7 +1117,7 @@ class $LicenseCategoryTableTable extends LicenseCategoryTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES license_table (id) ON DELETE CASCADE',
+      'REFERENCES license (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _questionCategoryIdMeta =
@@ -1130,7 +1130,7 @@ class $LicenseCategoryTableTable extends LicenseCategoryTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_category_table (id) ON DELETE CASCADE',
+      'REFERENCES category (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -1139,7 +1139,7 @@ class $LicenseCategoryTableTable extends LicenseCategoryTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'license_category_table';
+  static const String $name = 'license_category';
   @override
   VerificationContext validateIntegrity(
     Insertable<LicenseCategoryTableData> instance, {
@@ -1401,7 +1401,7 @@ class $RuleTableTable extends RuleTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_category_table (id)',
+      'REFERENCES category (id)',
     ),
   );
   @override
@@ -1424,7 +1424,7 @@ class $RuleTableTable extends RuleTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES license_table (id)',
+      'REFERENCES license (id)',
     ),
   );
   @override
@@ -1881,7 +1881,7 @@ class $QuestionTableTable extends QuestionTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_category_table (id) ON DELETE CASCADE',
+      'REFERENCES category (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -1897,7 +1897,7 @@ class $QuestionTableTable extends QuestionTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'question_table';
+  static const String $name = 'question';
   @override
   VerificationContext validateIntegrity(
     Insertable<QuestionTableData> instance, {
@@ -2236,7 +2236,7 @@ class $LicenseQuestionTableTable extends LicenseQuestionTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES license_table (id) ON DELETE CASCADE',
+      'REFERENCES license (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _questionIdMeta = const VerificationMeta(
@@ -2250,7 +2250,7 @@ class $LicenseQuestionTableTable extends LicenseQuestionTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_table (id) ON DELETE CASCADE',
+      'REFERENCES question (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -2259,7 +2259,7 @@ class $LicenseQuestionTableTable extends LicenseQuestionTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'license_question_table';
+  static const String $name = 'license_question';
   @override
   VerificationContext validateIntegrity(
     Insertable<LicenseQuestionTableData> instance, {
@@ -2496,7 +2496,7 @@ class $QuestionOptionTableTable extends QuestionOptionTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_table (id) ON DELETE CASCADE',
+      'REFERENCES question (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _isCorrectMeta = const VerificationMeta(
@@ -2520,7 +2520,7 @@ class $QuestionOptionTableTable extends QuestionOptionTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'question_option_table';
+  static const String $name = 'option';
   @override
   VerificationContext validateIntegrity(
     Insertable<QuestionOptionTableData> instance, {
@@ -2772,19 +2772,6 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $QuestionStatusTableTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
@@ -2808,7 +2795,7 @@ class $QuestionStatusTableTable extends QuestionStatusTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_table (id) ON DELETE NO ACTION',
+      'REFERENCES question (id) ON DELETE NO ACTION',
     ),
   );
   static const VerificationMeta _optionIdMeta = const VerificationMeta(
@@ -2822,7 +2809,7 @@ class $QuestionStatusTableTable extends QuestionStatusTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_option_table (id) ON DELETE NO ACTION',
+      'REFERENCES option (id) ON DELETE NO ACTION',
     ),
   );
   static const VerificationMeta _isCorrectMeta = const VerificationMeta(
@@ -2889,7 +2876,6 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   );
   @override
   List<GeneratedColumn> get $columns => [
-    id,
     userId,
     questionId,
     optionId,
@@ -2903,7 +2889,7 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'question_status_table';
+  static const String $name = 'question_status';
   @override
   VerificationContext validateIntegrity(
     Insertable<QuestionStatusTableData> instance, {
@@ -2911,9 +2897,6 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
     if (data.containsKey('user_id')) {
       context.handle(
         _userIdMeta,
@@ -2970,11 +2953,7 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  List<Set<GeneratedColumn>> get uniqueKeys => [
-    {userId, questionId},
-  ];
+  Set<GeneratedColumn> get $primaryKey => {userId, questionId};
   @override
   QuestionStatusTableData map(
     Map<String, dynamic> data, {
@@ -2982,10 +2961,6 @@ class $QuestionStatusTableTable extends QuestionStatusTable
   }) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return QuestionStatusTableData(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
       userId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}user_id'],
@@ -3029,7 +3004,6 @@ class $QuestionStatusTableTable extends QuestionStatusTable
 
 class QuestionStatusTableData extends DataClass
     implements Insertable<QuestionStatusTableData> {
-  final int id;
   final int userId;
   final int questionId;
   final int? optionId;
@@ -3039,7 +3013,6 @@ class QuestionStatusTableData extends DataClass
   final bool? isNew;
   final DateTime updatedAt;
   const QuestionStatusTableData({
-    required this.id,
     required this.userId,
     required this.questionId,
     this.optionId,
@@ -3052,7 +3025,6 @@ class QuestionStatusTableData extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
     map['user_id'] = Variable<int>(userId);
     map['question_id'] = Variable<int>(questionId);
     if (!nullToAbsent || optionId != null) {
@@ -3074,7 +3046,6 @@ class QuestionStatusTableData extends DataClass
 
   QuestionStatusTableCompanion toCompanion(bool nullToAbsent) {
     return QuestionStatusTableCompanion(
-      id: Value(id),
       userId: Value(userId),
       questionId: Value(questionId),
       optionId: optionId == null && nullToAbsent
@@ -3098,7 +3069,6 @@ class QuestionStatusTableData extends DataClass
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return QuestionStatusTableData(
-      id: serializer.fromJson<int>(json['id']),
       userId: serializer.fromJson<int>(json['userId']),
       questionId: serializer.fromJson<int>(json['questionId']),
       optionId: serializer.fromJson<int?>(json['optionId']),
@@ -3113,7 +3083,6 @@ class QuestionStatusTableData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
       'userId': serializer.toJson<int>(userId),
       'questionId': serializer.toJson<int>(questionId),
       'optionId': serializer.toJson<int?>(optionId),
@@ -3126,7 +3095,6 @@ class QuestionStatusTableData extends DataClass
   }
 
   QuestionStatusTableData copyWith({
-    int? id,
     int? userId,
     int? questionId,
     Value<int?> optionId = const Value.absent(),
@@ -3136,7 +3104,6 @@ class QuestionStatusTableData extends DataClass
     Value<bool?> isNew = const Value.absent(),
     DateTime? updatedAt,
   }) => QuestionStatusTableData(
-    id: id ?? this.id,
     userId: userId ?? this.userId,
     questionId: questionId ?? this.questionId,
     optionId: optionId.present ? optionId.value : this.optionId,
@@ -3148,7 +3115,6 @@ class QuestionStatusTableData extends DataClass
   );
   QuestionStatusTableData copyWithCompanion(QuestionStatusTableCompanion data) {
     return QuestionStatusTableData(
-      id: data.id.present ? data.id.value : this.id,
       userId: data.userId.present ? data.userId.value : this.userId,
       questionId: data.questionId.present
           ? data.questionId.value
@@ -3165,7 +3131,6 @@ class QuestionStatusTableData extends DataClass
   @override
   String toString() {
     return (StringBuffer('QuestionStatusTableData(')
-          ..write('id: $id, ')
           ..write('userId: $userId, ')
           ..write('questionId: $questionId, ')
           ..write('optionId: $optionId, ')
@@ -3180,7 +3145,6 @@ class QuestionStatusTableData extends DataClass
 
   @override
   int get hashCode => Object.hash(
-    id,
     userId,
     questionId,
     optionId,
@@ -3194,7 +3158,6 @@ class QuestionStatusTableData extends DataClass
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is QuestionStatusTableData &&
-          other.id == this.id &&
           other.userId == this.userId &&
           other.questionId == this.questionId &&
           other.optionId == this.optionId &&
@@ -3207,7 +3170,6 @@ class QuestionStatusTableData extends DataClass
 
 class QuestionStatusTableCompanion
     extends UpdateCompanion<QuestionStatusTableData> {
-  final Value<int> id;
   final Value<int> userId;
   final Value<int> questionId;
   final Value<int?> optionId;
@@ -3216,8 +3178,8 @@ class QuestionStatusTableCompanion
   final Value<bool> isSaved;
   final Value<bool?> isNew;
   final Value<DateTime> updatedAt;
+  final Value<int> rowid;
   const QuestionStatusTableCompanion({
-    this.id = const Value.absent(),
     this.userId = const Value.absent(),
     this.questionId = const Value.absent(),
     this.optionId = const Value.absent(),
@@ -3226,9 +3188,9 @@ class QuestionStatusTableCompanion
     this.isSaved = const Value.absent(),
     this.isNew = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   });
   QuestionStatusTableCompanion.insert({
-    this.id = const Value.absent(),
     required int userId,
     required int questionId,
     this.optionId = const Value.absent(),
@@ -3237,10 +3199,10 @@ class QuestionStatusTableCompanion
     this.isSaved = const Value.absent(),
     this.isNew = const Value.absent(),
     this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
   }) : userId = Value(userId),
        questionId = Value(questionId);
   static Insertable<QuestionStatusTableData> custom({
-    Expression<int>? id,
     Expression<int>? userId,
     Expression<int>? questionId,
     Expression<int>? optionId,
@@ -3249,9 +3211,9 @@ class QuestionStatusTableCompanion
     Expression<bool>? isSaved,
     Expression<bool>? isNew,
     Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
-      if (id != null) 'id': id,
       if (userId != null) 'user_id': userId,
       if (questionId != null) 'question_id': questionId,
       if (optionId != null) 'option_id': optionId,
@@ -3260,11 +3222,11 @@ class QuestionStatusTableCompanion
       if (isSaved != null) 'is_saved': isSaved,
       if (isNew != null) 'is_new': isNew,
       if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
     });
   }
 
   QuestionStatusTableCompanion copyWith({
-    Value<int>? id,
     Value<int>? userId,
     Value<int>? questionId,
     Value<int?>? optionId,
@@ -3273,9 +3235,9 @@ class QuestionStatusTableCompanion
     Value<bool>? isSaved,
     Value<bool?>? isNew,
     Value<DateTime>? updatedAt,
+    Value<int>? rowid,
   }) {
     return QuestionStatusTableCompanion(
-      id: id ?? this.id,
       userId: userId ?? this.userId,
       questionId: questionId ?? this.questionId,
       optionId: optionId ?? this.optionId,
@@ -3284,15 +3246,13 @@ class QuestionStatusTableCompanion
       isSaved: isSaved ?? this.isSaved,
       isNew: isNew ?? this.isNew,
       updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
     if (userId.present) {
       map['user_id'] = Variable<int>(userId.value);
     }
@@ -3317,13 +3277,15 @@ class QuestionStatusTableCompanion
     if (updatedAt.present) {
       map['updated_at'] = Variable<DateTime>(updatedAt.value);
     }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('QuestionStatusTableCompanion(')
-          ..write('id: $id, ')
           ..write('userId: $userId, ')
           ..write('questionId: $questionId, ')
           ..write('optionId: $optionId, ')
@@ -3331,7 +3293,8 @@ class QuestionStatusTableCompanion
           ..write('note: $note, ')
           ..write('isSaved: $isSaved, ')
           ..write('isNew: $isNew, ')
-          ..write('updatedAt: $updatedAt')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
           ..write(')'))
         .toString();
   }
@@ -3379,7 +3342,7 @@ class $LearningProgressTableTable extends LearningProgressTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES license_table (id) ON DELETE NO ACTION',
+      'REFERENCES license (id) ON DELETE NO ACTION',
     ),
   );
   static const VerificationMeta _questionCategoryIdMeta =
@@ -3392,7 +3355,7 @@ class $LearningProgressTableTable extends LearningProgressTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_category_table (id) ON DELETE NO ACTION',
+      'REFERENCES category (id) ON DELETE NO ACTION',
     ),
   );
   static const VerificationMeta _totalQuestionsMeta = const VerificationMeta(
@@ -3483,7 +3446,7 @@ class $LearningProgressTableTable extends LearningProgressTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'learning_progress_table';
+  static const String $name = 'learning_progress';
   @override
   VerificationContext validateIntegrity(
     Insertable<LearningProgressTableData> instance, {
@@ -3577,11 +3540,6 @@ class $LearningProgressTableTable extends LearningProgressTable
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  List<Set<GeneratedColumn>> get uniqueKeys => [
-    {userId, licenseId},
-    {userId, licenseId, questionCategoryId},
-  ];
   @override
   LearningProgressTableData map(
     Map<String, dynamic> data, {
@@ -4091,7 +4049,7 @@ class $ExamAttemptTableTable extends ExamAttemptTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'exam_attempt_table';
+  static const String $name = 'exam_attempt';
   @override
   VerificationContext validateIntegrity(
     Insertable<ExamAttemptTableData> instance, {
@@ -4538,7 +4496,7 @@ class $LearningHistoryTableTable extends LearningHistoryTable
     type: DriftSqlType.int,
     requiredDuringInsert: false,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES exam_attempt_table (id) ON DELETE SET NULL',
+      'REFERENCES exam_attempt (id) ON DELETE SET NULL',
     ),
   );
   static const VerificationMeta _questionIdMeta = const VerificationMeta(
@@ -4552,7 +4510,7 @@ class $LearningHistoryTableTable extends LearningHistoryTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_table (id) ON DELETE CASCADE',
+      'REFERENCES question (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _selectedOptionIdMeta = const VerificationMeta(
@@ -4566,7 +4524,7 @@ class $LearningHistoryTableTable extends LearningHistoryTable
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES question_option_table (id)',
+      'REFERENCES option (id)',
     ),
   );
   static const VerificationMeta _isCorrectMeta = const VerificationMeta(
@@ -4609,7 +4567,7 @@ class $LearningHistoryTableTable extends LearningHistoryTable
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'learning_history_table';
+  static const String $name = 'learning_history';
   @override
   VerificationContext validateIntegrity(
     Insertable<LearningHistoryTableData> instance, {
@@ -5032,87 +4990,87 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'license_table',
+        'license',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('license_category_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('license_category', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'question_category_table',
+        'category',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('license_category_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('license_category', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'question_category_table',
+        'category',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('question_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('question', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'license_table',
+        'license',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('license_question_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('license_question', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'question_table',
+        'question',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('license_question_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('license_question', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'question_table',
+        'question',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('question_option_table', kind: UpdateKind.delete)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'user_table',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('question_status_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('option', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'user_table',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('learning_progress_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('question_status', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'user_table',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('exam_attempt_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('learning_progress', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'user_table',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('learning_history_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('exam_attempt', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'exam_attempt_table',
+        'user_table',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('learning_history_table', kind: UpdateKind.update)],
+      result: [TableUpdate('learning_history', kind: UpdateKind.delete)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
-        'question_table',
+        'exam_attempt',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('learning_history_table', kind: UpdateKind.delete)],
+      result: [TableUpdate('learning_history', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'question',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('learning_history', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -9727,7 +9685,6 @@ typedef $$QuestionOptionTableTableProcessedTableManager =
     >;
 typedef $$QuestionStatusTableTableCreateCompanionBuilder =
     QuestionStatusTableCompanion Function({
-      Value<int> id,
       required int userId,
       required int questionId,
       Value<int?> optionId,
@@ -9736,10 +9693,10 @@ typedef $$QuestionStatusTableTableCreateCompanionBuilder =
       Value<bool> isSaved,
       Value<bool?> isNew,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 typedef $$QuestionStatusTableTableUpdateCompanionBuilder =
     QuestionStatusTableCompanion Function({
-      Value<int> id,
       Value<int> userId,
       Value<int> questionId,
       Value<int?> optionId,
@@ -9748,6 +9705,7 @@ typedef $$QuestionStatusTableTableUpdateCompanionBuilder =
       Value<bool> isSaved,
       Value<bool?> isNew,
       Value<DateTime> updatedAt,
+      Value<int> rowid,
     });
 
 final class $$QuestionStatusTableTableReferences
@@ -9836,11 +9794,6 @@ class $$QuestionStatusTableTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
   ColumnFilters<bool> get isCorrect => $composableBuilder(
     column: $table.isCorrect,
     builder: (column) => ColumnFilters(column),
@@ -9945,11 +9898,6 @@ class $$QuestionStatusTableTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<bool> get isCorrect => $composableBuilder(
     column: $table.isCorrect,
     builder: (column) => ColumnOrderings(column),
@@ -10055,9 +10003,6 @@ class $$QuestionStatusTableTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
   GeneratedColumn<bool> get isCorrect =>
       $composableBuilder(column: $table.isCorrect, builder: (column) => column);
 
@@ -10180,7 +10125,6 @@ class $$QuestionStatusTableTableTableManager
               ),
           updateCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
                 Value<int> userId = const Value.absent(),
                 Value<int> questionId = const Value.absent(),
                 Value<int?> optionId = const Value.absent(),
@@ -10189,8 +10133,8 @@ class $$QuestionStatusTableTableTableManager
                 Value<bool> isSaved = const Value.absent(),
                 Value<bool?> isNew = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => QuestionStatusTableCompanion(
-                id: id,
                 userId: userId,
                 questionId: questionId,
                 optionId: optionId,
@@ -10199,10 +10143,10 @@ class $$QuestionStatusTableTableTableManager
                 isSaved: isSaved,
                 isNew: isNew,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           createCompanionCallback:
               ({
-                Value<int> id = const Value.absent(),
                 required int userId,
                 required int questionId,
                 Value<int?> optionId = const Value.absent(),
@@ -10211,8 +10155,8 @@ class $$QuestionStatusTableTableTableManager
                 Value<bool> isSaved = const Value.absent(),
                 Value<bool?> isNew = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
               }) => QuestionStatusTableCompanion.insert(
-                id: id,
                 userId: userId,
                 questionId: questionId,
                 optionId: optionId,
@@ -10221,6 +10165,7 @@ class $$QuestionStatusTableTableTableManager
                 isSaved: isSaved,
                 isNew: isNew,
                 updatedAt: updatedAt,
+                rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map(

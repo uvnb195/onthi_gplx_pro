@@ -2,6 +2,9 @@ import 'package:drift/drift.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
 
 class ExamAttemptTable extends Table {
+  @override
+  String get tableName => 'exam_attempt';
+
   IntColumn get id => integer().autoIncrement()();
   IntColumn get userId =>
       integer().references(UserTable, #id, onDelete: .cascade)();

@@ -2,6 +2,9 @@ import 'package:drift/drift.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
 
 class LicenseQuestionTable extends Table {
+  @override
+  String get tableName => 'license_question';
+
   IntColumn get licenseId =>
       integer().references(LicenseTable, #id, onDelete: .cascade)();
   IntColumn get questionId =>

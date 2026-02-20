@@ -92,7 +92,7 @@ flutter:
     - assets/images/thumbnails/
     - assets/images/questions/
     - assets/videos/
-    - assets/data/
+    - assets/database/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

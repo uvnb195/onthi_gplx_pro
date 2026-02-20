@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class QuestionStatusEntity extends Equatable {
-  final int id;
   final int userId;
   final int questionId;
   final int? optionId;
@@ -11,7 +10,6 @@ class QuestionStatusEntity extends Equatable {
   final DateTime updatedAt;
 
   const QuestionStatusEntity({
-    required this.id,
     required this.userId,
     required this.questionId,
     required this.optionId,
@@ -23,7 +21,6 @@ class QuestionStatusEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-    id,
     userId,
     questionId,
     optionId,

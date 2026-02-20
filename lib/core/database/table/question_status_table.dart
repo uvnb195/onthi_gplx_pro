@@ -2,7 +2,8 @@ import 'package:drift/drift.dart';
 import 'package:onthi_gplx_pro/core/database/table/index.dart';
 
 class QuestionStatusTable extends Table {
-  IntColumn get id => integer().autoIncrement()();
+  @override
+  String get tableName => 'question_status';
   IntColumn get userId =>
       integer().references(UserTable, #id, onDelete: KeyAction.cascade)();
 
@@ -22,7 +23,6 @@ class QuestionStatusTable extends Table {
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 
   @override
-  List<Set<Column<Object>>>? get uniqueKeys => [
-    {userId, questionId},
-  ];
+  // TODO: implement primaryKey
+  Set<Column<Object>>? get primaryKey => {userId, questionId};
 }
